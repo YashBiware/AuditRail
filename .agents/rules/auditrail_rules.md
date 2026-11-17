@@ -21,3 +21,9 @@ Development must proceed strictly through the authorized phases one by one:
 - Phase 2 begins only with: `APPROVE DATABASE PHASE — START BACKEND`
 - Phase 3 begins only with: `START FRONTEND PHASE`
 - Never write frontend or backend code before their respective authorized phases.
+
+## 3. Code Cleanliness & Production Standards
+- Zero garbage code, zero dead code, zero bloated dependencies.
+- Keep all code clean, strictly typed, minimal, and laser-specific to requirements.
+- No unrequested features, no over-engineered boilerplate, no extra fluff.
+- Every class, function, query, and configuration must have a direct, necessary purpose.

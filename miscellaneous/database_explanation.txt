@@ -1,0 +1,108 @@
+================================================================================
+AUDITRAIL — DATABASE EXPLANATION (SIMPLIFIED)
+================================================================================
+
+1. THE BIG PICTURE: WHAT PROBLEM DOES THIS DATABASE SOLVE?
+--------------------------------------------------------------------------------
+In most companies, when someone logs in, transfers money, or changes a permission, 
+the application writes a record like:
+"User Alice approved a $50,000 transfer at 10:00 AM."
+
+Normally, these records sit in a standard database table. But here is the problem: 
+anyone with database administrator access can secretly go in and change or delete 
+that row — and nobody would ever know.
+
+AuditRail solves this. It turns ordinary log records into a tamper-evident chain. 
+If someone changes even a single letter of a historical event, or deletes a row, 
+the entire chain visibly breaks.
+
+
+2. HOW THE "TAMPER-EVIDENT CHAIN" WORKS (THE NOTEBOOK ANALOGY)
+--------------------------------------------------------------------------------
+Imagine a physical ledger notebook where:
+1. Every page is numbered consecutively (1, 2, 3, 4...). No pages can be skipped 
+   or added in between.
+2. When you write page 2, you must stamp it with a unique fingerprint made from 
+   everything on page 2 PLUS the fingerprint of page 1.
+3. When you write page 3, its fingerprint includes page 2's fingerprint.
+
+[ Event 1 ]               [ Event 2 ]               [ Event 3 ]
+Hash: A123  ---------->  Contains: A123  -------->  Contains: B456
+                         Hash: B456                Hash: C789
+
+If an insider goes back to secretly edit Event 1:
+- Event 1's fingerprint changes.
+- Event 2 no longer matches Event 1.
+- Event 3 no longer matches Event 2.
+- The entire chain is immediately flagged as compromised.
+
+
+3. THE 8 TABLES IN THE DATABASE
+--------------------------------------------------------------------------------
+
+GROUP 1: THE COMPANY & ITS PEOPLE
+- organizations
+  Stores the companies using the platform (e.g., Acme Global Logistics). Each 
+  company has its own isolated records; Company A can never see or interfere 
+  with Company B.
+
+- users
+  Stores human staff who log into the AuditRail web dashboard:
+  * Admins (can invite users, create API keys, run verification).
+  * Auditors (read-only; can inspect logs and download reports).
+  Passwords and two-factor authentication (authenticator app codes) are handled here.
+
+- invitations
+  When an Admin wants to onboard a new teammate, AuditRail creates a single-use 
+  invitation link that expires after a set time.
+
+
+GROUP 2: THE INGESTION DOOR
+- api_keys
+  External systems (like SAP, a billing app, or custom internal software) need 
+  permission to send audit events to AuditRail. This table stores the secret keys 
+  that allow those apps to connect. The raw secret is never saved—only its secure 
+  digital fingerprint is stored.
+
+
+GROUP 3: THE AUDIT CHAIN (THE CORE ENGINE)
+- chain_heads
+  Acts like a bookmark showing the latest point in each company's chain:
+  "Company A is currently on Event #1,250 with latest fingerprint x9f2..."
+  When a new event arrives, the system grabs this bookmark, adds 1 to the count, 
+  links the new event, and updates the bookmark.
+
+- audit_events
+  The main event storage. Every single action from your external apps is stored here:
+  * Who did it (Actor: user, system, or service).
+  * What was done (Action: e.g., USER_LOGIN, PAYMENT_APPROVED).
+  * What was affected (Resource: e.g., invoice:1042).
+  * When it happened (Timestamp).
+  * Details (Metadata: IP address, device, diffs).
+  * The Links (previous_hash and current_hash that bind this event to the one before it).
+
+
+GROUP 4: EXTERNAL CHECKPOINTS & VERIFICATION
+- checkpoints
+  Every hour, AuditRail takes a snapshot of the latest chain head and exports it 
+  to a completely separate, write-protected storage vault (like Amazon S3 with 
+  Object Lock or MinIO).
+  Why? If a rogue database admin hacked the entire MySQL database and recalculated 
+  all internal links, they still cannot touch the external checkpoint vault. 
+  This table keeps the record of those external snapshots.
+
+- verification_runs
+  Stores the history of verification health checks (either run automatically every 
+  hour or triggered manually by an Auditor/Admin). It records whether the chain 
+  was healthy (VERIFIED), had an error, or detected a tampering attempt (FAILED).
+
+
+4. WHAT HAPPENS WHEN AN EVENT ARRIVES?
+--------------------------------------------------------------------------------
+1. External App (SAP/Banking) sends: "Bob approved Invoice #99"
+2. Check API Key: Valid! Belongs to Acme Logistics.
+3. Lock Bookmark (chain_heads): Next number is #42; previous fingerprint was '7a8b...'.
+4. Calculate New Fingerprint: New fingerprint = SHA256 of details + '7a8b...'.
+5. Save Event in audit_events table.
+6. Update Bookmark to #42.
+================================================================================

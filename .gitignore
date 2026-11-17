@@ -1,0 +1,66 @@
+# =============================================================================
+# AuditRail .gitignore
+# Enterprise-grade audit integrity platform
+# =============================================================================
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+
+# IDE & Editor Configuration
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+*.sublime-project
+*.sublime-workspace
+
+# Environment & Sensitive Credentials
+.env
+.env.*
+*.local
+secrets/
+*.pem
+*.key
+*.p12
+
+# Java & Spring Boot (Backend - Phase 2)
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.logs
+logs/
+.mvn/wrapper/maven-wrapper.jar
+.gradle/
+build/
+
+# Node.js & React (Frontend - Phase 3)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+dist/
+dist-ssr/
+*.tsbuildinfo
+
+# Infrastructure & Terraform (Phase 4 & 5)
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Docker Volumes & Local Storage
+minio-data/
+mysql-data/

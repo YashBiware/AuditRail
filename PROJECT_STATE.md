@@ -58,6 +58,7 @@ All database architecture deliverables are located in `C:\Users\yashb\Desktop\Au
    - Row-level locking on `chain_heads` (`SELECT ... FOR UPDATE`).
    - Dual-layer verification engine (internal chain walk + out-of-band WORM checkpoint comparison).
 6. **`test_cases.sql`**: 9 SQL test suites covering foreign key rejection, sequence collisions, cross-tenant isolation, concurrency locks, tamper detection, and sequence gap queries.
+7. **`database_security_isolation.md`**: Security specifications covering zero public DB exposure, least-privilege DB user, multi-tenant query isolation, error sanitization, and endpoint concealment.
 
 ---
 

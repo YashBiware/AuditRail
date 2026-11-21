@@ -54,10 +54,10 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/api-keys/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/v1/invitations").hasRole("ADMIN")
                 
-                // Read & Verification Operations (Admin and Auditor)
-                .requestMatchers("/api/v1/audit/**").hasAnyRole("ADMIN", "AUDITOR")
-                .requestMatchers("/api/v1/verification/**").hasAnyRole("ADMIN", "AUDITOR")
-                .requestMatchers("/api/v1/checkpoints/**").hasAnyRole("ADMIN", "AUDITOR")
+                // Read & Verification Operations (Admin, Auditor, or Ingest key for Explorer)
+                .requestMatchers("/api/v1/audit/**").hasAnyRole("ADMIN", "AUDITOR", "INGEST")
+                .requestMatchers("/api/v1/verification/**").hasAnyRole("ADMIN", "AUDITOR", "INGEST")
+                .requestMatchers("/api/v1/checkpoints/**").hasAnyRole("ADMIN", "AUDITOR", "INGEST")
                 
                 // Common Authenticated User & Org Info
                 .requestMatchers("/api/v1/auth/**").authenticated()

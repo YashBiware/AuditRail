@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS audit_events (
     action VARCHAR(128) NOT NULL COMMENT 'Action code (e.g. USER_LOGIN, FINANCIAL_RECORD_UPDATE)',
     resource_reference VARCHAR(255) NOT NULL COMMENT 'Entity affected (e.g. account:acc_9812, doc:doc_45)',
     event_timestamp DATETIME(6) NOT NULL COMMENT 'Event generation timestamp from source application in UTC',
-    metadata_json JSON NOT NULL COMMENT 'Arbitrary structured contextual attributes',
+    metadata_json TEXT NOT NULL COMMENT 'Arbitrary structured contextual attributes',
     metadata_hash CHAR(64) NOT NULL COMMENT 'SHA-256 hex digest of RFC 8785 canonical metadata JSON',
     previous_hash CHAR(64) NOT NULL COMMENT 'SHA-256 hash of event (sequence_number - 1); 64 zeros for seq 1',
     current_hash CHAR(64) NOT NULL COMMENT 'SHA-256 hash of canonical event payload + previous_hash',

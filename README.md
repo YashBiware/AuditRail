@@ -1,42 +1,156 @@
-# AuditRail
+# AuditRail — Enterprise Tamper-Evident Audit Platform
 
-> **Application-Independent Audit Log Integrity Platform**
+AuditRail is an enterprise-grade, application-independent audit log platform engineered to provide mathematical certainty and tamper-evident evidentiary guarantees to compliance and security logging.
 
-"AuditRail is an application-independent, multi-tenant audit integrity platform that uses cryptographic hash chaining and independently stored checkpoints to make unauthorized modifications to historical audit records detectable."
-
----
-
-## Overview
-
-AuditRail serves as an enterprise-grade, independent integrity layer that collects audit events from diverse systems (e.g. SAP, core banking, custom Java services, internal admin tools), assigns strict monotonic sequences, computes SHA-256 hash chains, exports out-of-band WORM checkpoints to MinIO/S3, and provides automated and on-demand verification to make tampering detectable.
+> **Important:** AuditRail is **NOT a blockchain**, has no cryptocurrency tokens or consensus overhead, and is not a generic SIEM/GRC wrapper. It is a high-performance **tamper-evident audit integrity ledger** built on sequential SHA-256 hash chaining and out-of-band Write-Once-Read-Many (WORM) storage anchors.
 
 ---
 
-## Directory Structure
+## 🌟 Key Highlights & Architectural Overview
 
-```text
+```mermaid
+flowchart LR
+    subgraph Client Tier
+        ERP[External ERP / Apps] -->|POST /api/v1/events| Ingest[API Key Ingestion]
+        Browser[Auditor / Admin UI] -->|JWT + MFA| UI[Vite React Dashboard]
+    end
+
+    subgraph Platform Backend
+        Ingest --> Engine[Spring Boot Engine]
+        UI --> Engine
+        Engine --> Chaining[SHA-256 Hash Chain + RFC 8785 JCS]
+        Chaining --> DB[(MySQL 8.0 Append-Only Store)]
+    end
+
+    subgraph Immutability Tier
+        Engine -.->|Periodic Snapshots| WORM[AWS S3 Object Lock / MinIO WORM]
+        Engine -->|Hourly Verification Walk| Verify[Integrity Verification Engine]
+        Verify -.->|Anchor Cross-Check| WORM
+    end
+```
+
+### Core Cryptographic Capabilities
+- **Level 1 (Internal Hash-Chain Walk):** Every record mathematically links to the SHA-256 digest of its exact predecessor under pessimistic row locking (`SELECT ... FOR UPDATE`), guaranteeing monotonic sequencing and immediate detection of dropped, inserted, or modified rows.
+- **Level 2 (External WORM Anchoring):** Periodic state snapshots are exported to **AWS S3 Object Lock (Compliance Mode)**. Even a malicious DBA with root database access cannot rewrite the audit history without flagging external checkpoint mismatches.
+- **Canonical Serialization (RFC 8785 JCS):** Deterministic JSON metadata sorting and microsecond timestamp normalization eliminate hashing discrepancies across different operating systems and languages.
+
+---
+
+## 🛠️ Complete Technology Stack
+
+| Domain | Technology / Specification | Purpose |
+| :--- | :--- | :--- |
+| **Backend** | Java 17+, Spring Boot 3.3.5 | Modular monolith backend services |
+| **Security** | Spring Security 6, JJWT 0.12.6, BCrypt (cost 12) | Stateless JWT authentication, role segregation, brute-force lockout |
+| **MFA** | RFC 6238 TOTP (HMAC-SHA1, 30s) | Time-based one-time password two-factor authentication |
+| **Database** | MySQL 8.0+ (InnoDB Engine) | Primary append-only audit event store with row-level pessimistic locking |
+| **Database Migrations** | Flyway (`flyway-core`, `flyway-mysql`) | Version-controlled DDL migrations (`V1` schema, `V2` seed) |
+| **Hashing Engine** | SHA-256 (NIST FIPS 180-4) | Monotonic cryptographic chaining and metadata digest calculation |
+| **Serialization** | RFC 8785 JSON Canonicalization (JCS) | Deterministic key ordering and whitespace normalization |
+| **Frontend UI** | React 18, TypeScript, Vite | Enterprise operator and audit explorer interface |
+| **Styling & Fonts** | Tailwind CSS 3, Plus Jakarta Sans, JetBrains Mono | Obsidian charcoal palette (`#090D10`), high-contrast typography |
+| **Cloud & Storage** | AWS S3 Object Lock, MinIO | Write-Once-Read-Many (WORM) out-of-band checkpoint storage |
+| **Cloud Security** | AWS KMS, AWS IAM, Secrets Manager | Cryptographic key management and least-privilege service roles |
+| **Auditing & Threat** | AWS CloudTrail, GuardDuty, Inspector | Multi-layer telemetry and infrastructure vulnerability scanning |
+| **DevOps & IaC** | Docker, Docker Compose, Terraform | Reproducible multi-environment deployment orchestration |
+
+---
+
+## 📂 Project Directory Structure
+
+```
 AuditRail/
-├── PROJECT_STATE.md          # Complete project history, phase gates, and decisions
-├── README.md                 # Project overview and directory guide
-└── database/                 # Phase 1: Database Architecture and Schema
-    ├── data_dictionary.md    # Detailed table and column specifications
-    ├── hash_chain_spec.md    # Cryptographic formulas, serialization, and concurrency
-    ├── schema.sql            # MySQL 8.0+ DDL with 8 normalized tables
-    ├── test_cases.sql        # SQL validation queries for isolation and tamper detection
-    └── migrations/
-        ├── V1__init_auditrail_schema.sql       # Flyway V1 schema migration
-        └── V2__seed_demo_organization.sql      # Flyway V2 seed data migration
+├── backend/                             # Spring Boot 3.3.5 Modular Monolith
+│   ├── src/main/java/com/auditrail/
+│   │   ├── controller/                  # REST Controllers (Auth, Events, Audit, Verification, Policy)
+│   │   ├── dto/                         # Request & Response Contracts
+│   │   ├── entity/                      # JPA Entities (Organization, User, ApiKey, AuditEvent, Checkpoint)
+│   │   ├── exception/                   # Sanitized Global Exception Handlers
+│   │   ├── repository/                  # Spring Data JPA Repositories (Pessimistic write locking)
+│   │   ├── security/                    # JWT Filters, ApiKey Authentication, RBAC, Tenant Context
+│   │   ├── service/                     # Service Interfaces & Implementations
+│   │   ├── service/adapter/             # Storage Adapters (Local, MinIO, AWS S3)
+│   │   └── util/                        # HashUtil, CanonicalJsonUtil (RFC 8785), CanonicalPayloadBuilder
+│   └── src/main/resources/
+│       ├── application.yml              # Base Spring Boot Configuration
+│       ├── application-dev.yml          # Local In-Memory Development Configuration
+│       └── db/migration/                # Flyway Migrations (V1 DDL, V2 Seed Data)
+├── frontend/                            # React + TypeScript + Vite UI
+│   ├── src/
+│   │   ├── components/                  # Interactive Chaining Simulator & Visualizers
+│   │   ├── types/                       # TypeScript Data Interfaces
+│   │   ├── App.tsx                      # Landing Page & Audit Explorer
+│   │   ├── index.css                    # Tailwind Directives & Custom Backdrops
+│   │   └── main.tsx                     # Vite Entrypoint
+│   └── tailwind.config.js               # Enterprise Obsidian Color Palette Config
+├── database/                            # Reference Database DDL & Data Dictionaries
+│   ├── schema.sql                       # Pure MySQL 8.0 DDL Schema
+│   ├── data_dictionary.md               # Detailed Data Dictionary & Indexing Rationale
+│   ├── hash_chain_spec.md               # Cryptographic Hash-Chain Specifications
+│   └── test_cases.sql                   # SQL Integrity Validation Test Suite
+├── docs/                                # Technical Architecture Documentation
+│   └── architecture/
+│       ├── 01_database_layer.md         # Database Schema, Entities, Constraints, & ERD
+│       ├── 02_core_cryptography_and_flow.md # Ingestion Lifecycle, Canonicalization, Verification Walk
+│       ├── 03_services_and_controllers.md  # All Controllers, Services, & API Specifications
+│       └── 04_security_and_isolation.md    # Multi-Tenant Isolation, RBAC, TOTP, & DPDP Compliance
+├── miscellaneous/
+│   └── database_explanation.txt         # Non-technical explanation for team members
+└── README.md                            # Comprehensive Platform Guide
 ```
 
 ---
 
-## Project Status
+## 🚀 Getting Started Locally
 
-- **Phase 1 (Database Architecture & MySQL Implementation):** Complete.
-- **Phase 2 (Java Spring Boot Backend):** Pending approval.
-- **Phase 3 (Figma UI/UX & React Frontend):** Locked.
-- **Phase 4 (Local Infrastructure & Docker):** Locked.
-- **Phase 5 (AWS Cloud & Security Integration):** Locked.
-- **Phase 6 (Security Testing & Final Handover):** Locked.
+### Prerequisites
+- **Java:** JDK 17 or higher
+- **Maven:** 3.9+
+- **Node.js:** 18+ & npm 9+
+- **MySQL:** 8.0+ (or run with embedded H2 dev profile)
 
-See [PROJECT_STATE.md](file:///C:/Users/yashb/Desktop/AuditRail/PROJECT_STATE.md) for full architecture specifications and phase gate controls.
+### 1. Running the Backend
+To start the backend in local standalone mode:
+```bash
+cd backend
+mvn spring-boot:run "-Dspring-boot.run.profiles=dev"
+```
+The backend starts at `http://localhost:8080/`.
+
+### 2. Running the Frontend
+```bash
+cd frontend
+npm install
+npm run dev -- --host
+```
+Open your browser at `http://localhost:5173/`.
+
+### 3. Running Automated Tests
+AuditRail maintains unit and integration test suites covering concurrent ingestion, RFC 8785 canonical serialization, gap detection, row tampering, and checkpoint anchor verification:
+```bash
+cd backend
+mvn test
+```
+
+---
+
+## 🔐 Credentials & Demo Data
+
+The platform comes pre-seeded with a demo tenant for testing:
+- **Organization:** Acme Global Logistics (`slug: acme-global`, `id: 00000000-0000-0000-0000-000000000001`)
+- **Demo Ingestion API Key:** `ar_live_demo01_acme_secret_key_9981`
+- **Demo Admin:** `admin@acme-logistics.com` / `Admin@AuditRail2026!`
+- **Demo Auditor:** `auditor@acme-logistics.com` / `Auditor@AuditRail2026!`
+
+---
+
+## 🏛️ Regulatory Compliance Mapping
+
+- **Digital Personal Data Protection (DPDP) Act 2023 (Section 8(5), Section 9):** Enforces purpose-limited logging, cryptographically verified data modifications, and tenant isolation.
+- **SOC 2 Type II (Trust Services Criteria CC6.1, CC6.8, CC7.2):** Continuous unalterable event tracking with hourly automated verification walks.
+- **HIPAA / PCI-DSS:** Immutable audit trail preservation with multi-factor authentication for operators and cryptographic tamper alerts.
+
+---
+
+## 📄 License
+This project is licensed under the MIT License.

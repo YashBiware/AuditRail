@@ -1,41 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
-  ShieldCheck, 
-  Terminal, 
-  Database, 
-  Lock, 
-  CheckCircle2, 
   ChevronRight, 
-  ArrowUpRight 
+  ArrowUpRight, 
+  Terminal 
 } from 'lucide-react';
-import { InteractiveSandbox } from './components/InteractiveSandbox';
+import { LiveAuditConsole } from './components/LiveAuditConsole';
 
 export const App: React.FC = () => {
-  return (
-    <div className="min-h-screen bg-bg-primary text-text-primary selection:bg-accent-emerald/20 selection:text-accent-emerald flex flex-col font-sans">
-      {/* Top Ambient Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-5xl h-96 bg-gradient-to-b from-accent-emerald/10 via-accent-cyan/5 to-transparent blur-3xl pointer-events-none -z-10" />
+  const [activeStage, setActiveStage] = useState<number>(1);
 
-      {/* Navigation Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-bg-primary/80 border-b border-border-subtle">
+  return (
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-signal/15 selection:text-signal">
+      {/* Top Editorial Rule & Header */}
+      <header className="border-b border-border bg-background/95 backdrop-blur sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-accent-emerald/30 to-accent-cyan/20 border border-accent-emerald/40 flex items-center justify-center glow-emerald">
-              <ShieldCheck className="h-5 w-5 text-accent-emerald" />
-            </div>
-            <span className="text-lg font-bold tracking-tight text-text-primary">
-              Audit<span className="text-accent-emerald">Rail</span>
+            <span className="text-xl font-bold tracking-tight text-foreground font-serif">
+              AuditRail
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-border-strong text-text-secondary bg-bg-secondary">
+            <span className="mono-tag px-2 py-0.5 rounded border border-border text-muted-foreground bg-secondary/50">
               v1.0-ENTERPRISE
             </span>
           </div>
 
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-text-secondary">
-            <a href="#how-it-works" className="hover:text-text-primary transition-colors">How It Works</a>
-            <a href="#architecture" className="hover:text-text-primary transition-colors">Architecture</a>
-            <a href="#interactive-simulator" className="hover:text-text-primary transition-colors">Live Chaining</a>
-            <a href="#compliance" className="hover:text-text-primary transition-colors">Compliance</a>
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
+            <a href="#problem" className="hover:text-foreground transition-colors">The Problem</a>
+            <a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
+            <a href="#architecture" className="hover:text-foreground transition-colors">Architecture</a>
+            <a href="#live-console" className="hover:text-foreground transition-colors">Live Console</a>
+            <a href="#security" className="hover:text-foreground transition-colors">Security Principles</a>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -43,17 +36,18 @@ export const App: React.FC = () => {
               href="https://github.com/YashBiware/AuditRail.git" 
               target="_blank" 
               rel="noreferrer"
-              className="text-xs font-mono text-text-secondary hover:text-text-primary px-3 py-2 rounded-lg border border-border-subtle hover:border-border-strong transition-all flex items-center gap-1.5"
+              className="text-xs font-mono text-muted-foreground hover:text-foreground px-3 py-1.5 rounded border border-border hover:bg-secondary transition-all flex items-center gap-1.5"
             >
               <Terminal className="h-3.5 w-3.5" />
               <span>GitHub</span>
-              <ArrowUpRight className="h-3 w-3 text-text-muted" />
+              <ArrowUpRight className="h-3 w-3" />
             </a>
+
             <a 
-              href="#interactive-simulator"
-              className="text-xs font-semibold px-4 py-2 rounded-lg bg-accent-emerald text-bg-primary hover:bg-emerald-400 transition-all font-mono"
+              href="#live-console"
+              className="text-xs font-semibold px-4 py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90 transition-all font-mono"
             >
-              Launch Simulator
+              Open Live Ledger
             </a>
           </div>
         </div>
@@ -61,235 +55,376 @@ export const App: React.FC = () => {
 
       {/* Hero Section */}
       <main className="flex-1">
-        <section className="relative pt-24 pb-20 px-6 overflow-hidden">
-          <div className="max-w-5xl mx-auto text-center space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent-emerald/30 bg-accent-emerald/5 text-xs font-mono text-accent-emerald">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-emerald opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-emerald"></span>
-              </span>
-              Enterprise Tamper-Evident Audit Platform • Not Blockchain
+        <section className="pt-20 pb-16 px-6 border-b border-border">
+          <div className="max-w-4xl mx-auto text-center space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-secondary/60 text-xs font-mono text-muted-foreground">
+              <span className="h-2 w-2 rounded-full bg-signal"></span>
+              Application-Independent Tamper-Evident Ledger
             </div>
 
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-text-primary leading-[1.1]">
-              Cryptographic Integrity for <br />
-              <span className="bg-gradient-to-r from-text-primary via-accent-emerald to-accent-cyan bg-clip-text text-transparent">
-                Mission-Critical Audit Trails
-              </span>
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl serif-heading text-foreground tracking-tight leading-[1.08]">
+              Every action leaves a trail.<br />
+              <span className="italic">Make yours verifiable.</span>
             </h1>
 
-            <p className="max-w-3xl mx-auto text-base sm:text-lg text-text-secondary leading-relaxed">
-              AuditRail delivers mathematical certainty to compliance logging. Built with 
-              <span className="text-text-primary font-medium"> SHA-256 sequential hash-chaining</span>, 
-              RFC 8785 canonical metadata serialization, and independent 
-              <span className="text-text-primary font-medium"> AWS S3 Object Lock (WORM)</span> checkpoints.
+            <p className="max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground leading-relaxed">
+              AuditRail creates a structured, cryptographically verifiable record of enterprise actions. 
+              Built on sequential SHA-256 hash chaining, RFC 8785 canonical metadata normalization, 
+              and out-of-band Write-Once-Read-Many (WORM) storage checkpoints.
             </p>
 
             <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
               <a
-                href="#interactive-simulator"
-                className="px-6 py-3 rounded-xl bg-accent-emerald text-bg-primary font-semibold text-sm hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-950/30 flex items-center gap-2 font-mono"
+                href="#live-console"
+                className="px-5 py-2.5 rounded bg-primary text-primary-foreground font-semibold text-xs hover:bg-primary/90 transition-all shadow-subtle flex items-center gap-2 font-mono"
               >
-                Explore Live Chaining Simulator
+                Access Live Audit Stream
                 <ChevronRight className="h-4 w-4" />
               </a>
               <a
                 href="#architecture"
-                className="px-6 py-3 rounded-xl border border-border-strong bg-bg-secondary text-text-primary font-semibold text-sm hover:bg-bg-card transition-all flex items-center gap-2"
+                className="px-5 py-2.5 rounded border border-border bg-card text-foreground font-semibold text-xs hover:bg-secondary transition-all"
               >
-                Inspect Technical Architecture
+                View System Architecture
               </a>
             </div>
 
-            {/* Quick Metrics Bar */}
-            <div className="pt-12 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto text-left">
-              <div className="p-4 rounded-xl border border-border-subtle bg-bg-secondary/70">
-                <span className="text-xs font-mono text-text-muted block">DIGEST ALGORITHM</span>
-                <span className="text-lg font-bold text-text-primary font-mono mt-1 block">SHA-256</span>
-                <span className="text-[11px] text-accent-emerald mt-0.5 block">NIST FIPS 180-4</span>
+            {/* Scope / Model / Access Strip */}
+            <div className="pt-12 grid grid-cols-1 sm:grid-cols-3 gap-px bg-border max-w-3xl mx-auto border border-border rounded-lg overflow-hidden shadow-subtle">
+              <div className="bg-card p-4 text-left">
+                <span className="mono-tag text-muted-foreground block">SCOPE</span>
+                <span className="text-sm font-semibold text-foreground mt-0.5 block">Audit Trail Layer</span>
+                <span className="text-xs text-muted-foreground mt-1 block">Contextual metadata only; zero raw PII persisted.</span>
               </div>
-              <div className="p-4 rounded-xl border border-border-subtle bg-bg-secondary/70">
-                <span className="text-xs font-mono text-text-muted block">STORAGE IMMUTABILITY</span>
-                <span className="text-lg font-bold text-text-primary font-mono mt-1 block">AWS S3 WORM</span>
-                <span className="text-[11px] text-accent-cyan mt-0.5 block">Object Lock Compliance</span>
+              <div className="bg-card p-4 text-left">
+                <span className="mono-tag text-muted-foreground block">MODEL</span>
+                <span className="text-sm font-semibold text-foreground mt-0.5 block">Append-Only Records</span>
+                <span className="text-xs text-muted-foreground mt-1 block">Monotonic sequences under pessimistic row locks.</span>
               </div>
-              <div className="p-4 rounded-xl border border-border-subtle bg-bg-secondary/70">
-                <span className="text-xs font-mono text-text-muted block">CONCURRENCY ENGINE</span>
-                <span className="text-lg font-bold text-text-primary font-mono mt-1 block">Pessimistic Lock</span>
-                <span className="text-[11px] text-accent-emerald mt-0.5 block">Zero Tenant Collisions</span>
-              </div>
-              <div className="p-4 rounded-xl border border-border-subtle bg-bg-secondary/70">
-                <span className="text-xs font-mono text-text-muted block">JSON NORMALIZATION</span>
-                <span className="text-lg font-bold text-text-primary font-mono mt-1 block">RFC 8785 JCS</span>
-                <span className="text-[11px] text-text-secondary mt-0.5 block">Deterministic Hash</span>
+              <div className="bg-card p-4 text-left">
+                <span className="mono-tag text-muted-foreground block">ACCESS</span>
+                <span className="text-sm font-semibold text-foreground mt-0.5 block">Role-Scoped Review</span>
+                <span className="text-xs text-muted-foreground mt-1 block">Dual-role segregation for Administrators & Auditors.</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Live Simulator Section */}
-        <section id="interactive-simulator" className="py-16 px-6 bg-bg-secondary/40 border-y border-border-subtle">
+        {/* Live Operational Console */}
+        <section id="live-console" className="py-16 px-6 bg-[#FBF9F5] border-b border-border">
           <div className="max-w-6xl mx-auto space-y-6">
-            <div className="text-center space-y-2">
-              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary">
-                Experience Cryptographic Evidentiary Proof
+            <div className="max-w-2xl">
+              <span className="mono-tag text-signal font-semibold uppercase tracking-wider">
+                Interactive Operational Environment
+              </span>
+              <h2 className="text-2xl sm:text-3xl serif-heading text-foreground mt-1">
+                Connected Backend State & Verification
               </h2>
-              <p className="text-sm text-text-secondary max-w-2xl mx-auto">
-                Any retroactive alteration—even by a database superuser—instantly invalidates the 
-                SHA-256 continuum and triggers audit mismatch flags.
+              <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
+                Directly communicate with the running Spring Boot backend. Query stored events, append new 
+                records into the SHA-256 chain, or trigger real-time cryptographic verification walks.
               </p>
             </div>
 
-            <InteractiveSandbox />
+            <LiveAuditConsole />
           </div>
         </section>
 
-        {/* Technical Architecture Section */}
-        <section id="architecture" className="py-20 px-6">
-          <div className="max-w-6xl mx-auto space-y-12">
-            <div className="text-center space-y-3">
-              <span className="text-xs font-mono text-accent-emerald uppercase tracking-widest">
-                Defense In Depth
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-text-primary">
-                Two-Tier Verification Architecture
+        {/* The Problem & Evidentiary Value */}
+        <section id="problem" className="py-20 px-6 border-b border-border">
+          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div className="space-y-4">
+              <span className="mono-tag text-muted-foreground uppercase tracking-wider">The Problem</span>
+              <h2 className="text-3xl sm:text-4xl serif-heading text-foreground leading-tight">
+                Records of what happened are easy to keep — and easy to doubt.
               </h2>
-              <p className="text-text-secondary max-w-2xl mx-auto text-sm sm:text-base">
-                AuditRail combines relational performance with decoupled physical storage anchors to prevent database rewriting.
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Organizations that operate critical data systems are frequently asked a simple question: 
+                <span className="text-foreground font-medium"> what happened, when, by whom, and can you show it?</span>
+              </p>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Ordinary database tables and application logs can be edited, dropped, or reconstructed by 
+                privileged database administrators (DBAs) or compromised cloud credentials. Because of this, 
+                conventional logs carry limited evidentiary weight when scrutinized under compliance reviews.
+              </p>
+              <p className="text-sm text-foreground font-medium leading-relaxed">
+                AuditRail explores the opposite posture — a record designed from the start to be append-only, 
+                cryptographically chained, and independently recomputable.
+              </p>
+            </div>
+
+            {/* Step-by-step pipeline card */}
+            <div className="bg-card border border-border rounded-lg p-6 shadow-subtle space-y-5">
+              <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider mono-tag border-b border-border pb-3">
+                From Action to Evidentiary Proof
+              </h4>
+
+              <div className="space-y-3.5 text-xs">
+                <div className="flex items-start gap-3">
+                  <span className="mono-tag h-5 w-5 rounded bg-secondary flex items-center justify-center font-bold text-foreground">01</span>
+                  <div>
+                    <span className="font-semibold text-foreground block">Action</span>
+                    <span className="text-muted-foreground">A human operator or background service mutates a critical system.</span>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <span className="mono-tag h-5 w-5 rounded bg-secondary flex items-center justify-center font-bold text-foreground">02</span>
+                  <div>
+                    <span className="font-semibold text-foreground block">Record</span>
+                    <span className="text-muted-foreground">A structured event captures actor, action, resource target, and timestamp.</span>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <span className="mono-tag h-5 w-5 rounded bg-secondary flex items-center justify-center font-bold text-foreground">03</span>
+                  <div>
+                    <span className="font-semibold text-foreground block">Hash</span>
+                    <span className="text-muted-foreground">The event is linked to its predecessor via a deterministic SHA-256 digest.</span>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <span className="mono-tag h-5 w-5 rounded bg-secondary flex items-center justify-center font-bold text-foreground">04</span>
+                  <div>
+                    <span className="font-semibold text-foreground block">Verification</span>
+                    <span className="text-muted-foreground">Any authorized compliance officer can recompute and compare the entire chain.</span>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <span className="mono-tag h-5 w-5 rounded bg-secondary flex items-center justify-center font-bold text-signal">05</span>
+                  <div>
+                    <span className="font-semibold text-foreground block">Evidence</span>
+                    <span className="text-muted-foreground">An immutable trail that can be logically and mathematically reasoned about.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Five Stages: One Continuous Record */}
+        <section id="how-it-works" className="py-20 px-6 border-b border-border bg-[#FBF9F5]">
+          <div className="max-w-5xl mx-auto space-y-12">
+            <div className="text-center space-y-3">
+              <span className="mono-tag text-muted-foreground uppercase tracking-wider">How It Works</span>
+              <h2 className="text-3xl sm:text-4xl serif-heading text-foreground">
+                Five stages, one continuous record.
+              </h2>
+              <p className="text-sm text-muted-foreground max-w-xl mx-auto">
+                How every audit event transitions from an application touchpoint to an externally anchored evidentiary ledger.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              <div 
+                onClick={() => setActiveStage(1)}
+                className={`p-5 rounded-lg border transition-all cursor-pointer ${
+                  activeStage === 1 ? 'bg-card border-foreground shadow-subtle' : 'bg-card/60 border-border hover:bg-card'
+                }`}
+              >
+                <span className="mono-tag text-muted-foreground text-xs block">STAGE 01</span>
+                <h4 className="text-base font-semibold text-foreground mt-2">Capture</h4>
+                <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+                  A structured event records actor, action, resource target, purpose, and timestamp.
+                </p>
+              </div>
+
+              <div 
+                onClick={() => setActiveStage(2)}
+                className={`p-5 rounded-lg border transition-all cursor-pointer ${
+                  activeStage === 2 ? 'bg-card border-foreground shadow-subtle' : 'bg-card/60 border-border hover:bg-card'
+                }`}
+              >
+                <span className="mono-tag text-muted-foreground text-xs block">STAGE 02</span>
+                <h4 className="text-base font-semibold text-foreground mt-2">Hash</h4>
+                <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+                  Every event participates in a SHA-256 chain linking directly to its predecessor.
+                </p>
+              </div>
+
+              <div 
+                onClick={() => setActiveStage(3)}
+                className={`p-5 rounded-lg border transition-all cursor-pointer ${
+                  activeStage === 3 ? 'bg-card border-foreground shadow-subtle' : 'bg-card/60 border-border hover:bg-card'
+                }`}
+              >
+                <span className="mono-tag text-muted-foreground text-xs block">STAGE 03</span>
+                <h4 className="text-base font-semibold text-foreground mt-2">Order</h4>
+                <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+                  Pessimistic row locking enforces strictly monotonic sequences without concurrency gaps.
+                </p>
+              </div>
+
+              <div 
+                onClick={() => setActiveStage(4)}
+                className={`p-5 rounded-lg border transition-all cursor-pointer ${
+                  activeStage === 4 ? 'bg-card border-foreground shadow-subtle' : 'bg-card/60 border-border hover:bg-card'
+                }`}
+              >
+                <span className="mono-tag text-muted-foreground text-xs block">STAGE 04</span>
+                <h4 className="text-base font-semibold text-foreground mt-2">WORM Anchor</h4>
+                <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+                  Periodic chain snapshots export to AWS S3 Object Lock (Compliance Mode).
+                </p>
+              </div>
+
+              <div 
+                onClick={() => setActiveStage(5)}
+                className={`p-5 rounded-lg border transition-all cursor-pointer ${
+                  activeStage === 5 ? 'bg-card border-foreground shadow-subtle' : 'bg-card/60 border-border hover:bg-card'
+                }`}
+              >
+                <span className="mono-tag text-muted-foreground text-xs block">STAGE 05</span>
+                <h4 className="text-base font-semibold text-foreground mt-2">Verify</h4>
+                <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+                  Continuous automated hourly walks validate chain continuity and external anchors.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Architecture & Security Principles */}
+        <section id="architecture" className="py-20 px-6 border-b border-border">
+          <div className="max-w-5xl mx-auto space-y-12">
+            <div className="text-center space-y-3">
+              <span className="mono-tag text-muted-foreground uppercase tracking-wider">Architecture</span>
+              <h2 className="text-3xl sm:text-4xl serif-heading text-foreground">
+                A conceptual map of the system.
+              </h2>
+              <p className="text-sm text-muted-foreground max-w-xl mx-auto">
+                Modular monolith architecture decoupling transaction ingestion from immutable evidentiary verification.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Level 1 Card */}
-              <div className="rounded-2xl border border-border-subtle bg-bg-secondary p-8 space-y-5 relative overflow-hidden">
-                <div className="h-10 w-10 rounded-xl bg-accent-emerald/10 border border-accent-emerald/20 flex items-center justify-center">
-                  <Database className="h-5 w-5 text-accent-emerald" />
+              <div className="space-y-4">
+                <div className="paper-card p-5 rounded-lg space-y-2">
+                  <span className="mono-tag text-signal font-semibold">L1 • FRONTEND CONSOLE</span>
+                  <h4 className="text-sm font-semibold text-foreground">Admin Console & Scoped Auditor Views</h4>
+                  <p className="text-xs text-muted-foreground">
+                    Role-tailored interfaces allowing administrators to configure tenants and auditors to inspect immutable records.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-text-primary">
-                  Level 1: Internal Hash-Chain Continuity
-                </h3>
-                <p className="text-sm text-text-secondary leading-relaxed">
-                  Every ingested event computes a strictly deterministic payload:
-                  <code className="block mt-2 p-2.5 rounded bg-bg-primary text-xs font-mono text-accent-emerald border border-border-subtle">
-                    v1|orgId|seq|actor|action|resource|isoTime|metaHash|prevHash
-                  </code>
-                  Serialized under <span className="text-text-primary font-medium">Pessimistic Row Locking (`SELECT ... FOR UPDATE`)</span>, 
-                  guaranteeing atomic monotonic sequences (1, 2, 3...) per tenant without sequence gaps.
-                </p>
-                <ul className="text-xs text-text-secondary space-y-2 pt-2">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent-emerald" />
-                    <span>Detects dropped rows (sequence gap detection)</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent-emerald" />
-                    <span>Detects modified values in actor, action, timestamp, or payload</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent-emerald" />
-                    <span>Zero blockchain overhead, high throughput MySQL transaction speed</span>
-                  </li>
-                </ul>
+
+                <div className="paper-card p-5 rounded-lg space-y-2">
+                  <span className="mono-tag text-signal font-semibold">L2 • INGESTION API GATEWAY</span>
+                  <h4 className="text-sm font-semibold text-foreground">Machine Authentication & Scoped Routing</h4>
+                  <p className="text-xs text-muted-foreground">
+                    High-throughput REST gateway validating callers via hashed API keys and establishing tenant context.
+                  </p>
+                </div>
+
+                <div className="paper-card p-5 rounded-lg space-y-2">
+                  <span className="mono-tag text-signal font-semibold">L3 • CANONICAL NORMALIZATION</span>
+                  <h4 className="text-sm font-semibold text-foreground">RFC 8785 JSON Canonicalization Scheme (JCS)</h4>
+                  <p className="text-xs text-muted-foreground">
+                    Converts arbitrary contextual metadata into deterministic byte sequences before digest calculation.
+                  </p>
+                </div>
               </div>
 
-              {/* Level 2 Card */}
-              <div className="rounded-2xl border border-border-subtle bg-bg-secondary p-8 space-y-5 relative overflow-hidden">
-                <div className="h-10 w-10 rounded-xl bg-accent-cyan/10 border border-accent-cyan/20 flex items-center justify-center">
-                  <Lock className="h-5 w-5 text-accent-cyan" />
+              <div className="space-y-4">
+                <div className="paper-card p-5 rounded-lg space-y-2">
+                  <span className="mono-tag text-signal font-semibold">L4 • CONCURRENCY & CHAINING</span>
+                  <h4 className="text-sm font-semibold text-foreground">Pessimistic Row Locking (`SELECT ... FOR UPDATE`)</h4>
+                  <p className="text-xs text-muted-foreground">
+                    Serializes monotonic event sequence allocation per tenant without cross-tenant database locking.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-text-primary">
-                  Level 2: External Checkpoint Anchor (WORM)
-                </h3>
-                <p className="text-sm text-text-secondary leading-relaxed">
-                  Internal chaining protects against casual tampering. However, if a malicious DBA recalculates 
-                  the entire chain, Level 2 stops them cold. Periodic state snapshots are exported to 
-                  <span className="text-text-primary font-medium"> AWS S3 Object Lock</span>.
-                </p>
-                <div className="p-3 rounded-lg bg-bg-primary border border-border-subtle font-mono text-xs text-text-secondary">
-                  <span className="text-accent-cyan block">AWS S3 WORM Compliance Mode:</span>
-                  <span className="text-text-muted text-[11px]">Cannot be deleted or overwritten by any IAM user or root AWS account.</span>
+
+                <div className="paper-card p-5 rounded-lg space-y-2">
+                  <span className="mono-tag text-signal font-semibold">L5 • IMMUTABLE STORAGE (WORM)</span>
+                  <h4 className="text-sm font-semibold text-foreground">Decoupled AWS S3 Object Lock Checkpoints</h4>
+                  <p className="text-xs text-muted-foreground">
+                    Snapshots stored in write-once-read-many mode preventing retroactive database rewrite attacks.
+                  </p>
                 </div>
-                <ul className="text-xs text-text-secondary space-y-2 pt-2">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent-cyan" />
-                    <span>Root-level DBA rewrite immunity</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent-cyan" />
-                    <span>Continuous automated reconciliation job</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-accent-cyan" />
-                    <span>Cross-referenced cryptographic receipts for external auditors</span>
-                  </li>
-                </ul>
+
+                <div className="paper-card p-5 rounded-lg space-y-2">
+                  <span className="mono-tag text-signal font-semibold">L6 • VERIFICATION ENGINE</span>
+                  <h4 className="text-sm font-semibold text-foreground">Automated Chain Walk & Drift Detection</h4>
+                  <p className="text-xs text-muted-foreground">
+                    Continuously walks the stored chain to immediately flag content modifications or deleted row gaps.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Compliance & Standards */}
-        <section id="compliance" className="py-16 px-6 bg-bg-secondary/30 border-t border-border-subtle">
-          <div className="max-w-6xl mx-auto space-y-8">
-            <div className="text-center space-y-2">
-              <h2 className="text-2xl font-bold text-text-primary">
-                Built for Enterprise Regulatory Frameworks
+        {/* Security Principles */}
+        <section id="security" className="py-20 px-6 bg-[#FBF9F5]">
+          <div className="max-w-5xl mx-auto space-y-12">
+            <div className="text-center space-y-3">
+              <span className="mono-tag text-muted-foreground uppercase tracking-wider">Security Principles</span>
+              <h2 className="text-3xl sm:text-4xl serif-heading text-foreground">
+                The posture the architecture is built around.
               </h2>
-              <p className="text-xs text-text-secondary">
-                Designed to satisfy stringent evidentiary audit requirements across jurisdictions.
-              </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-5 rounded-xl border border-border-subtle bg-bg-card space-y-2">
-                <span className="text-xs font-mono font-bold text-accent-emerald">DPDP ACT 2023</span>
-                <h4 className="text-sm font-semibold text-text-primary">Data Protection & Privacy</h4>
-                <p className="text-xs text-text-secondary">
-                  Enforces strict purpose limitation, non-repudiation of data modifications, and full tenant query isolation.
-                </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="paper-card p-5 rounded-lg">
+                <span className="text-xs font-semibold text-foreground block">Append-only records</span>
+                <span className="text-xs text-muted-foreground mt-1.5 block">Records are added, never overwritten or deleted.</span>
               </div>
 
-              <div className="p-5 rounded-xl border border-border-subtle bg-bg-card space-y-2">
-                <span className="text-xs font-mono font-bold text-accent-cyan">SOC 2 TYPE II</span>
-                <h4 className="text-sm font-semibold text-text-primary">Trust Services Criteria</h4>
-                <p className="text-xs text-text-secondary">
-                  Unbroken chain verification satisfies CC6.1, CC6.8, and CC7.2 controls for system monitoring and change integrity.
-                </p>
+              <div className="paper-card p-5 rounded-lg">
+                <span className="text-xs font-semibold text-foreground block">Hash-chain integrity</span>
+                <span className="text-xs text-muted-foreground mt-1.5 block">Every record references the previous SHA-256 digest.</span>
               </div>
 
-              <div className="p-5 rounded-xl border border-border-subtle bg-bg-card space-y-2">
-                <span className="text-xs font-mono font-bold text-accent-amber">HIPAA & PCI-DSS</span>
-                <h4 className="text-sm font-semibold text-text-primary">Audit Trail Immutability</h4>
-                <p className="text-xs text-text-secondary">
-                  Requires 1-year verifiable retention of access logs with tamper detection and immutable backup stores.
-                </p>
+              <div className="paper-card p-5 rounded-lg">
+                <span className="text-xs font-semibold text-foreground block">Immutable WORM storage</span>
+                <span className="text-xs text-muted-foreground mt-1.5 block">Anchored against AWS S3 Compliance Object Lock.</span>
+              </div>
+
+              <div className="paper-card p-5 rounded-lg">
+                <span className="text-xs font-semibold text-foreground block">Role-scoped review</span>
+                <span className="text-xs text-muted-foreground mt-1.5 block">Auditors receive strictly read-only scoped access.</span>
+              </div>
+
+              <div className="paper-card p-5 rounded-lg">
+                <span className="text-xs font-semibold text-foreground block">Mandatory TOTP MFA</span>
+                <span className="text-xs text-muted-foreground mt-1.5 block">Second factor required for every human account.</span>
+              </div>
+
+              <div className="paper-card p-5 rounded-lg">
+                <span className="text-xs font-semibold text-foreground block">Lockout protection</span>
+                <span className="text-xs text-muted-foreground mt-1.5 block">15-minute lockout after 5 consecutive failed attempts.</span>
+              </div>
+
+              <div className="paper-card p-5 rounded-lg">
+                <span className="text-xs font-semibold text-foreground block">Tenant boundary</span>
+                <span className="text-xs text-muted-foreground mt-1.5 block">Zero trust placed on client-provided tenant input.</span>
+              </div>
+
+              <div className="paper-card p-5 rounded-lg">
+                <span className="text-xs font-semibold text-foreground block">Verification history</span>
+                <span className="text-xs text-muted-foreground mt-1.5 block">Every verification walk is itself immutably recorded.</span>
               </div>
             </div>
           </div>
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-border-subtle bg-bg-primary py-12 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-text-muted">
+      {/* Editorial Clean Footer */}
+      <footer className="border-t border-border py-12 px-6 bg-background">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-muted-foreground">
           <div className="flex items-center gap-3">
-            <ShieldCheck className="h-4 w-4 text-accent-emerald" />
-            <span className="text-text-secondary font-semibold">AuditRail Platform</span>
+            <span className="text-base font-serif font-bold text-foreground">AuditRail</span>
             <span>•</span>
             <span>Application-Independent Audit Log Integrity</span>
           </div>
 
-          <div className="flex items-center gap-6">
-            <a 
-              href="https://github.com/YashBiware/AuditRail.git" 
-              target="_blank" 
-              rel="noreferrer"
-              className="hover:text-text-primary transition-colors font-mono"
-            >
+          <div className="flex items-center gap-6 mono-tag">
+            <a href="https://github.com/YashBiware/AuditRail.git" target="_blank" rel="noreferrer" className="hover:text-foreground">
               GitHub Repository
             </a>
             <span>•</span>
-            <span>MIT License</span>
+            <span>DPDP Act 2023 Safeguards</span>
             <span>•</span>
             <span>Not Blockchain • Tamper-Evident</span>
           </div>

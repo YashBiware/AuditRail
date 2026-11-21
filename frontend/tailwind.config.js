@@ -7,47 +7,41 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: {
-          primary: '#090D10',    // Deep obsidian charcoal
-          secondary: '#11181D',  // Graphite slate
-          card: '#161F26',       // Elevation layer
-          surface: '#1C2730',    // Hover & modal surface
-        },
-        border: {
-          subtle: '#22323D',     // Subtle geometric outline
-          strong: '#334B5C',     // High-contrast border
-        },
-        accent: {
-          emerald: '#10B981',    // Verified cryptographic integrity green
-          forest: '#059669',
-          cyan: '#06B6D4',       // Checkpoint anchor cyan
-          amber: '#F59E0B',      // Warning / drift detection
-          rose: '#F43F5E',       // Tamper alert crimson
-        },
-        text: {
-          primary: '#F3F4F6',    // Warm stark off-white
-          secondary: '#9CA3AF',  // Muted documentation body
-          muted: '#6B7280',      // Metadata caption
-        }
+        background: '#FAF9F6', // Warm organic parchment paper (oklch(98.1% .007 88))
+        foreground: '#1F2421', // Deep graphite charcoal (oklch(21.5% .012 70))
+        card: '#FFFFFF',       // Clean card surface (oklch(99.7% .003 90))
+        'card-foreground': '#1F2421',
+        primary: '#212529',    // Refined deep charcoal
+        'primary-foreground': '#F8F9FA',
+        secondary: '#F2EFE9',  // Subtle warm sand
+        'secondary-foreground': '#2C302E',
+        muted: '#EBE7DF',
+        'muted-foreground': '#6C757D', // Neutral editorial secondary
+        border: '#E2DDD3',     // Elegant tactile border (oklch(89.5% .009 84))
+        signal: '#2A6F97',     // Slate blue-teal cryptographic signal accent (oklch(47.5% .058 205))
+        'signal-foreground': '#FFFFFF',
+        accent: '#DCE6E5',
+        'accent-foreground': '#1B3B36',
+        destructive: '#B02A37', // Crimson for tamper alerts
+        'destructive-foreground': '#FFFFFF',
       },
       fontFamily: {
-        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+        sans: ['"Instrument Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+        mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
       },
-      animation: {
-        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'fade-in': 'fadeIn 0.5s ease-out forwards',
-        'shimmer': 'shimmer 2.5s infinite linear',
+      borderRadius: {
+        DEFAULT: '6px',
+        sm: '4px',
+        md: '6px',
+        lg: '8px',
+        xl: '12px',
+        '2xl': '16px',
       },
-      keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0', transform: 'translateY(10px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        shimmer: {
-          '0%': { backgroundPosition: '-200% 0' },
-          '100%': { backgroundPosition: '200% 0' },
-        }
+      boxShadow: {
+        subtle: '0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04)',
+        card: '0 0 0 1px #E2DDD3, 0 2px 4px -1px rgba(0, 0, 0, 0.02), 0 4px 6px -2px rgba(0, 0, 0, 0.04)',
+        float: '0 12px 32px -8px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04)',
       }
     },
   },

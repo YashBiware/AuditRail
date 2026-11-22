@@ -1,69 +1,97 @@
-<mxfile host="app.diagrams.net" modified="2026-11-22T09:50:00.000Z" agent="AuditRail" version="21.0.0" type="device">
-  <diagram id="er_diagram" name="3.3.5 Entity Relationship Diagram">
+<mxfile host="app.diagrams.net" modified="2026-11-22T10:40:00.000Z" agent="AuditRail" version="21.0.0" type="device">
+  <diagram id="er_diagram_clean" name="3.3.5 Entity Relationship Diagram">
     <mxGraphModel background="#ffffff" dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
 
-        <mxCell id="title" value="&lt;b&gt;Figure 3.3.5: Entity-Relationship Diagram (ERD) — Multi-Tenant Schema&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="114" y="30" width="600" height="30" as="geometry"/>
+        <!-- Title -->
+        <mxCell id="title" value="&lt;b style=&quot;font-size: 15px;&quot;&gt;Figure 3.3.5: Entity-Relationship Diagram (ERD) — Multi-Tenant Schema&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="64" y="30" width="700" height="30" as="geometry"/>
         </mxCell>
 
-        <!-- Entity: organizations -->
-        <mxCell id="ent_org" value="&lt;b&gt;organizations&lt;/b&gt;&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;   name : VARCHAR(255)&#xa;   slug : VARCHAR(100) UNIQUE&#xa;   status : VARCHAR(50)&#xa;   created_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="290" y="80" width="220" height="120" as="geometry"/>
+        <!-- ==================== TIER 1: ROOT TENANT ENTITY ==================== -->
+        <mxCell id="e_org" value="&lt;b&gt;organizations&lt;/b&gt;&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&lt;br&gt;   name : VARCHAR(255)&lt;br&gt;   slug : VARCHAR(100) [UNIQUE]&lt;br&gt;   status : VARCHAR(50)&lt;br&gt;   created_at : TIMESTAMP(6)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="274" y="80" width="280" height="105" as="geometry"/>
         </mxCell>
 
-        <!-- Entity: api_keys -->
-        <mxCell id="ent_api_key" value="&lt;b&gt;api_keys&lt;/b&gt;&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&#xa;   key_prefix : VARCHAR(16)&#xa;   hashed_secret : VARCHAR(64)&#xa;   label : VARCHAR(100)&#xa;   status : VARCHAR(20)&#xa;   created_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="40" y="270" width="220" height="150" as="geometry"/>
+        <!-- ==================== TIER 2: IDENTITY & CONCURRENCY HEAD ==================== -->
+        <mxCell id="e_api_keys" value="&lt;b&gt;api_keys&lt;/b&gt;&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&lt;br&gt;   key_prefix : VARCHAR(16)&lt;br&gt;   key_hash : CHAR(64) [UNIQUE]&lt;br&gt;   label : VARCHAR(100)&lt;br&gt;   status : VARCHAR(20)&lt;br&gt;   created_at : TIMESTAMP(6)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="240" width="210" height="130" as="geometry"/>
         </mxCell>
 
-        <!-- Entity: chain_heads -->
-        <mxCell id="ent_chain_head" value="&lt;b&gt;chain_heads&lt;/b&gt; (Pessimistic Lock)&#xa;--&#xa;&lt;b&gt;PK, FK&lt;/b&gt; organization_id : CHAR(36)&#xa;   head_sequence : BIGINT&#xa;   head_record_hash : CHAR(64)&#xa;   genesis_hash : CHAR(64)&#xa;   updated_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="290" y="270" width="220" height="130" as="geometry"/>
+        <mxCell id="e_chain_heads" value="&lt;b&gt;chain_heads&lt;/b&gt; (Pessimistic Lock)&lt;hr&gt;&lt;b&gt;PK, FK&lt;/b&gt; organization_id : CHAR(36)&lt;br&gt;   head_sequence_number : BIGINT&lt;br&gt;   head_record_hash : CHAR(64)&lt;br&gt;   genesis_hash : CHAR(64)&lt;br&gt;   updated_at : TIMESTAMP(6)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="309" y="240" width="210" height="130" as="geometry"/>
         </mxCell>
 
-        <!-- Entity: users -->
-        <mxCell id="ent_users" value="&lt;b&gt;users&lt;/b&gt; (Enterprise RBAC)&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&#xa;   email : VARCHAR(255) UNIQUE&#xa;   password_hash : VARCHAR(255)&#xa;   role : VARCHAR(50)&#xa;   totp_secret : VARCHAR(64)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="545" y="270" width="220" height="145" as="geometry"/>
+        <mxCell id="e_users" value="&lt;b&gt;users&lt;/b&gt; (Platform RBAC)&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&lt;br&gt;   email : VARCHAR(255) [UNIQUE]&lt;br&gt;   password_hash : VARCHAR(255)&lt;br&gt;   role : VARCHAR(50)&lt;br&gt;   account_status : VARCHAR(20)&lt;br&gt;   created_at : TIMESTAMP(6)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="554" y="240" width="210" height="130" as="geometry"/>
         </mxCell>
 
-        <!-- Entity: audit_events -->
-        <mxCell id="ent_audit_events" value="&lt;b&gt;audit_events&lt;/b&gt; (Cryptographic Log Chain)&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&#xa;&lt;b&gt;UQ&lt;/b&gt; (organization_id, sequence_number)&#xa;   sequence_number : BIGINT&#xa;   event_action : VARCHAR(100)&#xa;   actor_id : VARCHAR(100)&#xa;   target_id : VARCHAR(100)&#xa;   payload : TEXT&#xa;   record_hash : CHAR(64)&#xa;   prev_record_hash : CHAR(64)&#xa;   created_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="150" y="500" width="280" height="230" as="geometry"/>
+        <!-- ==================== TIER 3: IMMUTABLE AUDIT EVENTS (CHAIN TABLE) ==================== -->
+        <mxCell id="e_audit_events" value="&lt;b&gt;audit_events&lt;/b&gt; (Cryptographic SHA-256 Ledger)&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&lt;br&gt;&lt;b&gt;UQ&lt;/b&gt; (organization_id, sequence_number)&lt;br&gt;   sequence_number : BIGINT [Monotonic]&lt;br&gt;   event_action : VARCHAR(100)&lt;br&gt;   actor_id : VARCHAR(100)&lt;br&gt;   target_id : VARCHAR(100)&lt;br&gt;   payload : TEXT [RFC 8785 Canonical JSON]&lt;br&gt;   record_hash : CHAR(64) [Current SHA-256 Digest]&lt;br&gt;   prev_record_hash : CHAR(64) [Previous Chain Digest]&lt;br&gt;   created_at : TIMESTAMP(6) [Microsecond UTC]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="425" width="455" height="195" as="geometry"/>
         </mxCell>
 
-        <!-- Entity: checkpoints -->
-        <mxCell id="ent_checkpoints" value="&lt;b&gt;checkpoints&lt;/b&gt; (WORM Anchors)&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&#xa;   sequence_number : BIGINT&#xa;   checkpoint_hash : CHAR(64)&#xa;   storage_provider : VARCHAR(50)&#xa;   s3_bucket : VARCHAR(100)&#xa;   s3_object_key : VARCHAR(255)&#xa;   s3_version_id : VARCHAR(100)&#xa;   created_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="490" y="500" width="260" height="200" as="geometry"/>
+        <mxCell id="e_checkpoints" value="&lt;b&gt;checkpoints&lt;/b&gt; (WORM Anchors)&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&lt;br&gt;   sequence_number : BIGINT&lt;br&gt;   checkpoint_hash : CHAR(64)&lt;br&gt;   storage_provider : VARCHAR(32)&lt;br&gt;   s3_bucket : VARCHAR(100)&lt;br&gt;   s3_object_key : VARCHAR(255)&lt;br&gt;   s3_version_id : VARCHAR(100)&lt;br&gt;   created_at : TIMESTAMP(6)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="544" y="425" width="220" height="195" as="geometry"/>
         </mxCell>
 
-        <!-- Entity: verification_runs -->
-        <mxCell id="ent_verification_runs" value="&lt;b&gt;verification_runs&lt;/b&gt; (Proof Audit Trail)&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&#xa;   verified_from_sequence : BIGINT&#xa;   verified_to_sequence : BIGINT&#xa;   result_status : VARCHAR(50)&#xa;   discrepancies_count : INT&#xa;   failure_reason : TEXT&#xa;   verified_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="270" y="800" width="260" height="180" as="geometry"/>
+        <!-- ==================== TIER 4: VERIFICATION AUDIT RUNS ==================== -->
+        <mxCell id="e_verification_runs" value="&lt;b&gt;verification_runs&lt;/b&gt; (Continuous Mathematical Verification Logs)&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&lt;br&gt;   verified_from_sequence : BIGINT&lt;br&gt;   verified_to_sequence : BIGINT&lt;br&gt;   result_status : VARCHAR(50) ['SUCCESS', 'TAMPER_DETECTED', 'CORRUPT']&lt;br&gt;   discrepancies_count : INT&lt;br&gt;   failure_reason : TEXT&lt;br&gt;   verified_at : TIMESTAMP(6)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="665" width="700" height="135" as="geometry"/>
         </mxCell>
 
-        <!-- Relationships (1 to Many / 1 to 1) -->
-        <mxCell id="rel_org_api" value="1 : N" edge="1" parent="1" source="ent_org" target="ent_api_key">
+        <!-- ==================== CLEAN CONNECTORS WITH CARDINALITY ==================== -->
+        <mxCell id="rel_org_api" edge="1" parent="1" source="e_org" target="e_api_keys" style="endArrow=open;endFill=0;strokeColor=#333333;">
           <mxGeometry relative="1" as="geometry">
-            <Array as="points"><mxPoint x="150" y="140"/></Array>
+            <Array as="points"><mxPoint x="169" y="132"/></Array>
           </mxGeometry>
         </mxCell>
-
-        <mxCell id="rel_org_head" value="1 : 1" edge="1" parent="1" source="ent_org" target="ent_chain_head"><mxGeometry relative="1" as="geometry"/></mxCell>
-
-        <mxCell id="rel_org_user" value="1 : N" edge="1" parent="1" source="ent_org" target="ent_users">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points"><mxPoint x="655" y="140"/></Array>
-          </mxGeometry>
+        <mxCell id="lbl_org_api" value="1 : N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;" vertex="1" connectable="0" parent="rel_org_api">
+          <mxGeometry x="0.2" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
         </mxCell>
 
-        <mxCell id="rel_org_events" value="1 : N" edge="1" parent="1" source="ent_chain_head" target="ent_audit_events"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="rel_org_head" edge="1" parent="1" source="e_org" target="e_chain_heads" style="endArrow=open;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="lbl_org_head" value="1 : 1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;" vertex="1" connectable="0" parent="rel_org_head">
+          <mxGeometry x="0.1" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+        </mxCell>
 
-        <mxCell id="rel_org_checkpoints" value="1 : N" edge="1" parent="1" source="ent_chain_head" target="ent_checkpoints"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="rel_org_users" edge="1" parent="1" source="e_org" target="e_users" style="endArrow=open;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="659" y="132"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_org_users" value="1 : N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;" vertex="1" connectable="0" parent="rel_org_users">
+          <mxGeometry x="0.2" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+        </mxCell>
 
-        <mxCell id="rel_events_verify" value="1 : N" edge="1" parent="1" source="ent_audit_events" target="ent_verification_runs"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="rel_head_events" edge="1" parent="1" source="e_chain_heads" target="e_audit_events" style="endArrow=open;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="414" y="395"/><mxPoint x="291" y="395"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_head_events" value="1 : N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;" vertex="1" connectable="0" parent="rel_head_events">
+          <mxGeometry x="0.3" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+        </mxCell>
+
+        <mxCell id="rel_head_checkpoints" edge="1" parent="1" source="e_chain_heads" target="e_checkpoints" style="endArrow=open;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="414" y="395"/><mxPoint x="654" y="395"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_head_checkpoints" value="1 : N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;" vertex="1" connectable="0" parent="rel_head_checkpoints">
+          <mxGeometry x="0.3" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+        </mxCell>
+
+        <mxCell id="rel_events_verify" edge="1" parent="1" source="e_audit_events" target="e_verification_runs" style="endArrow=open;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="lbl_events_verify" value="1 : N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;" vertex="1" connectable="0" parent="rel_events_verify">
+          <mxGeometry x="0.1" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+        </mxCell>
 
       </root>
     </mxGraphModel>

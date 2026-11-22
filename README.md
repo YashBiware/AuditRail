@@ -6,6 +6,36 @@ AuditRail is an enterprise-grade, application-independent audit log platform eng
 
 ---
 
+## 🚀 Zero-Setup Quickstart (Run in 1 Click)
+
+Anyone cloning or downloading the repository can spin up the complete containerized stack in **one single command** (or double-click). No manual database installations, Java setups, or Node.js installs required.
+
+### Option A: Double-Click (Windows)
+1. Double-click [**`run_auditrail.bat`**](run_auditrail.bat)
+2. The script will automatically:
+   - Verify Docker Desktop is active.
+   - Build and start all 4 containers (MySQL 8.0, MinIO S3 Object Lock, Backend, and Frontend).
+   - Automatically open `http://localhost:5173` in your browser.
+
+### Option B: Terminal / Linux / macOS (1 Command)
+```bash
+docker compose up -d --build
+```
+*(or run `./run_auditrail.sh` on macOS/Linux)*
+
+---
+
+### 🌐 Access URLs & Demo Credentials
+
+| Component | URL | Credentials / Notes |
+| :--- | :--- | :--- |
+| **AuditRail Editorial UI** | `http://localhost:5173` *(or port 80)* | Ready to use immediately |
+| **Backend API & Health** | `http://localhost:8080/api/v1/policy/dpdp` | Actuator & Ingestion API |
+| **MinIO S3 Object Lock** | `http://localhost:9001` | User: `minioadmin` / Pass: `minioadminpassword2026!` |
+| **Simulated Client Bank** | `http://localhost:5050` | Double-click `launch_simulated_client_app.bat` |
+
+---
+
 ## 🌟 Key Highlights & Architectural Overview
 
 ```mermaid

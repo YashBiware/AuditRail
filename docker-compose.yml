@@ -92,11 +92,14 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/auditrail?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: auditrail_app
       SPRING_DATASOURCE_PASSWORD: auditrail_secret
-      STORAGE_PROVIDER: MINIO
-      MINIO_ENDPOINT: http://minio:9000
-      MINIO_ACCESS_KEY: minioadmin
-      MINIO_SECRET_KEY: minioadminpassword2026!
-      MINIO_BUCKET: auditrail-checkpoints
+      STORAGE_PROVIDER: AWS_S3
+      AWS_S3_ENDPOINT: http://minio:9000
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadminpassword2026!
+      AWS_S3_BUCKET: auditrail-checkpoints
+      AWS_REGION: us-east-1
+      AWS_S3_PATH_STYLE_ACCESS: "true"
+      AWS_S3_RETENTION_DAYS: 365
       JWT_SECRET: AuditRailSuperSecretKeyForSigningJwtTokensMinimum256BitsLong2026!
     ports:
       - "8080:8080"

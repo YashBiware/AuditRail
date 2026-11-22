@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" modified="2026-11-22T09:25:00.000Z" agent="AuditRail" version="21.0.0" type="device">
   <diagram id="function_oriented_design" name="3.2 Function Oriented Design (Structure Chart)">
-    <mxGraphModel dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel background="#ffffff" dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
@@ -10,72 +10,72 @@
         </mxCell>
 
         <!-- Top Level Root Module -->
-        <mxCell id="mod_root" value="&lt;b&gt;AUDITRAIL SYSTEM&lt;/b&gt;&lt;br&gt;Core Controller &amp;amp; Orchestration" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1">
+        <mxCell id="mod_root" value="&lt;b&gt;AUDITRAIL SYSTEM&lt;/b&gt;&lt;br&gt;Core Controller &amp;amp; Orchestration" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="1">
           <mxGeometry x="304" y="110" width="220" height="60" as="geometry"/>
         </mxCell>
 
         <!-- Level 1 Subsystems -->
-        <mxCell id="mod_sec" value="&lt;b&gt;1.0 Security &amp;amp; Auth&lt;/b&gt;&lt;br&gt;Identity Resolution" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+        <mxCell id="mod_sec" value="&lt;b&gt;1.0 Security &amp;amp; Auth&lt;/b&gt;&lt;br&gt;Identity Resolution" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
           <mxGeometry x="84" y="230" width="150" height="50" as="geometry"/>
         </mxCell>
 
-        <mxCell id="mod_ingest" value="&lt;b&gt;2.0 Ingestion Pipeline&lt;/b&gt;&lt;br&gt;Serialization &amp;amp; Chaining" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+        <mxCell id="mod_ingest" value="&lt;b&gt;2.0 Ingestion Pipeline&lt;/b&gt;&lt;br&gt;Serialization &amp;amp; Chaining" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
           <mxGeometry x="264" y="230" width="150" height="50" as="geometry"/>
         </mxCell>
 
-        <mxCell id="mod_verify" value="&lt;b&gt;3.0 Verification Engine&lt;/b&gt;&lt;br&gt;Chain Walk &amp;amp; Proof" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+        <mxCell id="mod_verify" value="&lt;b&gt;3.0 Verification Engine&lt;/b&gt;&lt;br&gt;Chain Walk &amp;amp; Proof" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
           <mxGeometry x="444" y="230" width="150" height="50" as="geometry"/>
         </mxCell>
 
-        <mxCell id="mod_worm" value="&lt;b&gt;4.0 Anchor Service&lt;/b&gt;&lt;br&gt;WORM &amp;amp; S3 Checkpoints" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+        <mxCell id="mod_worm" value="&lt;b&gt;4.0 Anchor Service&lt;/b&gt;&lt;br&gt;WORM &amp;amp; S3 Checkpoints" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
           <mxGeometry x="614" y="230" width="150" height="50" as="geometry"/>
         </mxCell>
 
         <!-- Level 2 Functions -->
         <!-- Security Functions -->
-        <mxCell id="fn_1_1" value="Authenticate API Key&lt;br&gt;(SHA-256 Match)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="fn_1_1" value="Authenticate API Key&lt;br&gt;(SHA-256 Match)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="84" y="340" width="150" height="40" as="geometry"/>
         </mxCell>
-        <mxCell id="fn_1_2" value="Validate JWT Claims&lt;br&gt;&amp;amp; TOTP Token" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="fn_1_2" value="Validate JWT Claims&lt;br&gt;&amp;amp; TOTP Token" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="84" y="410" width="150" height="40" as="geometry"/>
         </mxCell>
-        <mxCell id="fn_1_3" value="Resolve Org Isolation&lt;br&gt;(Tenant Context)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="fn_1_3" value="Resolve Org Isolation&lt;br&gt;(Tenant Context)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="84" y="480" width="150" height="40" as="geometry"/>
         </mxCell>
 
         <!-- Ingestion Functions -->
-        <mxCell id="fn_2_1" value="Acquire Pessimistic&lt;br&gt;Row Lock (FOR UPDATE)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="fn_2_1" value="Acquire Pessimistic&lt;br&gt;Row Lock (FOR UPDATE)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="264" y="340" width="150" height="40" as="geometry"/>
         </mxCell>
-        <mxCell id="fn_2_2" value="RFC 8785 JSON&lt;br&gt;Canonicalization (JCS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="fn_2_2" value="RFC 8785 JSON&lt;br&gt;Canonicalization (JCS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="264" y="410" width="150" height="40" as="geometry"/>
         </mxCell>
-        <mxCell id="fn_2_3" value="Compute SHA-256&lt;br&gt;Current Record Hash" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="fn_2_3" value="Compute SHA-256&lt;br&gt;Current Record Hash" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="264" y="480" width="150" height="40" as="geometry"/>
         </mxCell>
-        <mxCell id="fn_2_4" value="Insert Event &amp;amp; Advance&lt;br&gt;Chain Head Pointer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="fn_2_4" value="Insert Event &amp;amp; Advance&lt;br&gt;Chain Head Pointer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="264" y="550" width="150" height="40" as="geometry"/>
         </mxCell>
 
         <!-- Verification Functions -->
-        <mxCell id="fn_3_1" value="Fetch Ordered Events&lt;br&gt;(ORDER BY seq ASC)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="fn_3_1" value="Fetch Ordered Events&lt;br&gt;(ORDER BY seq ASC)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="444" y="340" width="150" height="40" as="geometry"/>
         </mxCell>
-        <mxCell id="fn_3_2" value="Recalculate JCS &amp;amp;&lt;br&gt;Step-by-Step Hash Walk" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="fn_3_2" value="Recalculate JCS &amp;amp;&lt;br&gt;Step-by-Step Hash Walk" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="444" y="410" width="150" height="40" as="geometry"/>
         </mxCell>
-        <mxCell id="fn_3_3" value="Detect Sequence Gaps&lt;br&gt;&amp;amp; Payload Mutations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="fn_3_3" value="Detect Sequence Gaps&lt;br&gt;&amp;amp; Payload Mutations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="444" y="480" width="150" height="40" as="geometry"/>
         </mxCell>
 
         <!-- Anchor Functions -->
-        <mxCell id="fn_4_1" value="Generate Checkpoint&lt;br&gt;JSON Manifest" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="fn_4_1" value="Generate Checkpoint&lt;br&gt;JSON Manifest" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="614" y="340" width="150" height="40" as="geometry"/>
         </mxCell>
-        <mxCell id="fn_4_2" value="Upload to AWS S3&lt;br&gt;Object Lock (WORM)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="fn_4_2" value="Upload to AWS S3&lt;br&gt;Object Lock (WORM)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="614" y="410" width="150" height="40" as="geometry"/>
         </mxCell>
-        <mxCell id="fn_4_3" value="Reconcile Chain Head&lt;br&gt;with Immutable WORM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="fn_4_3" value="Reconcile Chain Head&lt;br&gt;with Immutable WORM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="614" y="480" width="150" height="40" as="geometry"/>
         </mxCell>
 

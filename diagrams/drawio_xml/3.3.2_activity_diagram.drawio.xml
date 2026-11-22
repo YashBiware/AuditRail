@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" modified="2026-11-22T09:35:00.000Z" agent="AuditRail" version="21.0.0" type="device">
   <diagram id="activity_diagram" name="3.3.2 Activity Diagram">
-    <mxGraphModel dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel background="#ffffff" dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
@@ -10,7 +10,7 @@
         </mxCell>
 
         <!-- Swimlanes (Client App, Backend Engine, Database, WORM S3) -->
-        <mxCell id="lane_client" value="Client Application" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;startSize=30;fontStyle=1;" vertex="1" parent="1">
+        <mxCell id="lane_client" value="Client Application" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;startSize=30;fontStyle=1;" vertex="1" parent="1">
           <mxGeometry x="40" y="70" width="180" height="1040" as="geometry"/>
         </mxCell>
 
@@ -18,11 +18,11 @@
           <mxGeometry x="75" y="45" width="30" height="30" as="geometry"/>
         </mxCell>
 
-        <mxCell id="act_c1" value="Send POST /api/v1/events&lt;br&gt;with X-AuditRail-API-Key" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="lane_client">
+        <mxCell id="act_c1" value="Send POST /api/v1/events&lt;br&gt;with X-AuditRail-API-Key" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="lane_client">
           <mxGeometry x="20" y="100" width="140" height="50" as="geometry"/>
         </mxCell>
 
-        <mxCell id="act_c2" value="Receive Monotonic&lt;br&gt;Receipt (Seq &amp;amp; Hash)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="lane_client">
+        <mxCell id="act_c2" value="Receive Monotonic&lt;br&gt;Receipt (Seq &amp;amp; Hash)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="lane_client">
           <mxGeometry x="20" y="860" width="140" height="50" as="geometry"/>
         </mxCell>
 
@@ -31,57 +31,57 @@
         </mxCell>
 
         <!-- Backend Engine Swimlane -->
-        <mxCell id="lane_engine" value="AuditRail Core Backend" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;startSize=30;fontStyle=1;" vertex="1" parent="1">
+        <mxCell id="lane_engine" value="AuditRail Core Backend" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;startSize=30;fontStyle=1;" vertex="1" parent="1">
           <mxGeometry x="220" y="70" width="220" height="1040" as="geometry"/>
         </mxCell>
 
-        <mxCell id="act_b1" value="Authenticate &amp;amp; Resolve&lt;br&gt;Organization Context" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;" vertex="1" parent="lane_engine">
+        <mxCell id="act_b1" value="Authenticate &amp;amp; Resolve&lt;br&gt;Organization Context" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="lane_engine">
           <mxGeometry x="30" y="100" width="160" height="50" as="geometry"/>
         </mxCell>
 
-        <mxCell id="act_b2" value="Request Row Lock on&lt;br&gt;chain_heads (FOR UPDATE)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;" vertex="1" parent="lane_engine">
+        <mxCell id="act_b2" value="Request Row Lock on&lt;br&gt;chain_heads (FOR UPDATE)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="lane_engine">
           <mxGeometry x="30" y="180" width="160" height="50" as="geometry"/>
         </mxCell>
 
-        <mxCell id="act_b3" value="Compute Sequence Number&lt;br&gt;&lt;b&gt;S_next = S_prev + 1&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;" vertex="1" parent="lane_engine">
+        <mxCell id="act_b3" value="Compute Sequence Number&lt;br&gt;&lt;b&gt;S_next = S_prev + 1&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="lane_engine">
           <mxGeometry x="30" y="340" width="160" height="50" as="geometry"/>
         </mxCell>
 
-        <mxCell id="act_b4" value="Canonicalize Payload via&lt;br&gt;RFC 8785 (JCS standard)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;" vertex="1" parent="lane_engine">
+        <mxCell id="act_b4" value="Canonicalize Payload via&lt;br&gt;RFC 8785 (JCS standard)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="lane_engine">
           <mxGeometry x="30" y="420" width="160" height="50" as="geometry"/>
         </mxCell>
 
-        <mxCell id="act_b5" value="Calculate SHA-256 Hash:&lt;br&gt;SHA-256(JCS || H_prev)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="lane_engine">
+        <mxCell id="act_b5" value="Calculate SHA-256 Hash:&lt;br&gt;SHA-256(JCS || H_prev)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="lane_engine">
           <mxGeometry x="30" y="500" width="160" height="50" as="geometry"/>
         </mxCell>
 
-        <mxCell id="act_b6" value="Is Milestone Checkpoint?&lt;br&gt;(Seq % Interval == 0)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane_engine">
+        <mxCell id="act_b6" value="Is Milestone Checkpoint?&lt;br&gt;(Seq % Interval == 0)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="lane_engine">
           <mxGeometry x="40" y="660" width="140" height="70" as="geometry"/>
         </mxCell>
 
-        <mxCell id="act_b7" value="Commit Transaction &amp;amp;&lt;br&gt;Release Row Lock" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="lane_engine">
+        <mxCell id="act_b7" value="Commit Transaction &amp;amp;&lt;br&gt;Release Row Lock" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="lane_engine">
           <mxGeometry x="30" y="770" width="160" height="50" as="geometry"/>
         </mxCell>
 
         <!-- Database Swimlane -->
-        <mxCell id="lane_db" value="Relational Database (MySQL)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;startSize=30;fontStyle=1;" vertex="1" parent="1">
+        <mxCell id="lane_db" value="Relational Database (MySQL)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;startSize=30;fontStyle=1;" vertex="1" parent="1">
           <mxGeometry x="440" y="70" width="180" height="1040" as="geometry"/>
         </mxCell>
 
-        <mxCell id="act_db1" value="Acquire Exclusive&lt;br&gt;Pessimistic Row Lock&lt;br&gt;on Chain Head" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="lane_db">
+        <mxCell id="act_db1" value="Acquire Exclusive&lt;br&gt;Pessimistic Row Lock&lt;br&gt;on Chain Head" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="lane_db">
           <mxGeometry x="20" y="250" width="140" height="60" as="geometry"/>
         </mxCell>
 
-        <mxCell id="act_db2" value="Insert audit_events&lt;br&gt;&amp;amp; Update chain_heads&lt;br&gt;Head Sequence &amp;amp; Hash" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;" vertex="1" parent="lane_db">
+        <mxCell id="act_db2" value="Insert audit_events&lt;br&gt;&amp;amp; Update chain_heads&lt;br&gt;Head Sequence &amp;amp; Hash" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="lane_db">
           <mxGeometry x="20" y="580" width="140" height="60" as="geometry"/>
         </mxCell>
 
         <!-- S3 Object Lock Swimlane -->
-        <mxCell id="lane_s3" value="AWS S3 Object Lock (WORM)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;startSize=30;fontStyle=1;" vertex="1" parent="1">
+        <mxCell id="lane_s3" value="AWS S3 Object Lock (WORM)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;startSize=30;fontStyle=1;" vertex="1" parent="1">
           <mxGeometry x="620" y="70" width="170" height="1040" as="geometry"/>
         </mxCell>
 
-        <mxCell id="act_s3_1" value="PutObject with&lt;br&gt;ObjectLockMode = COMPLIANCE&lt;br&gt;&amp;amp; LegalHold = ON" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;" vertex="1" parent="lane_s3">
+        <mxCell id="act_s3_1" value="PutObject with&lt;br&gt;ObjectLockMode = COMPLIANCE&lt;br&gt;&amp;amp; LegalHold = ON" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="lane_s3">
           <mxGeometry x="15" y="665" width="140" height="60" as="geometry"/>
         </mxCell>
 

@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" modified="2026-11-22T09:50:00.000Z" agent="AuditRail" version="21.0.0" type="device">
   <diagram id="er_diagram" name="3.3.5 Entity Relationship Diagram">
-    <mxGraphModel dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel background="#ffffff" dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
@@ -10,37 +10,37 @@
         </mxCell>
 
         <!-- Entity: organizations -->
-        <mxCell id="ent_org" value="&lt;b&gt;organizations&lt;/b&gt;&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;   name : VARCHAR(255)&#xa;   slug : VARCHAR(100) UNIQUE&#xa;   status : VARCHAR(50)&#xa;   created_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#dae8fc;strokeColor=#6c8ebf;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
+        <mxCell id="ent_org" value="&lt;b&gt;organizations&lt;/b&gt;&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;   name : VARCHAR(255)&#xa;   slug : VARCHAR(100) UNIQUE&#xa;   status : VARCHAR(50)&#xa;   created_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
           <mxGeometry x="290" y="80" width="220" height="120" as="geometry"/>
         </mxCell>
 
         <!-- Entity: api_keys -->
-        <mxCell id="ent_api_key" value="&lt;b&gt;api_keys&lt;/b&gt;&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&#xa;   key_prefix : VARCHAR(16)&#xa;   hashed_secret : VARCHAR(64)&#xa;   label : VARCHAR(100)&#xa;   status : VARCHAR(20)&#xa;   created_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#f5f5f5;strokeColor=#666666;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
+        <mxCell id="ent_api_key" value="&lt;b&gt;api_keys&lt;/b&gt;&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&#xa;   key_prefix : VARCHAR(16)&#xa;   hashed_secret : VARCHAR(64)&#xa;   label : VARCHAR(100)&#xa;   status : VARCHAR(20)&#xa;   created_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
           <mxGeometry x="40" y="270" width="220" height="150" as="geometry"/>
         </mxCell>
 
         <!-- Entity: chain_heads -->
-        <mxCell id="ent_chain_head" value="&lt;b&gt;chain_heads&lt;/b&gt; (Pessimistic Lock)&#xa;--&#xa;&lt;b&gt;PK, FK&lt;/b&gt; organization_id : CHAR(36)&#xa;   head_sequence : BIGINT&#xa;   head_record_hash : CHAR(64)&#xa;   genesis_hash : CHAR(64)&#xa;   updated_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffe6cc;strokeColor=#d79b00;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
+        <mxCell id="ent_chain_head" value="&lt;b&gt;chain_heads&lt;/b&gt; (Pessimistic Lock)&#xa;--&#xa;&lt;b&gt;PK, FK&lt;/b&gt; organization_id : CHAR(36)&#xa;   head_sequence : BIGINT&#xa;   head_record_hash : CHAR(64)&#xa;   genesis_hash : CHAR(64)&#xa;   updated_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
           <mxGeometry x="290" y="270" width="220" height="130" as="geometry"/>
         </mxCell>
 
         <!-- Entity: users -->
-        <mxCell id="ent_users" value="&lt;b&gt;users&lt;/b&gt; (Enterprise RBAC)&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&#xa;   email : VARCHAR(255) UNIQUE&#xa;   password_hash : VARCHAR(255)&#xa;   role : VARCHAR(50)&#xa;   totp_secret : VARCHAR(64)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#f5f5f5;strokeColor=#666666;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
+        <mxCell id="ent_users" value="&lt;b&gt;users&lt;/b&gt; (Enterprise RBAC)&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&#xa;   email : VARCHAR(255) UNIQUE&#xa;   password_hash : VARCHAR(255)&#xa;   role : VARCHAR(50)&#xa;   totp_secret : VARCHAR(64)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
           <mxGeometry x="545" y="270" width="220" height="145" as="geometry"/>
         </mxCell>
 
         <!-- Entity: audit_events -->
-        <mxCell id="ent_audit_events" value="&lt;b&gt;audit_events&lt;/b&gt; (Cryptographic Log Chain)&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&#xa;&lt;b&gt;UQ&lt;/b&gt; (organization_id, sequence_number)&#xa;   sequence_number : BIGINT&#xa;   event_action : VARCHAR(100)&#xa;   actor_id : VARCHAR(100)&#xa;   target_id : VARCHAR(100)&#xa;   payload : TEXT&#xa;   record_hash : CHAR(64)&#xa;   prev_record_hash : CHAR(64)&#xa;   created_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#d5e8d4;strokeColor=#82b366;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
+        <mxCell id="ent_audit_events" value="&lt;b&gt;audit_events&lt;/b&gt; (Cryptographic Log Chain)&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&#xa;&lt;b&gt;UQ&lt;/b&gt; (organization_id, sequence_number)&#xa;   sequence_number : BIGINT&#xa;   event_action : VARCHAR(100)&#xa;   actor_id : VARCHAR(100)&#xa;   target_id : VARCHAR(100)&#xa;   payload : TEXT&#xa;   record_hash : CHAR(64)&#xa;   prev_record_hash : CHAR(64)&#xa;   created_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
           <mxGeometry x="150" y="500" width="280" height="230" as="geometry"/>
         </mxCell>
 
         <!-- Entity: checkpoints -->
-        <mxCell id="ent_checkpoints" value="&lt;b&gt;checkpoints&lt;/b&gt; (WORM Anchors)&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&#xa;   sequence_number : BIGINT&#xa;   checkpoint_hash : CHAR(64)&#xa;   storage_provider : VARCHAR(50)&#xa;   s3_bucket : VARCHAR(100)&#xa;   s3_object_key : VARCHAR(255)&#xa;   s3_version_id : VARCHAR(100)&#xa;   created_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#fff2cc;strokeColor=#d6b656;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
+        <mxCell id="ent_checkpoints" value="&lt;b&gt;checkpoints&lt;/b&gt; (WORM Anchors)&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&#xa;   sequence_number : BIGINT&#xa;   checkpoint_hash : CHAR(64)&#xa;   storage_provider : VARCHAR(50)&#xa;   s3_bucket : VARCHAR(100)&#xa;   s3_object_key : VARCHAR(255)&#xa;   s3_version_id : VARCHAR(100)&#xa;   created_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
           <mxGeometry x="490" y="500" width="260" height="200" as="geometry"/>
         </mxCell>
 
         <!-- Entity: verification_runs -->
-        <mxCell id="ent_verification_runs" value="&lt;b&gt;verification_runs&lt;/b&gt; (Proof Audit Trail)&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&#xa;   verified_from_sequence : BIGINT&#xa;   verified_to_sequence : BIGINT&#xa;   result_status : VARCHAR(50)&#xa;   discrepancies_count : INT&#xa;   failure_reason : TEXT&#xa;   verified_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#e1d5e7;strokeColor=#9673a6;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
+        <mxCell id="ent_verification_runs" value="&lt;b&gt;verification_runs&lt;/b&gt; (Proof Audit Trail)&#xa;--&#xa;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&#xa;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&#xa;   verified_from_sequence : BIGINT&#xa;   verified_to_sequence : BIGINT&#xa;   result_status : VARCHAR(50)&#xa;   discrepancies_count : INT&#xa;   failure_reason : TEXT&#xa;   verified_at : TIMESTAMP(6)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
           <mxGeometry x="270" y="800" width="260" height="180" as="geometry"/>
         </mxCell>
 

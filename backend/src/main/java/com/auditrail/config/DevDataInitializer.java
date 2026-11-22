@@ -1,0 +1,118 @@
+package com.auditrail.config;
+
+import com.auditrail.entity.ApiKey;
+import com.auditrail.entity.ChainHead;
+import com.auditrail.entity.Organization;
+import com.auditrail.entity.User;
+import com.auditrail.repository.ApiKeyRepository;
+import com.auditrail.repository.ChainHeadRepository;
+import com.auditrail.repository.OrganizationRepository;
+import com.auditrail.repository.UserRepository;
+import com.auditrail.util.HashUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@Configuration
+@Profile("dev")
+public class DevDataInitializer {
+
+    private static final Logger log = LoggerFactory.getLogger(DevDataInitializer.class);
+
+    @Bean
+    public CommandLineRunner initDevSeedData(
+            OrganizationRepository orgRepo,
+            UserRepository userRepo,
+            ChainHeadRepository chainHeadRepo,
+            ApiKeyRepository apiKeyRepo,
+            PasswordEncoder passwordEncoder
+    ) {
+        return args -> {
+            log.info("Checking development seed organizations...");
+
+            // 1. Acme Global Logistics
+            String acmeOrgId = "00000000-0000-0000-0000-000000000001";
+            if (!orgRepo.existsById(acmeOrgId)) {
+                Organization org = new Organization();
+                org.setId(acmeOrgId);
+                org.setName("Acme Global Logistics");
+                org.setSlug("acme-global");
+                org.setStatus("ACTIVE");
+                orgRepo.save(org);
+
+                ChainHead head = new ChainHead();
+                head.setOrganizationId(acmeOrgId);
+                head.setLatestSequenceNumber(0L);
+                head.setLatestEventHash("0000000000000000000000000000000000000000000000000000000000000000");
+                chainHeadRepo.save(head);
+
+                User admin = new User();
+                admin.setId("00000000-0000-0000-0000-000000000010");
+                admin.setOrganizationId(acmeOrgId);
+                admin.setEmail("admin@acme-logistics.com");
+                admin.setPasswordHash(passwordEncoder.encode("Admin@AuditRail2026!"));
+                admin.setRole("ADMIN");
+                admin.setAccountStatus("ACTIVE");
+                admin.setTotpEnabled(false);
+                userRepo.save(admin);
+
+                ApiKey key = new ApiKey();
+                key.setId("00000000-0000-0000-0000-000000000020");
+                key.setOrganizationId(acmeOrgId);
+                key.setKeyPrefix("ar_live_demo01");
+                key.setKeyHash(HashUtil.sha256Hex("ar_live_demo01_acme_secret_key_9981"));
+                key.setLabel("Acme SAP Gateway");
+                key.setStatus("ACTIVE");
+                key.setCreatedByUserId(admin.getId());
+                apiKeyRepo.save(key);
+
+                log.info("Initialized default Acme Global Logistics organization.");
+            }
+
+            // 2. Apex National Bank
+            String apexOrgId = "11111111-1111-1111-1111-111111111111";
+            if (!orgRepo.existsById(apexOrgId)) {
+                Organization org = new Organization();
+                org.setId(apexOrgId);
+                org.setName("Apex National Bank");
+                org.setSlug("apex-bank");
+                org.setStatus("ACTIVE");
+                orgRepo.save(org);
+
+                ChainHead head = new ChainHead();
+                head.setOrganizationId(apexOrgId);
+                head.setLatestSequenceNumber(0L);
+                head.setLatestEventHash("0000000000000000000000000000000000000000000000000000000000000000");
+                chainHeadRepo.save(head);
+
+                User admin = new User();
+                admin.setId("11111111-1111-1111-1111-111111111110");
+                admin.setOrganizationId(apexOrgId);
+                admin.setEmail("admin@apexbank.com");
+                admin.setPasswordHash(passwordEncoder.encode("Admin@AuditRail2026!"));
+                admin.setRole("ADMIN");
+                admin.setAccountStatus("ACTIVE");
+                admin.setTotpEnabled(false);
+                userRepo.save(admin);
+
+                ApiKey key = new ApiKey();
+                key.setId("11111111-1111-1111-1111-111111111120");
+                key.setOrganizationId(apexOrgId);
+                key.setKeyPrefix("ar_live_apex_bank");
+                key.setKeyHash(HashUtil.sha256Hex("ar_live_apex_bank_secret_key_8821"));
+                key.setLabel("Apex Core Banking Gateway");
+                key.setStatus("ACTIVE");
+                key.setCreatedByUserId(admin.getId());
+                apiKeyRepo.save(key);
+
+                log.info("Initialized default Apex National Bank organization.");
+            }
+
+            log.info("Dev seed organizations check complete.");
+        };
+    }
+}

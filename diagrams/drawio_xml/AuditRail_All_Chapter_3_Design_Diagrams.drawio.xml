@@ -1,0 +1,1033 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" modified="2026-11-22T11:00:00.000Z" agent="AuditRail" version="21.0.0" type="device">
+  <diagram id="algorithm_flow" name="3.1 Algorithm - Hash Chaining">
+    <mxGraphModel background="#ffffff" dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;b&gt;Algorithm 3.1: Monotonic Cryptographic Hash Chaining &amp;amp; Ingestion&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="114" y="40" width="600" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="step_start" value="START: Client Submits Audit Event Payload" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="274" y="90" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="step_auth" value="Authenticate Client via SHA-256 Hashed API Key&lt;br&gt;&amp;amp; Resolve Tenant Organization ID" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="274" y="170" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="step_lock" value="Acquire Pessimistic Write Lock on Tenant Chain Head&lt;br&gt;(&lt;i&gt;SELECT ... FOR UPDATE on chain_heads&lt;/i&gt;)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="274" y="250" width="280" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="step_read_prev" value="Read Current Sequence Number (S) and Previous Record Hash (H_prev)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="274" y="335" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="step_inc" value="Calculate Monotonic Next Sequence Number:&lt;br&gt;&lt;b&gt;S_next = S + 1&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="274" y="415" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="step_jcs" value="Canonicalize Payload via RFC 8785 (JCS)&lt;br&gt;Normalize Timestamp to Microseconds Precision" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="274" y="495" width="280" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="step_hash" value="Compute Cryptographic SHA-256 Record Hash:&lt;br&gt;&lt;b&gt;H_curr = SHA-256( JCS(payload) || H_prev )&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="274" y="580" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="step_persist" value="Insert audit_events Record with (S_next, H_curr, H_prev)&lt;br&gt;Update chain_heads with (head_sequence=S_next, head_hash=H_curr)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="274" y="670" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="step_decision" value="Is S_next a Checkpoint&lt;br&gt;Interval Milestone?&lt;br&gt;(e.g., mod 1000 == 0)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="314" y="760" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="step_worm" value="Export Checkpoint Manifest &amp;amp; Anchor to&lt;br&gt;Immutable AWS S3 Object Lock (WORM)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="540" y="860" width="210" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="step_commit" value="Commit RDBMS Transaction &amp;amp; Release Row Lock" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="274" y="940" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="step_return" value="Return HTTP 201 Created with Sequence &amp;amp; Hash Receipt" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="274" y="1020" width="280" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="step_end" value="END" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="344" y="1090" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="step_start" target="step_auth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="step_auth" target="step_lock">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="step_lock" target="step_read_prev">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="step_read_prev" target="step_inc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="step_inc" target="step_jcs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="step_jcs" target="step_hash">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="step_hash" target="step_persist">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="step_persist" target="step_decision">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" value="YES" edge="1" parent="1" source="step_decision" target="step_worm">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="645" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10" value="NO" edge="1" parent="1" source="step_decision" target="step_commit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="step_worm" target="step_commit">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="645" y="965" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="step_commit" target="step_return">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="step_return" target="step_end">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="function_oriented_design" name="3.2 Function Oriented Design">
+    <mxGraphModel background="#ffffff" dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;b&gt;Figure 3.2: Function Oriented Design (Top-Down Modular Structure Chart)&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="114" y="50" width="600" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mod_root" value="&lt;b&gt;AUDITRAIL SYSTEM&lt;/b&gt;&lt;br&gt;Core Controller &amp;amp; Orchestration" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="304" y="110" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="mod_sec" value="&lt;b&gt;1.0 Security &amp;amp; Auth&lt;/b&gt;&lt;br&gt;Identity Resolution" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="84" y="230" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mod_ingest" value="&lt;b&gt;2.0 Ingestion Pipeline&lt;/b&gt;&lt;br&gt;Serialization &amp;amp; Chaining" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="264" y="230" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mod_verify" value="&lt;b&gt;3.0 Verification Engine&lt;/b&gt;&lt;br&gt;Chain Walk &amp;amp; Proof" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="444" y="230" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mod_worm" value="&lt;b&gt;4.0 Anchor Service&lt;/b&gt;&lt;br&gt;WORM &amp;amp; S3 Checkpoints" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="614" y="230" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_1_1" value="Authenticate API Key&lt;br&gt;(SHA-256 Match)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="84" y="340" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_1_2" value="Validate JWT Claims&lt;br&gt;&amp;amp; TOTP Token" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="84" y="410" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_1_3" value="Resolve Org Isolation&lt;br&gt;(Tenant Context)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="84" y="480" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_2_1" value="Acquire Pessimistic&lt;br&gt;Row Lock (FOR UPDATE)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="264" y="340" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_2_2" value="RFC 8785 JSON&lt;br&gt;Canonicalization (JCS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="264" y="410" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_2_3" value="Compute SHA-256&lt;br&gt;Current Record Hash" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="264" y="480" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_2_4" value="Insert Event &amp;amp; Advance&lt;br&gt;Chain Head Pointer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="264" y="550" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_3_1" value="Fetch Ordered Events&lt;br&gt;(ORDER BY seq ASC)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="444" y="340" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_3_2" value="Recalculate JCS &amp;amp;&lt;br&gt;Step-by-Step Hash Walk" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="444" y="410" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_3_3" value="Detect Sequence Gaps&lt;br&gt;&amp;amp; Payload Mutations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="444" y="480" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_4_1" value="Generate Checkpoint&lt;br&gt;JSON Manifest" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="614" y="340" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_4_2" value="Upload to AWS S3&lt;br&gt;Object Lock (WORM)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="614" y="410" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fn_4_3" value="Reconcile Chain Head&lt;br&gt;with Immutable WORM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="614" y="480" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c1" edge="1" parent="1" source="mod_root" target="mod_sec">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" edge="1" parent="1" source="mod_root" target="mod_ingest">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" edge="1" parent="1" source="mod_root" target="mod_verify">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" edge="1" parent="1" source="mod_root" target="mod_worm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s1_1" edge="1" parent="1" source="mod_sec" target="fn_1_1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s1_2" edge="1" parent="1" source="fn_1_1" target="fn_1_2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s1_3" edge="1" parent="1" source="fn_1_2" target="fn_1_3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s2_1" edge="1" parent="1" source="mod_ingest" target="fn_2_1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s2_2" edge="1" parent="1" source="fn_2_1" target="fn_2_2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s2_3" edge="1" parent="1" source="fn_2_2" target="fn_2_3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s2_4" edge="1" parent="1" source="fn_2_3" target="fn_2_4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s3_1" edge="1" parent="1" source="mod_verify" target="fn_3_1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s3_2" edge="1" parent="1" source="fn_3_1" target="fn_3_2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s3_3" edge="1" parent="1" source="fn_3_2" target="fn_3_3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s4_1" edge="1" parent="1" source="mod_worm" target="fn_4_1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s4_2" edge="1" parent="1" source="fn_4_1" target="fn_4_2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s4_3" edge="1" parent="1" source="fn_4_2" target="fn_4_3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="dfd_levels" name="3.3.1 Data Flow Diagrams">
+    <mxGraphModel background="#ffffff" dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;b&gt;Figure 3.3.1: Data Flow Diagrams (Level 0 Context Diagram &amp;amp; Level 1 DFD)&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="114" y="30" width="600" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="sec_a_box" value="DFD LEVEL 0: CONTEXT DIAGRAM" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=12;fontStyle=1;startSize=25;" vertex="1" parent="1">
+          <mxGeometry x="64" y="70" width="700" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="ext_client_0" value="&lt;b&gt;External Client Application&lt;/b&gt;&lt;br&gt;(Core Banking, Healthcare, FinTech)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="sec_a_box">
+          <mxGeometry x="40" y="60" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_auditrail_0" value="&lt;b&gt;0.0&lt;br&gt;AUDITRAIL PLATFORM&lt;/b&gt;&lt;br&gt;Tamper-Evident Ingestion &amp;amp; Cryptographic Verification" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="sec_a_box">
+          <mxGeometry x="270" y="45" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="ext_auditor_0" value="&lt;b&gt;Compliance Auditor / Dashboard&lt;/b&gt;&lt;br&gt;(DPDP / SOC2 / ISO 27001)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="sec_a_box">
+          <mxGeometry x="500" y="60" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ext_s3_0" value="&lt;b&gt;AWS S3 Object Lock&lt;/b&gt;&lt;br&gt;(Out-of-band WORM Anchor)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="sec_a_box">
+          <mxGeometry x="270" y="190" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f0_1" value="Audit Event Payload + API Key" edge="1" parent="sec_a_box" source="ext_client_0" target="proc_auditrail_0">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="230" y="75" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f0_2" value="Sequence &amp;amp; Hash Receipt" edge="1" parent="sec_a_box" source="proc_auditrail_0" target="ext_client_0">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="230" y="105" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f0_3" value="Verification Request" edge="1" parent="sec_a_box" source="ext_auditor_0" target="proc_auditrail_0">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="470" y="75" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f0_4" value="Mathematical Proof &amp;amp; Report" edge="1" parent="sec_a_box" source="proc_auditrail_0" target="ext_auditor_0">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="470" y="105" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f0_5" value="WORM Checkpoint Upload" edge="1" parent="sec_a_box" source="proc_auditrail_0" target="ext_s3_0">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sec_b_box" value="DFD LEVEL 1: DETAILED DATA FLOW PROCESS" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=12;fontStyle=1;startSize=25;" vertex="1" parent="1">
+          <mxGeometry x="64" y="350" width="700" height="780" as="geometry" />
+        </mxCell>
+        <mxCell id="ent_client_1" value="Client App" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="30" y="50" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ent_auditor_1" value="Auditor UI" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="560" y="50" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_1_1" value="&lt;b&gt;1.0&lt;/b&gt;&lt;br&gt;Auth &amp;amp; Identity&lt;br&gt;Resolution" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="190" y="40" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_1_2" value="&lt;b&gt;2.0&lt;/b&gt;&lt;br&gt;Serialization &amp;amp;&lt;br&gt;Pessimistic Lock" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="190" y="160" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_1_3" value="&lt;b&gt;3.0&lt;/b&gt;&lt;br&gt;SHA-256 Hash&lt;br&gt;Chain Ingestion" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="190" y="280" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_1_4" value="&lt;b&gt;4.0&lt;/b&gt;&lt;br&gt;Chain Verification&lt;br&gt;Walk Engine" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="420" y="160" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_1_5" value="&lt;b&gt;5.0&lt;/b&gt;&lt;br&gt;WORM Checkpoint&lt;br&gt;&amp;amp; Reconciliation" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="420" y="380" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ds_api_keys" value="&lt;b&gt;D1&lt;/b&gt; api_keys &amp;amp; organizations" style="shape=partialRectangle;right=0;left=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="340" y="50" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ds_chain_heads" value="&lt;b&gt;D2&lt;/b&gt; chain_heads (Pessimistic Lock)" style="shape=partialRectangle;right=0;left=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="20" y="220" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ds_audit_events" value="&lt;b&gt;D3&lt;/b&gt; audit_events (Chain Table)" style="shape=partialRectangle;right=0;left=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="170" y="440" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ds_s3_worm" value="&lt;b&gt;D4&lt;/b&gt; AWS S3 Object Lock (WORM)" style="shape=partialRectangle;right=0;left=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="400" y="520" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_1" value="API Key" edge="1" parent="sec_b_box" source="ent_client_1" target="proc_1_1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_2" value="Validate Hash" edge="1" parent="sec_b_box" source="proc_1_1" target="ds_api_keys">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_3" value="Tenant ID" edge="1" parent="sec_b_box" source="proc_1_1" target="proc_1_2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_4" value="Lock &amp;amp; Read Head" edge="1" parent="sec_b_box" source="proc_1_2" target="ds_chain_heads">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_5" value="Seq+1, H_prev" edge="1" parent="sec_b_box" source="proc_1_2" target="proc_1_3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_6" value="Persist Event &amp;amp; Hash" edge="1" parent="sec_b_box" source="proc_1_3" target="ds_audit_events">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_7" value="Update Head" edge="1" parent="sec_b_box" source="proc_1_3" target="ds_chain_heads">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="100" y="310" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f1_8" value="Run Verify" edge="1" parent="sec_b_box" source="ent_auditor_1" target="proc_1_4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_9" value="Walk Chain Rows" edge="1" parent="sec_b_box" source="proc_1_4" target="ds_audit_events">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="360" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f1_10" value="Compare Checkpoints" edge="1" parent="sec_b_box" source="proc_1_4" target="proc_1_5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_11" value="Read Immutable Manifest" edge="1" parent="sec_b_box" source="proc_1_5" target="ds_s3_worm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_12" value="Audit Report" edge="1" parent="sec_b_box" source="proc_1_4" target="ent_auditor_1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="540" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="activity_diagram" name="3.3.2 Activity Diagram">
+    <mxGraphModel background="#ffffff" dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;b&gt;Figure 3.3.2: UML Activity Diagram — Ingestion &amp;amp; Tamper Verification&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="114" y="30" width="600" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_client" value="Client Application" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;startSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="180" height="1040" as="geometry" />
+        </mxCell>
+        <mxCell id="act_start" value="" style="ellipse;fillColor=#000000;strokeColor=none;" vertex="1" parent="lane_client">
+          <mxGeometry x="75" y="45" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="act_c1" value="Send POST /api/v1/events&lt;br&gt;with X-AuditRail-API-Key" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="lane_client">
+          <mxGeometry x="20" y="100" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_c2" value="Receive Monotonic&lt;br&gt;Receipt (Seq &amp;amp; Hash)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="lane_client">
+          <mxGeometry x="20" y="860" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_end" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#333333;" vertex="1" parent="lane_client">
+          <mxGeometry x="75" y="940" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_engine" value="AuditRail Core Backend" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;startSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="70" width="220" height="1040" as="geometry" />
+        </mxCell>
+        <mxCell id="act_b1" value="Authenticate &amp;amp; Resolve&lt;br&gt;Organization Context" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="lane_engine">
+          <mxGeometry x="30" y="100" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_b2" value="Request Row Lock on&lt;br&gt;chain_heads (FOR UPDATE)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="lane_engine">
+          <mxGeometry x="30" y="180" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_b3" value="Compute Sequence Number&lt;br&gt;&lt;b&gt;S_next = S_prev + 1&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="lane_engine">
+          <mxGeometry x="30" y="340" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_b4" value="Canonicalize Payload via&lt;br&gt;RFC 8785 (JCS standard)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="lane_engine">
+          <mxGeometry x="30" y="420" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_b5" value="Calculate SHA-256 Hash:&lt;br&gt;SHA-256(JCS || H_prev)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="lane_engine">
+          <mxGeometry x="30" y="500" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_b6" value="Is Milestone Checkpoint?&lt;br&gt;(Seq % Interval == 0)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="lane_engine">
+          <mxGeometry x="40" y="660" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_b7" value="Commit Transaction &amp;amp;&lt;br&gt;Release Row Lock" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="lane_engine">
+          <mxGeometry x="30" y="770" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_db" value="Relational Database (MySQL)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;startSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="70" width="180" height="1040" as="geometry" />
+        </mxCell>
+        <mxCell id="act_db1" value="Acquire Exclusive&lt;br&gt;Pessimistic Row Lock&lt;br&gt;on Chain Head" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="lane_db">
+          <mxGeometry x="20" y="250" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="act_db2" value="Insert audit_events&lt;br&gt;&amp;amp; Update chain_heads&lt;br&gt;Head Sequence &amp;amp; Hash" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="lane_db">
+          <mxGeometry x="20" y="580" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_s3" value="AWS S3 Object Lock (WORM)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;startSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="70" width="170" height="1040" as="geometry" />
+        </mxCell>
+        <mxCell id="act_s3_1" value="PutObject with&lt;br&gt;ObjectLockMode = COMPLIANCE&lt;br&gt;&amp;amp; LegalHold = ON" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="lane_s3">
+          <mxGeometry x="15" y="665" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="tr1" edge="1" parent="1" source="act_start" target="act_c1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tr2" edge="1" parent="1" source="act_c1" target="act_b1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tr3" edge="1" parent="1" source="act_b1" target="act_b2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tr4" edge="1" parent="1" source="act_b2" target="act_db1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tr5" edge="1" parent="1" source="act_db1" target="act_b3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tr6" edge="1" parent="1" source="act_b3" target="act_b4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tr7" edge="1" parent="1" source="act_b4" target="act_b5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tr8" edge="1" parent="1" source="act_b5" target="act_db2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tr9" edge="1" parent="1" source="act_db2" target="act_b6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tr10" value="YES" edge="1" parent="1" source="act_b6" target="act_s3_1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tr11" value="NO" edge="1" parent="1" source="act_b6" target="act_b7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tr12" edge="1" parent="1" source="act_s3_1" target="act_b7">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="705" y="870" />
+              <mxPoint x="330" y="870" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tr13" edge="1" parent="1" source="act_b7" target="act_c2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tr14" edge="1" parent="1" source="act_c2" target="act_end">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="flow_chart" name="3.3.3 Flow Chart">
+    <mxGraphModel background="#ffffff" dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;b&gt;Figure 3.3.3: System Flowchart — End-to-End Ingestion &amp;amp; Continuous Audit&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="114" y="30" width="600" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="fc_start" value="START: Audit Event Emitted" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="294" y="75" width="240" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="fc_auth" value="Is API Key Valid &amp;amp;&lt;br&gt;Active in Database?" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="329" y="150" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="fc_err_401" value="Return HTTP 401 Unauthorized" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="570" y="167.5" width="190" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="fc_lock" value="Acquire Pessimistic Lock on chain_heads&lt;br&gt;(SELECT ... FOR UPDATE)" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.process;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="284" y="260" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="fc_jcs" value="Apply RFC 8785 Canonical JSON&lt;br&gt;Transform &amp;amp; Microsecond Timestamp" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.process;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="284" y="340" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="fc_hash" value="Compute Monotonic SHA-256 Hash:&lt;br&gt;&lt;b&gt;H_curr = SHA-256(JCS || H_prev)&lt;/b&gt;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.process;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="284" y="420" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="fc_db_write" value="Insert audit_events Record&lt;br&gt;Update chain_heads Pointer" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.process;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="284" y="500" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="fc_check_milestone" value="Milestone Reached?&lt;br&gt;(Seq % 1000 == 0)" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="329" y="580" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="fc_worm_put" value="Upload Signed Checkpoint to&lt;br&gt;AWS S3 WORM Object Lock (COMPLIANCE)" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.process;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="540" y="675" width="240" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="fc_commit" value="Commit RDBMS Transaction &amp;amp;&lt;br&gt;Release Pessimistic Row Lock" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.process;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="284" y="750" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="fc_return_receipt" value="Return HTTP 201 Created&lt;br&gt;with Monotonic Sequence &amp;amp; Hash" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.document;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="294" y="830" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fc_verify_trig" value="Scheduled Audit Job / Auditor Trigger" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.process;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="60" y="750" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="fc_verify_walk" value="Walk Chain Rows (ORDER BY seq ASC)&lt;br&gt;Recalculate H_curr &amp;amp; Match S3 Anchor" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.process;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="50" y="835" width="200" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="fc_verify_eval" value="Any Hash Drift or&lt;br&gt;Missing Sequence?" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="65" y="920" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="fc_alarm" value="Raise Immediate Tamper Alert&lt;br&gt;(Log Breach Sequence)" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="55" y="1040" width="190" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="fc_clean" value="Confirm Cryptographic Integrity&lt;br&gt;(100% Chain Valid)" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="937.5" width="210" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="l1" edge="1" parent="1" source="fc_start" target="fc_auth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2" value="NO" edge="1" parent="1" source="fc_auth" target="fc_err_401">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l3" value="YES" edge="1" parent="1" source="fc_auth" target="fc_lock">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l4" edge="1" parent="1" source="fc_lock" target="fc_jcs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l5" edge="1" parent="1" source="fc_jcs" target="fc_hash">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l6" edge="1" parent="1" source="fc_hash" target="fc_db_write">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l7" edge="1" parent="1" source="fc_db_write" target="fc_check_milestone">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l8" value="YES" edge="1" parent="1" source="fc_check_milestone" target="fc_worm_put">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="660" y="620" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l9" value="NO" edge="1" parent="1" source="fc_check_milestone" target="fc_commit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l10" edge="1" parent="1" source="fc_worm_put" target="fc_commit">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="660" y="775" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l11" edge="1" parent="1" source="fc_commit" target="fc_return_receipt">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l12" edge="1" parent="1" source="fc_verify_trig" target="fc_verify_walk">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l13" edge="1" parent="1" source="fc_verify_walk" target="fc_verify_eval">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l14" value="YES" edge="1" parent="1" source="fc_verify_eval" target="fc_alarm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l15" value="NO" edge="1" parent="1" source="fc_verify_eval" target="fc_clean">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="class_diagram_clean" name="3.3.4 Class Diagram">
+    <mxGraphModel background="#ffffff" dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;b style=&quot;font-size: 15px;&quot;&gt;Figure 3.3.4: UML Class Diagram — Core System Components&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="64" y="30" width="700" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ctrl" value="&lt;b&gt;AuditEventIngestionController&lt;/b&gt;&lt;hr&gt;- ingestionService: AuditEventIngestionService&lt;hr&gt;+ ingestEvent(request, apiKey): ResponseEntity&lt;br&gt;+ batchIngest(requests, apiKey): ResponseEntity" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="80" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="c_verify_ctrl" value="&lt;b&gt;VerificationController&lt;/b&gt;&lt;hr&gt;- verificationService: IntegrityVerificationService&lt;hr&gt;+ runVerification(apiKey): ResponseEntity&lt;br&gt;+ verifyRange(fromSeq, toSeq): ResponseEntity" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="444" y="80" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ingest_iface" value="&lt;b&gt;&amp;lt;&amp;lt;interface&amp;gt;&amp;gt;&lt;br&gt;AuditEventIngestionService&lt;/b&gt;&lt;hr&gt;+ ingest(orgId, request): AuditEventResponse&lt;br&gt;+ batchIngest(orgId, list): List&amp;lt;AuditEventResponse&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="210" width="320" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="c_verify_iface" value="&lt;b&gt;&amp;lt;&amp;lt;interface&amp;gt;&amp;gt;&lt;br&gt;IntegrityVerificationService&lt;/b&gt;&lt;hr&gt;+ verifyChain(orgId, fromSeq, toSeq): VerificationResult&lt;br&gt;+ verifyAgainstWorm(orgId): ReconciliationResult" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="444" y="210" width="320" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ingest_impl" value="&lt;b&gt;AuditEventIngestionServiceImpl&lt;/b&gt;&lt;hr&gt;- eventRepository: AuditEventRepository&lt;br&gt;- chainHeadRepository: ChainHeadRepository&lt;br&gt;- checkpointService: CheckpointStorageService&lt;hr&gt;+ ingest(orgId, request): AuditEventResponse&lt;br&gt;- acquireTenantLock(orgId): ChainHead&lt;br&gt;- computeSha256(payload, prevHash): String" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="325" width="320" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="c_verify_impl" value="&lt;b&gt;IntegrityVerificationServiceImpl&lt;/b&gt;&lt;hr&gt;- eventRepository: AuditEventRepository&lt;br&gt;- chainHeadRepository: ChainHeadRepository&lt;br&gt;- checkpointService: CheckpointStorageService&lt;hr&gt;+ verifyChain(orgId, fromSeq, toSeq): VerificationResult&lt;br&gt;- stepWalkVerification(events): VerificationReport" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="444" y="325" width="320" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="c_store_iface" value="&lt;b&gt;&amp;lt;&amp;lt;interface&amp;gt;&amp;gt;&lt;br&gt;CheckpointStorageService&lt;/b&gt;&lt;hr&gt;+ storeCheckpoint(data): StoredCheckpointResult&lt;br&gt;+ retrieveCheckpointContent(bucket, key): String&lt;br&gt;+ isAvailable(): boolean" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="485" width="320" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="c_s3_adapter" value="&lt;b&gt;AwsS3CheckpointStorageAdapter&lt;/b&gt;&lt;hr&gt;- s3Client: S3Client&lt;br&gt;- defaultBucket: String&lt;br&gt;- retentionDays: int (WORM COMPLIANCE)&lt;hr&gt;+ storeCheckpoint(data): StoredCheckpointResult&lt;br&gt;+ retrieveCheckpointContent(bucket, key): String" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="444" y="485" width="320" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ent_event" value="&lt;b&gt;AuditEvent&lt;/b&gt;&lt;hr&gt;- id: UUID&lt;br&gt;- organizationId: UUID&lt;br&gt;- sequenceNumber: Long&lt;br&gt;- eventAction: String&lt;br&gt;- actorId: String&lt;br&gt;- payload: String (RFC 8785 JSON)&lt;br&gt;- recordHash: String (SHA-256)&lt;br&gt;- previousRecordHash: String&lt;br&gt;- createdAt: Instant" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="610" width="215" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ent_head" value="&lt;b&gt;ChainHead&lt;/b&gt;&lt;hr&gt;- organizationId: UUID [PK]&lt;br&gt;- headSequenceNumber: Long&lt;br&gt;- headRecordHash: String&lt;br&gt;- genesisHash: String&lt;br&gt;- updatedAt: Instant" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="307" y="610" width="215" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ent_checkpoint" value="&lt;b&gt;Checkpoint&lt;/b&gt;&lt;hr&gt;- id: UUID [PK]&lt;br&gt;- organizationId: UUID&lt;br&gt;- sequenceNumber: Long&lt;br&gt;- checkpointHash: String&lt;br&gt;- s3Bucket: String&lt;br&gt;- s3ObjectKey: String&lt;br&gt;- s3VersionId: String&lt;br&gt;- createdAt: Instant" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="549" y="610" width="215" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="c_util_jcs" value="&lt;b&gt;CanonicalJsonUtil&lt;/b&gt;&lt;hr&gt;+ canonicalize(rawJson: String): String&lt;br&gt;+ toCanonicalBytes(payload: Object): byte[]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="815" width="320" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="c_util_hash" value="&lt;b&gt;HashUtil&lt;/b&gt;&lt;hr&gt;+ sha256Hex(bytes: byte[]): String&lt;br&gt;+ sha256Hex(input: String): String" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="444" y="815" width="320" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ctrl_ingest" edge="1" parent="1" source="c_ctrl" target="c_ingest_iface" style="endArrow=open;dashed=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ctrl_verify" edge="1" parent="1" source="c_verify_ctrl" target="c_verify_iface" style="endArrow=open;dashed=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_impl_ingest" edge="1" parent="1" source="c_ingest_impl" target="c_ingest_iface" style="endArrow=block;dashed=1;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_impl_verify" edge="1" parent="1" source="c_verify_impl" target="c_verify_iface" style="endArrow=block;dashed=1;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_adapter_store" edge="1" parent="1" source="c_s3_adapter" target="c_store_iface" style="endArrow=block;dashed=1;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ingest_to_store" edge="1" parent="1" source="c_ingest_impl" target="c_store_iface" style="endArrow=open;dashed=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ingest_to_event" edge="1" parent="1" source="c_ingest_impl" target="c_ent_event" style="endArrow=open;dashed=1;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="171" y="580" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_ingest_to_head" edge="1" parent="1" source="c_ingest_impl" target="c_ent_head" style="endArrow=open;dashed=1;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="414" y="580" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_verify_to_cp" edge="1" parent="1" source="c_verify_impl" target="c_ent_checkpoint" style="endArrow=open;dashed=1;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="656" y="580" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_ingest_to_jcs" edge="1" parent="1" source="c_ent_event" target="c_util_jcs" style="endArrow=open;dashed=1;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_head_to_hash" edge="1" parent="1" source="c_ent_checkpoint" target="c_util_hash" style="endArrow=open;dashed=1;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="er_diagram_clean" name="3.3.5 Entity Relationship Diagram">
+    <mxGraphModel background="#ffffff" dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;b style=&quot;font-size: 15px;&quot;&gt;Figure 3.3.5: Entity-Relationship Diagram (ERD) — Multi-Tenant Schema&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="64" y="30" width="700" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="e_org" value="&lt;b&gt;organizations&lt;/b&gt;&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&lt;br&gt;   name : VARCHAR(255)&lt;br&gt;   slug : VARCHAR(100) [UNIQUE]&lt;br&gt;   status : VARCHAR(50)&lt;br&gt;   created_at : TIMESTAMP(6)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="274" y="80" width="280" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="e_api_keys" value="&lt;b&gt;api_keys&lt;/b&gt;&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&lt;br&gt;   key_prefix : VARCHAR(16)&lt;br&gt;   key_hash : CHAR(64) [UNIQUE]&lt;br&gt;   label : VARCHAR(100)&lt;br&gt;   status : VARCHAR(20)&lt;br&gt;   created_at : TIMESTAMP(6)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="240" width="210" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="e_chain_heads" value="&lt;b&gt;chain_heads&lt;/b&gt; (Pessimistic Lock)&lt;hr&gt;&lt;b&gt;PK, FK&lt;/b&gt; organization_id : CHAR(36)&lt;br&gt;   head_sequence_number : BIGINT&lt;br&gt;   head_record_hash : CHAR(64)&lt;br&gt;   genesis_hash : CHAR(64)&lt;br&gt;   updated_at : TIMESTAMP(6)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="309" y="240" width="210" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="e_users" value="&lt;b&gt;users&lt;/b&gt; (Platform RBAC)&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&lt;br&gt;   email : VARCHAR(255) [UNIQUE]&lt;br&gt;   password_hash : VARCHAR(255)&lt;br&gt;   role : VARCHAR(50)&lt;br&gt;   account_status : VARCHAR(20)&lt;br&gt;   created_at : TIMESTAMP(6)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="554" y="240" width="210" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="e_audit_events" value="&lt;b&gt;audit_events&lt;/b&gt; (Cryptographic SHA-256 Ledger)&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&lt;br&gt;&lt;b&gt;UQ&lt;/b&gt; (organization_id, sequence_number)&lt;br&gt;   sequence_number : BIGINT [Monotonic]&lt;br&gt;   event_action : VARCHAR(100)&lt;br&gt;   actor_id : VARCHAR(100)&lt;br&gt;   target_id : VARCHAR(100)&lt;br&gt;   payload : TEXT [RFC 8785 Canonical JSON]&lt;br&gt;   record_hash : CHAR(64) [Current SHA-256 Digest]&lt;br&gt;   prev_record_hash : CHAR(64) [Previous Chain Digest]&lt;br&gt;   created_at : TIMESTAMP(6) [Microsecond UTC]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="425" width="455" height="195" as="geometry" />
+        </mxCell>
+        <mxCell id="e_checkpoints" value="&lt;b&gt;checkpoints&lt;/b&gt; (WORM Anchors)&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&lt;br&gt;   sequence_number : BIGINT&lt;br&gt;   checkpoint_hash : CHAR(64)&lt;br&gt;   storage_provider : VARCHAR(32)&lt;br&gt;   s3_bucket : VARCHAR(100)&lt;br&gt;   s3_object_key : VARCHAR(255)&lt;br&gt;   s3_version_id : VARCHAR(100)&lt;br&gt;   created_at : TIMESTAMP(6)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="544" y="425" width="220" height="195" as="geometry" />
+        </mxCell>
+        <mxCell id="e_verification_runs" value="&lt;b&gt;verification_runs&lt;/b&gt; (Continuous Mathematical Verification Logs)&lt;hr&gt;&lt;b&gt;PK&lt;/b&gt; id : CHAR(36)&lt;br&gt;&lt;b&gt;FK&lt;/b&gt; organization_id : CHAR(36)&lt;br&gt;   verified_from_sequence : BIGINT&lt;br&gt;   verified_to_sequence : BIGINT&lt;br&gt;   result_status : VARCHAR(50) ['SUCCESS', 'TAMPER_DETECTED', 'CORRUPT']&lt;br&gt;   discrepancies_count : INT&lt;br&gt;   failure_reason : TEXT&lt;br&gt;   verified_at : TIMESTAMP(6)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="665" width="700" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_org_api" edge="1" parent="1" source="e_org" target="e_api_keys" style="endArrow=open;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="169" y="132" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_org_api" value="1 : N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;" vertex="1" connectable="0" parent="rel_org_api">
+          <mxGeometry x="0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_org_head" edge="1" parent="1" source="e_org" target="e_chain_heads" style="endArrow=open;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_org_head" value="1 : 1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;" vertex="1" connectable="0" parent="rel_org_head">
+          <mxGeometry x="0.1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_org_users" edge="1" parent="1" source="e_org" target="e_users" style="endArrow=open;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="659" y="132" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_org_users" value="1 : N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;" vertex="1" connectable="0" parent="rel_org_users">
+          <mxGeometry x="0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_head_events" edge="1" parent="1" source="e_chain_heads" target="e_audit_events" style="endArrow=open;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="414" y="395" />
+              <mxPoint x="291" y="395" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_head_events" value="1 : N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;" vertex="1" connectable="0" parent="rel_head_events">
+          <mxGeometry x="0.3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_head_checkpoints" edge="1" parent="1" source="e_chain_heads" target="e_checkpoints" style="endArrow=open;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="414" y="395" />
+              <mxPoint x="654" y="395" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_head_checkpoints" value="1 : N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;" vertex="1" connectable="0" parent="rel_head_checkpoints">
+          <mxGeometry x="0.3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_events_verify" edge="1" parent="1" source="e_audit_events" target="e_verification_runs" style="endArrow=open;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_events_verify" value="1 : N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;" vertex="1" connectable="0" parent="rel_events_verify">
+          <mxGeometry x="0.1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="sequence_diagram" name="3.3.6 Sequence Diagram">
+    <mxGraphModel background="#ffffff" dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;b&gt;Figure 3.3.6: UML Sequence Diagram — Concurrent Tamper-Evident Ingestion&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="114" y="30" width="600" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p_client" value="&lt;b&gt;Client Application&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="line_client" value="" style="endArrow=none;dashed=1;html=1;" edge="1" parent="1" source="p_client">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="1060" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p_filter" value="&lt;b&gt;ApiKeyAuthFilter&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="180" y="80" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="line_filter" value="" style="endArrow=none;dashed=1;html=1;" edge="1" parent="1" source="p_filter">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="240" y="1060" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p_service" value="&lt;b&gt;IngestionService&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="320" y="80" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="line_service" value="" style="endArrow=none;dashed=1;html=1;" edge="1" parent="1" source="p_service">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="385" y="1060" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p_db" value="&lt;b&gt;MySQL (InnoDB)&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="470" y="80" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="line_db" value="" style="endArrow=none;dashed=1;html=1;" edge="1" parent="1" source="p_db">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="535" y="1060" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p_s3" value="&lt;b&gt;AWS S3 WORM&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="620" y="80" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="line_s3" value="" style="endArrow=none;dashed=1;html=1;" edge="1" parent="1" source="p_s3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="685" y="1060" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m1" value="1: POST /api/v1/events (Payload, API Key)" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="160" as="sourcePoint" />
+            <mxPoint x="240" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" value="2: SHA-256(Secret) Lookup &amp;amp; Verify Active" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="240" y="200" as="sourcePoint" />
+            <mxPoint x="535" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" value="3: Return Tenant Organization Context" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="535" y="240" as="sourcePoint" />
+            <mxPoint x="240" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" value="4: Delegate ingest(orgId, eventRequest)" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="240" y="280" as="sourcePoint" />
+            <mxPoint x="385" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" value="5: SELECT ... FOR UPDATE on chain_heads" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="385" y="330" as="sourcePoint" />
+            <mxPoint x="535" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note_lock" value="Pessimistic row lock acquired;&#10;serializes all concurrent writers per tenant" style="shape=note;whiteSpace=wrap;html=1;size=14;verticalAlign=top;align=left;fillColor=#ffffff;strokeColor=#333333;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="545" y="310" width="170" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="m6" value="6: Return (head_seq = N, head_hash = H_prev)" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="535" y="390" as="sourcePoint" />
+            <mxPoint x="385" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" value="7: S_next = N + 1; Canonicalize JCS(payload)" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="385" y="440" as="sourcePoint" />
+            <mxPoint x="385" y="480" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="430" y="440" />
+              <mxPoint x="430" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" value="8: H_curr = SHA-256(JCS || H_prev)" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="385" y="510" as="sourcePoint" />
+            <mxPoint x="385" y="550" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="430" y="510" />
+              <mxPoint x="430" y="550" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" value="9: INSERT INTO audit_events (S_next, H_curr, H_prev)" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="385" y="600" as="sourcePoint" />
+            <mxPoint x="535" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10" value="10: UPDATE chain_heads (head_seq = S_next, head_hash = H_curr)" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="385" y="650" as="sourcePoint" />
+            <mxPoint x="535" y="650" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt_box" value="alt [S_next is Milestone Checkpoint (e.g., % 1000 == 0)]" style="shape=umlFrame;whiteSpace=wrap;html=1;width=280;height=20;fillColor=#ffffff;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="350" y="710" width="370" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="m11" value="11: PutObject (WORM Legal Hold &amp;amp; COMPLIANCE)" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="385" y="760" as="sourcePoint" />
+            <mxPoint x="685" y="760" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m12" value="12: S3 Version Reference &amp;amp; ETag" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="685" y="800" as="sourcePoint" />
+            <mxPoint x="385" y="800" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m13" value="13: Record Checkpoint in DB" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="385" y="835" as="sourcePoint" />
+            <mxPoint x="535" y="835" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m14" value="14: COMMIT Transaction (Row Lock Released)" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="385" y="900" as="sourcePoint" />
+            <mxPoint x="535" y="900" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m15" value="15: Return AuditEventResponse DTO" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="385" y="950" as="sourcePoint" />
+            <mxPoint x="240" y="950" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m16" value="16: HTTP 201 Created (Sequence Number &amp;amp; SHA-256 Hash)" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="240" y="1000" as="sourcePoint" />
+            <mxPoint x="100" y="1000" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="logical_db_clean" name="3.4.1 Logical Database Design">
+    <mxGraphModel background="#ffffff" dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;b style=&quot;font-size: 15px;&quot;&gt;Figure 3.4.1: Logical Database Design (Relational Multi-Tenant Model &amp;amp; Integrity Constraints)&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="64" y="30" width="700" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t_org" value="&lt;b&gt;ORGANIZATIONS&lt;/b&gt; [Logical Root]&lt;hr&gt;+ &lt;b&gt;id&lt;/b&gt; : UUID &lt;b&gt;&amp;lt;PK&amp;gt;&lt;/b&gt;&lt;br&gt;+ name : VARCHAR(255) [NOT NULL]&lt;br&gt;+ slug : VARCHAR(100) &lt;b&gt;&amp;lt;UQ&amp;gt;&lt;/b&gt;&lt;br&gt;+ status : ENUM('ACTIVE', 'SUSPENDED')&lt;br&gt;+ created_at : TIMESTAMP(6)&lt;br&gt;+ updated_at : TIMESTAMP(6)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="80" width="320" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="t_chain_heads" value="&lt;b&gt;CHAIN_HEADS&lt;/b&gt; [Concurrency Lock Target]&lt;hr&gt;+ &lt;b&gt;organization_id&lt;/b&gt; : UUID &lt;b&gt;&amp;lt;PK, FK-&amp;gt;ORGANIZATIONS.id&amp;gt;&lt;/b&gt;&lt;br&gt;+ head_sequence_number : BIGINT [NOT NULL, DEF 0]&lt;br&gt;+ head_record_hash : CHAR(64) [SHA-256 Hex]&lt;br&gt;+ genesis_hash : CHAR(64) [64 Zeros Genesis]&lt;br&gt;+ updated_at : TIMESTAMP(6) [ON UPDATE CURRENT]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="444" y="80" width="320" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="t_api_keys" value="&lt;b&gt;API_KEYS&lt;/b&gt; [Zero-Trust Ingestion Credentials]&lt;hr&gt;+ &lt;b&gt;id&lt;/b&gt; : UUID &lt;b&gt;&amp;lt;PK&amp;gt;&lt;/b&gt;&lt;br&gt;+ &lt;b&gt;organization_id&lt;/b&gt; : UUID &lt;b&gt;&amp;lt;FK-&amp;gt;ORGANIZATIONS.id&amp;gt;&lt;/b&gt;&lt;br&gt;+ key_prefix : VARCHAR(16) [NOT NULL]&lt;br&gt;+ key_hash : CHAR(64) &lt;b&gt;&amp;lt;UQ, SHA-256&amp;gt;&lt;/b&gt;&lt;br&gt;+ label : VARCHAR(100)&lt;br&gt;+ status : ENUM('ACTIVE', 'REVOKED')&lt;br&gt;+ created_at : TIMESTAMP(6)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="240" width="320" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="t_checkpoints" value="&lt;b&gt;CHECKPOINTS&lt;/b&gt; [WORM Out-of-Band Anchors]&lt;hr&gt;+ &lt;b&gt;id&lt;/b&gt; : UUID &lt;b&gt;&amp;lt;PK&amp;gt;&lt;/b&gt;&lt;br&gt;+ &lt;b&gt;organization_id&lt;/b&gt; : UUID &lt;b&gt;&amp;lt;FK-&amp;gt;ORGANIZATIONS.id&amp;gt;&lt;/b&gt;&lt;br&gt;+ sequence_number : BIGINT [Snapshot Seq]&lt;br&gt;+ checkpoint_hash : CHAR(64) [Chain Digest]&lt;br&gt;+ storage_provider : ENUM('AWS_S3', 'MINIO', 'LOCAL')&lt;br&gt;+ s3_bucket : VARCHAR(100)&lt;br&gt;+ s3_object_key : VARCHAR(255)&lt;br&gt;+ s3_version_id : VARCHAR(100) [WORM Version ID]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="444" y="240" width="320" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="t_audit_events" value="&lt;b&gt;AUDIT_EVENTS&lt;/b&gt; [Immutable Append-Only Cryptographic Chain Table]&lt;hr&gt;+ &lt;b&gt;id&lt;/b&gt; : UUID &lt;b&gt;&amp;lt;PK&amp;gt;&lt;/b&gt;&lt;br&gt;+ &lt;b&gt;organization_id&lt;/b&gt; : UUID &lt;b&gt;&amp;lt;FK-&amp;gt;ORGANIZATIONS.id&amp;gt;&lt;/b&gt;&lt;br&gt;+ &lt;b&gt;sequence_number&lt;/b&gt; : BIGINT [NOT NULL, STRICTLY MONOTONIC 1, 2, 3...]&lt;br&gt;+ event_action : VARCHAR(100) [NOT NULL]&lt;br&gt;+ actor_id : VARCHAR(100) [NOT NULL]&lt;br&gt;+ target_id : VARCHAR(100) [NOT NULL]&lt;br&gt;+ payload : TEXT [Canonical RFC 8785 JSON representation]&lt;br&gt;+ &lt;b&gt;record_hash&lt;/b&gt; : CHAR(64) [SHA-256( JCS(payload) || prev_record_hash )]&lt;br&gt;+ &lt;b&gt;prev_record_hash&lt;/b&gt; : CHAR(64) [Cryptographic predecessor link]&lt;br&gt;+ created_at : TIMESTAMP(6) [Microsecond UTC timestamp]&lt;hr&gt;&lt;b&gt;UQ_org_seq&lt;/b&gt; : UNIQUE (organization_id, sequence_number)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="430" width="700" height="195" as="geometry" />
+        </mxCell>
+        <mxCell id="t_verification_runs" value="&lt;b&gt;VERIFICATION_RUNS&lt;/b&gt; [Audit Proof Reports &amp;amp; Tamper Telemetry]&lt;hr&gt;+ &lt;b&gt;id&lt;/b&gt; : UUID &lt;b&gt;&amp;lt;PK&amp;gt;&lt;/b&gt;&lt;br&gt;+ &lt;b&gt;organization_id&lt;/b&gt; : UUID &lt;b&gt;&amp;lt;FK-&amp;gt;ORGANIZATIONS.id&amp;gt;&lt;/b&gt;&lt;br&gt;+ verified_from_sequence : BIGINT&lt;br&gt;+ verified_to_sequence : BIGINT&lt;br&gt;+ result_status : ENUM('SUCCESS', 'TAMPER_DETECTED', 'SEQUENCE_GAP')&lt;br&gt;+ discrepancies_count : INT&lt;br&gt;+ failure_reason : TEXT [Identifies sequence &amp;amp; mismatch delta]&lt;br&gt;+ verified_at : TIMESTAMP(6)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="660" width="700" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="fk_org_head" edge="1" parent="1" source="t_org" target="t_chain_heads" style="endArrow=open;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_fk_head" value="1 : 1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;" vertex="1" connectable="0" parent="fk_org_head">
+          <mxGeometry x="0.1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fk_org_api" edge="1" parent="1" source="t_org" target="t_api_keys" style="endArrow=open;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_fk_api" value="1 : N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;" vertex="1" connectable="0" parent="fk_org_api">
+          <mxGeometry x="0.1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fk_head_cp" edge="1" parent="1" source="t_chain_heads" target="t_checkpoints" style="endArrow=open;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_fk_cp" value="1 : N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;" vertex="1" connectable="0" parent="fk_head_cp">
+          <mxGeometry x="0.1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fk_head_events" edge="1" parent="1" source="t_chain_heads" target="t_audit_events" style="endArrow=open;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="604" y="215" />
+              <mxPoint x="414" y="215" />
+              <mxPoint x="414" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_fk_events" value="1 : N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;" vertex="1" connectable="0" parent="fk_head_events">
+          <mxGeometry x="0.4" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fk_events_verify" edge="1" parent="1" source="t_audit_events" target="t_verification_runs" style="endArrow=open;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_fk_verify" value="1 : N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;" vertex="1" connectable="0" parent="fk_events_verify">
+          <mxGeometry x="0.1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="physical_db_clean" name="3.4.2 Physical Database Design">
+    <mxGraphModel background="#ffffff" dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;b style=&quot;font-size: 15px;&quot;&gt;Figure 3.4.2: Physical Database Design (MySQL 8.0 / InnoDB Engine Storage &amp;amp; B-Tree Index Topology)&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="64" y="30" width="700" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p_audit_events" value="&lt;b style=&quot;font-size: 11.5px;&quot;&gt;TABLE: audit_events (ENGINE=InnoDB, ROW_FORMAT=DYNAMIC, CHARSET=utf8mb4)&lt;/b&gt;&lt;hr&gt;&lt;b&gt;PHYSICAL COLUMN SPECIFICATION:&lt;/b&gt;&lt;br&gt;* &lt;b&gt;id&lt;/b&gt; : CHAR(36) NOT NULL [36 Bytes Clustered Primary Key Inode]&lt;br&gt;* &lt;b&gt;organization_id&lt;/b&gt; : CHAR(36) NOT NULL [36 Bytes Tenant Isolation Key]&lt;br&gt;* &lt;b&gt;sequence_number&lt;/b&gt; : BIGINT UNSIGNED NOT NULL [8 Bytes Monotonic Sequence 1, 2, 3...]&lt;br&gt;* &lt;b&gt;event_action&lt;/b&gt; : VARCHAR(100) NOT NULL [1-100 Bytes UTF-8 Variable String]&lt;br&gt;* &lt;b&gt;actor_id&lt;/b&gt; : VARCHAR(100) NOT NULL [1-100 Bytes Principal Identifier]&lt;br&gt;* &lt;b&gt;target_id&lt;/b&gt; : VARCHAR(100) NOT NULL [1-100 Bytes Entity Subject]&lt;br&gt;* &lt;b&gt;payload&lt;/b&gt; : TEXT NOT NULL [LOB Overflow Page Storage, RFC 8785 Canonical JSON]&lt;br&gt;* &lt;b&gt;record_hash&lt;/b&gt; : CHAR(64) NOT NULL [64 Bytes Hexadecimal SHA-256 Digest]&lt;br&gt;* &lt;b&gt;prev_record_hash&lt;/b&gt; : CHAR(64) NOT NULL [64 Bytes Predecessor Digest Link]&lt;br&gt;* &lt;b&gt;created_at&lt;/b&gt; : DATETIME(6) NOT NULL [8 Bytes Microsecond Precision UTC Timestamp]&lt;hr&gt;&lt;b&gt;B-TREE INDEX TOPOLOGY &amp;amp; BUFFER ALLOCATION:&lt;/b&gt;&lt;br&gt;1. &lt;b&gt;PRIMARY KEY (id)&lt;/b&gt; USING BTREE [Clustered Index, In-Memory Buffer Pool]&lt;br&gt;2. &lt;b&gt;UNIQUE KEY uq_org_seq (organization_id, sequence_number)&lt;/b&gt; USING BTREE [Composite Cover]&lt;br&gt;3. &lt;b&gt;KEY idx_org_created (organization_id, created_at)&lt;/b&gt; USING BTREE [Time-Range Scan Acceleration]&lt;br&gt;4. &lt;b&gt;KEY idx_record_hash (record_hash)&lt;/b&gt; USING BTREE [O(log N) Cryptographic Point Lookup]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="80" width="700" height="295" as="geometry" />
+        </mxCell>
+        <mxCell id="p_chain_heads" value="&lt;b style=&quot;font-size: 11px;&quot;&gt;TABLE: chain_heads (Pessimistic Row Lock)&lt;/b&gt;&lt;hr&gt;&lt;b&gt;PHYSICAL SPECIFICATIONS:&lt;/b&gt;&lt;br&gt;* &lt;b&gt;organization_id&lt;/b&gt; : CHAR(36) NOT NULL [PK Inode]&lt;br&gt;* &lt;b&gt;head_sequence_number&lt;/b&gt; : BIGINT UNSIGNED NOT NULL&lt;br&gt;* &lt;b&gt;head_record_hash&lt;/b&gt; : CHAR(64) NOT NULL [SHA-256]&lt;br&gt;* &lt;b&gt;genesis_hash&lt;/b&gt; : CHAR(64) NOT NULL [64 Zeros]&lt;br&gt;* &lt;b&gt;updated_at&lt;/b&gt; : DATETIME(6) NOT NULL [Microsecond]&lt;hr&gt;&lt;b&gt;LOCKING TOPOLOGY:&lt;/b&gt;&lt;br&gt;PRIMARY KEY (organization_id) USING BTREE&lt;br&gt;&lt;i&gt;Target of SELECT ... FOR UPDATE exclusive row lock&lt;/i&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="405" width="335" height="225" as="geometry" />
+        </mxCell>
+        <mxCell id="p_checkpoints" value="&lt;b style=&quot;font-size: 11px;&quot;&gt;TABLE: checkpoints (WORM Storage Anchors)&lt;/b&gt;&lt;hr&gt;&lt;b&gt;PHYSICAL SPECIFICATIONS:&lt;/b&gt;&lt;br&gt;* &lt;b&gt;id&lt;/b&gt; : CHAR(36) NOT NULL [36 Bytes PK]&lt;br&gt;* &lt;b&gt;organization_id&lt;/b&gt; : CHAR(36) NOT NULL [FK Inode]&lt;br&gt;* &lt;b&gt;sequence_number&lt;/b&gt; : BIGINT UNSIGNED NOT NULL&lt;br&gt;* &lt;b&gt;checkpoint_hash&lt;/b&gt; : CHAR(64) NOT NULL [SHA-256]&lt;br&gt;* &lt;b&gt;storage_provider&lt;/b&gt; : VARCHAR(32) NOT NULL&lt;br&gt;* &lt;b&gt;s3_bucket&lt;/b&gt; : VARCHAR(100) NOT NULL&lt;br&gt;* &lt;b&gt;s3_object_key&lt;/b&gt; : VARCHAR(255) NOT NULL&lt;br&gt;* &lt;b&gt;s3_version_id&lt;/b&gt; : VARCHAR(100) [WORM Version]&lt;br&gt;* &lt;b&gt;created_at&lt;/b&gt; : DATETIME(6) NOT NULL [Microsecond]&lt;hr&gt;&lt;b&gt;INDEX TOPOLOGY:&lt;/b&gt;&lt;br&gt;PRIMARY KEY (id) USING BTREE&lt;br&gt;KEY idx_cp_org_seq (organization_id, sequence_number)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="429" y="405" width="335" height="225" as="geometry" />
+        </mxCell>
+        <mxCell id="p_hardening_box" value="&lt;b style=&quot;font-size: 11.5px;&quot;&gt;HARDWARE, MEMORY &amp;amp; OUT-OF-BAND IMMUTABILITY POLICIES&lt;/b&gt;&lt;hr&gt;&lt;b&gt;1. Buffer Pool Optimization (innodb_buffer_pool_size = 256M):&lt;/b&gt;&lt;br&gt;Indexes &lt;i&gt;uq_org_seq&lt;/i&gt; and &lt;i&gt;chain_heads&lt;/i&gt; are locked resident in RAM. This provides sub-millisecond execution times for pessimistic write locks and eliminates disk I/O bottlenecks during peak transaction ingestion bursts.&lt;br&gt;&lt;br&gt;&lt;b&gt;2. Zero Page Splitting Overhead:&lt;/b&gt;&lt;br&gt;Because sequence numbers strictly increment by +1 (1, 2, 3...) per tenant, all B-Tree leaf insertions occur monotonically at the rightmost page node, ensuring 100% fill factor with zero index fragmentation or page splits.&lt;br&gt;&lt;br&gt;&lt;b&gt;3. Out-of-Band Hardware Immutability (AWS S3 Object Lock COMPLIANCE Mode):&lt;/b&gt;&lt;br&gt;Checkpoint digests are replicated directly to AWS S3 Object Lock buckets with Legal Hold ON, encrypted via dedicated AWS KMS Customer Managed Keys. S3 WORM hardware-level write protection rejects all database administrator (DBA) delete or overwrite operations." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=10;fontSize=10;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="660" width="700" height="205" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

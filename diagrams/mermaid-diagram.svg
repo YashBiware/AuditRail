@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1393.716 357.40000000000003" width="1393.716" height="357.40000000000003" style="--bg:#18181B;--fg:#F4F4F5;--line:#71717A;--muted:#A1A1AA;--surface:#27272A;--border:#3F3F46;background:var(--bg)">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
+  }
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="8" markerHeight="5" refX="7" refY="2.5" orient="auto">
+    <polygon points="0 0, 8 2.5, 0 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+  <marker id="arrowhead-start" markerWidth="8" markerHeight="5" refX="1" refY="2.5" orient="auto-start-reverse">
+    <polygon points="8 0, 0 2.5, 8 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+</defs>
+<g class="subgraph" data-id="Client_Infrastructure" data-label="Client Infrastructure">
+  <rect x="40" y="40" width="218.44499999999996" height="277.40000000000003" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="40" y="40" width="218.44499999999996" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="52" y="54" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Client Infrastructure</text>
+</g>
+<g class="subgraph" data-id="Security_Boundary" data-label="Security Boundary">
+  <rect x="442.029" y="113.35000000000002" width="253.27199999999993" height="130.7" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="442.029" y="113.35000000000002" width="253.27199999999993" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="454.029" y="127.35000000000002" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Security Boundary</text>
+</g>
+<g class="subgraph" data-id="AuditRail_Platform" data-label="AuditRail Platform">
+  <rect x="755.3009999999999" y="91.02500000000002" width="598.415" height="168.35000000000002" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="755.3009999999999" y="91.02500000000002" width="598.415" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="767.3009999999999" y="105.02500000000002" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">AuditRail Platform</text>
+</g>
+<polyline class="edge" data-from="AppA" data-to="GW" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="HTTPS POST" points="229.47749999999996,192.70000000000002 458.029,192.70000000000002" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="AppB" data-to="GW" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="HTTPS POST" points="255.41249999999997,274.5 300.44499999999994,274.5 300.44499999999994,250.25 424.029,250.25 424.029,210.37500000000003 458.029,210.37500000000003" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="AppC" data-to="GW" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="HTTPS POST" points="242.44499999999996,110.9 300.44499999999994,110.9 300.44499999999994,135.15 424.029,135.15 424.029,175.02500000000003 458.029,175.02500000000003" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="GW" data-to="Engine" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="679.3009999999999,192.70000000000002 771.3009999999999,192.70000000000002" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Engine" data-to="DB" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="925.8829999999999,186.55 937.8829999999999,186.55 937.8829999999999,160.47500000000002 973.8829999999999,160.47500000000002" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Engine" data-to="WORM" data-style="dotted" data-arrow-start="false" data-arrow-end="true" data-label="Checkpoints" points="925.8829999999999,198.85000000000002 937.8829999999999,198.85000000000002 937.8829999999999,224.925 1175.724,224.925" fill="none" stroke="var(--_line)" stroke-width="1" stroke-dasharray="4 4" marker-end="url(#arrowhead)" />
+<g class="edge-label" data-from="AppA" data-to="GW" data-label="HTTPS POST">
+  <rect x="308.44499999999994" y="176.70000000000002" width="83.584" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="350.23699999999997" y="191.85000000000002" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">HTTPS POST</text>
+</g>
+<g class="edge-label" data-from="AppB" data-to="GW" data-label="HTTPS POST">
+  <rect x="308.44499999999994" y="234.25" width="83.584" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="350.23699999999997" y="249.4" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">HTTPS POST</text>
+</g>
+<g class="edge-label" data-from="AppC" data-to="GW" data-label="HTTPS POST">
+  <rect x="308.44499999999994" y="119.15" width="83.584" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="350.23699999999997" y="134.3" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">HTTPS POST</text>
+</g>
+<g class="edge-label" data-from="Engine" data-to="WORM" data-label="Checkpoints">
+  <rect x="1012.2785" y="208.92500000000004" width="77.05000000000001" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1050.8035" y="224.07500000000005" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Checkpoints</text>
+</g>
+<g class="node" data-id="AppA" data-label="Billing Microservice
+Node.js / Express" data-shape="rectangle">
+  <rect x="68.96749999999999" y="165.8" width="160.51" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="149.22249999999997" y="192.70000000000002" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="149.22249999999997" dy="-3.9000000000000012">Billing Microservice</tspan><tspan x="149.22249999999997" dy="16.900000000000002">Node.js / Express</tspan></text>
+</g>
+<g class="node" data-id="AppB" data-label="Core Banking / SAP ERP
+Java / Spring Boot" data-shape="rectangle">
+  <rect x="68.96749999999999" y="247.60000000000002" width="186.44499999999996" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="162.18999999999997" y="274.5" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="162.18999999999997" dy="-3.9000000000000012">Core Banking / SAP ERP</tspan><tspan x="162.18999999999997" dy="16.900000000000002">Java / Spring Boot</tspan></text>
+</g>
+<g class="node" data-id="AppC" data-label="Data Pipeline / Lambda
+Python" data-shape="rectangle">
+  <rect x="68.59699999999998" y="84" width="173.84799999999998" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="155.52099999999996" y="110.9" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="155.52099999999996" dy="-3.9000000000000012">Data Pipeline / Lambda</tspan><tspan x="155.52099999999996" dy="16.900000000000002">Python</tspan></text>
+</g>
+<g class="node" data-id="GW" data-label="HTTPS Ingestion Gateway
+POST /api/v1/events
+X-AuditRail-API-Key: ar_live_..." data-shape="rectangle">
+  <rect x="458.029" y="157.35000000000002" width="221.27199999999993" height="70.7" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="568.665" y="192.70000000000002" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="568.665" dy="-12.350000000000001">HTTPS Ingestion Gateway</tspan><tspan x="568.665" dy="16.900000000000002">POST /api/v1/events</tspan><tspan x="568.665" dy="16.900000000000002">X-AuditRail-API-Key: ar_live_...</tspan></text>
+</g>
+<g class="node" data-id="Engine" data-label="Spring Boot Engine" data-shape="rectangle">
+  <rect x="771.3009999999999" y="174.25" width="154.582" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="848.5919999999999" y="192.7" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Spring Boot Engine</text>
+</g>
+<g class="node" data-id="DB" data-label="MySQL 8.0 Ledger" data-shape="cylinder">
+  <rect x="973.8829999999999" y="142.02500000000003" width="153.841" height="36.900000000000006" fill="var(--_node-fill)" stroke="none" />
+  <line x1="973.8829999999999" y1="142.02500000000003" x2="973.8829999999999" y2="178.92500000000004" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <line x1="1127.724" y1="142.02500000000003" x2="1127.724" y2="178.92500000000004" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="1050.8035" cy="178.92500000000004" rx="76.9205" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="1050.8035" cy="142.02500000000003" rx="76.9205" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1050.8035" y="160.47500000000002" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">MySQL 8.0 Ledger</text>
+</g>
+<g class="node" data-id="WORM" data-label="AWS S3 Object Lock" data-shape="rectangle">
+  <rect x="1175.724" y="206.47500000000002" width="161.99200000000002" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1256.72" y="224.925" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">AWS S3 Object Lock</text>
+</g>
+</svg>

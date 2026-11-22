@@ -1,0 +1,35 @@
+<mxfile host="app.diagrams.net" modified="2026-11-22T10:05:00.000Z" agent="AuditRail" version="21.0.0" type="device">
+  <diagram id="physical_db_design" name="3.4.2 Physical Database Design">
+    <mxGraphModel dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="&lt;b&gt;Figure 3.4.2: Physical Database Design (MySQL 8.0 / InnoDB Engine Storage &amp;amp; B-Tree Index Topology)&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="114" y="25" width="600" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Physical Block: audit_events -->
+        <mxCell id="phys_audit_events" value="&lt;b&gt;TABLE: audit_events&lt;/b&gt; (ENGINE=InnoDB, DYNAMIC, utf8mb4_unicode_ci)&#xa;--&#xa;&lt;b&gt;COLUMN&lt;/b&gt;               | &lt;b&gt;DATA TYPE&lt;/b&gt;       | &lt;b&gt;NULL&lt;/b&gt; | &lt;b&gt;STORAGE / COMPRESSION&lt;/b&gt;&#xa;id                   | CHAR(36)        | NO   | 36 Bytes (Clustered PK)&#xa;organization_id      | CHAR(36)        | NO   | 36 Bytes (Tenant Foreign Key)&#xa;sequence_number      | BIGINT UNSIGNED | NO   | 8 Bytes (Monotonic strictly +1)&#xa;event_action         | VARCHAR(100)    | NO   | 1-100 Bytes&#xa;actor_id             | VARCHAR(100)    | NO   | 1-100 Bytes&#xa;target_id            | VARCHAR(100)    | NO   | 1-100 Bytes&#xa;payload              | TEXT            | NO   | LOB Overflow Page (RFC 8785 JSON)&#xa;record_hash          | CHAR(64)        | NO   | 64 Bytes (Fixed SHA-256 Digest)&#xa;prev_record_hash     | CHAR(64)        | NO   | 64 Bytes (Fixed SHA-256 Digest)&#xa;created_at           | DATETIME(6)     | NO   | 8 Bytes (Microsecond UTC)&#xa;--&#xa;&lt;b&gt;PHYSICAL B-TREE INDEX TOPOLOGY:&lt;/b&gt;&#xa;PRIMARY KEY (id) USING BTREE [Clustered Index]&#xa;UNIQUE KEY uq_org_seq (organization_id, sequence_number) USING BTREE [Composite Cover]&#xa;KEY idx_org_created (organization_id, created_at) USING BTREE [Time Range Scan]&#xa;KEY idx_record_hash (record_hash) USING BTREE [Point Lookup]" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#d5e8d4;strokeColor=#82b366;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="747" height="330" as="geometry"/>
+        </mxCell>
+
+        <!-- Physical Block: chain_heads -->
+        <mxCell id="phys_chain_heads" value="&lt;b&gt;TABLE: chain_heads&lt;/b&gt; (ENGINE=InnoDB, ROW_FORMAT=DYNAMIC)&#xa;--&#xa;&lt;b&gt;COLUMN&lt;/b&gt;               | &lt;b&gt;DATA TYPE&lt;/b&gt;       | &lt;b&gt;NULL&lt;/b&gt; | &lt;b&gt;CONCURRENCY / LOCK SEMANTICS&lt;/b&gt;&#xa;organization_id      | CHAR(36)        | NO   | PK (Target for SELECT ... FOR UPDATE)&#xa;head_sequence_number | BIGINT UNSIGNED | NO   | 8 Bytes (Atomically Incremented)&#xa;head_record_hash     | CHAR(64)        | NO   | 64 Bytes (Latest SHA-256 Hex)&#xa;genesis_hash         | CHAR(64)        | NO   | 64 Bytes (Initial Anchor)&#xa;updated_at           | DATETIME(6)     | NO   | 8 Bytes (Microsecond Lock Release)&#xa;--&#xa;&lt;b&gt;PHYSICAL INDEX TOPOLOGY:&lt;/b&gt;&#xa;PRIMARY KEY (organization_id) USING BTREE [Single Row Exclusive Inode Lock]" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffe6cc;strokeColor=#d79b00;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="425" width="747" height="200" as="geometry"/>
+        </mxCell>
+
+        <!-- Physical Block: checkpoints -->
+        <mxCell id="phys_checkpoints" value="&lt;b&gt;TABLE: checkpoints&lt;/b&gt; (ENGINE=InnoDB, ROW_FORMAT=DYNAMIC)&#xa;--&#xa;&lt;b&gt;COLUMN&lt;/b&gt;               | &lt;b&gt;DATA TYPE&lt;/b&gt;       | &lt;b&gt;NULL&lt;/b&gt; | &lt;b&gt;OBJECT STORAGE METADATA&lt;/b&gt;&#xa;id                   | CHAR(36)        | NO   | 36 Bytes PK&#xa;organization_id      | CHAR(36)        | NO   | 36 Bytes FK&#xa;sequence_number      | BIGINT UNSIGNED | NO   | Milestone Snapshot Seq&#xa;checkpoint_hash      | CHAR(64)        | NO   | 64 Bytes SHA-256 Anchor&#xa;storage_provider     | VARCHAR(32)     | NO   | 'AWS_S3' / 'MINIO' / 'LOCAL'&#xa;s3_bucket            | VARCHAR(100)    | NO   | S3 Bucket Name&#xa;s3_object_key        | VARCHAR(255)    | NO   | Target URI Path&#xa;s3_version_id        | VARCHAR(100)    | YES  | AWS S3 Object Version ID&#xa;created_at           | DATETIME(6)     | NO   | 8 Bytes Microsecond UTC&#xa;--&#xa;&lt;b&gt;PHYSICAL INDEX TOPOLOGY:&lt;/b&gt;&#xa;PRIMARY KEY (id) USING BTREE&#xa;KEY idx_cp_org_seq (organization_id, sequence_number) USING BTREE" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#fff2cc;strokeColor=#d6b656;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="650" width="747" height="250" as="geometry"/>
+        </mxCell>
+
+        <!-- Storage Partitioning & WORM Integration Note -->
+        <mxCell id="phys_storage_note" value="&lt;b&gt;PHYSICAL STORAGE ALLOCATION &amp;amp; HARDENING GUIDELINES:&lt;/b&gt;&lt;br&gt;1. &lt;b&gt;InnoDB Buffer Pool:&lt;/b&gt; Configured to cache &lt;i&gt;uq_org_seq&lt;/i&gt; and &lt;i&gt;chain_heads&lt;/i&gt; in RAM for sub-millisecond pessimistic row locks.&lt;br&gt;2. &lt;b&gt;Write Volume:&lt;/b&gt; audit_events uses append-only pattern with sequential primary and composite index insertions to minimize page splits.&lt;br&gt;3. &lt;b&gt;Out-of-Band Physical Isolation:&lt;/b&gt; Checkpoint files are physically replicated to AWS S3 Object Lock (WORM COMPLIANCE mode) on AWS KMS hardware modules, ensuring zero physical write access to database administrators." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8f9fa;strokeColor=#666666;align=left;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="930" width="747" height="120" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

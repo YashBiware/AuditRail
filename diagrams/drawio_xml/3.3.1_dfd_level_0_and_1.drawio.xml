@@ -1,0 +1,140 @@
+<mxfile host="app.diagrams.net" modified="2026-11-22T09:30:00.000Z" agent="AuditRail" version="21.0.0" type="device">
+  <diagram id="dfd_levels" name="3.3.1 Data Flow Diagrams (Level 0 and Level 1)">
+    <mxGraphModel dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="&lt;b&gt;Figure 3.3.1: Data Flow Diagrams (Level 0 Context Diagram &amp;amp; Level 1 DFD)&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="114" y="30" width="600" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== SECTION A: DFD LEVEL 0 ==================== -->
+        <mxCell id="sec_a_box" value="DFD LEVEL 0: CONTEXT DIAGRAM" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8f9fa;strokeColor=#dcdcdc;fontSize=12;fontStyle=1;startSize=25;" vertex="1" parent="1">
+          <mxGeometry x="64" y="70" width="700" height="260" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ext_client_0" value="&lt;b&gt;External Client Application&lt;/b&gt;&lt;br&gt;(Core Banking, Healthcare, FinTech)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="sec_a_box">
+          <mxGeometry x="40" y="60" width="160" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="proc_auditrail_0" value="&lt;b&gt;0.0&lt;br&gt;AUDITRAIL PLATFORM&lt;/b&gt;&lt;br&gt;Tamper-Evident Ingestion &amp;amp; Cryptographic Verification" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="sec_a_box">
+          <mxGeometry x="270" y="45" width="160" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ext_auditor_0" value="&lt;b&gt;Compliance Auditor / Dashboard&lt;/b&gt;&lt;br&gt;(DPDP / SOC2 / ISO 27001)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="sec_a_box">
+          <mxGeometry x="500" y="60" width="160" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ext_s3_0" value="&lt;b&gt;AWS S3 Object Lock&lt;/b&gt;&lt;br&gt;(Out-of-band WORM Anchor)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="sec_a_box">
+          <mxGeometry x="270" y="190" width="160" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Flows in Level 0 -->
+        <mxCell id="f0_1" value="Audit Event Payload + API Key" edge="1" parent="sec_a_box" source="ext_client_0" target="proc_auditrail_0">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="230" y="75"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f0_2" value="Sequence &amp;amp; Hash Receipt" edge="1" parent="sec_a_box" source="proc_auditrail_0" target="ext_client_0">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="230" y="105"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f0_3" value="Verification Request" edge="1" parent="sec_a_box" source="ext_auditor_0" target="proc_auditrail_0">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="470" y="75"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f0_4" value="Mathematical Proof &amp;amp; Report" edge="1" parent="sec_a_box" source="proc_auditrail_0" target="ext_auditor_0">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="470" y="105"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f0_5" value="WORM Checkpoint Upload" edge="1" parent="sec_a_box" source="proc_auditrail_0" target="ext_s3_0"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+
+        <!-- ==================== SECTION B: DFD LEVEL 1 ==================== -->
+        <mxCell id="sec_b_box" value="DFD LEVEL 1: DETAILED DATA FLOW PROCESS" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8f9fa;strokeColor=#dcdcdc;fontSize=12;fontStyle=1;startSize=25;" vertex="1" parent="1">
+          <mxGeometry x="64" y="350" width="700" height="780" as="geometry"/>
+        </mxCell>
+
+        <!-- Entities -->
+        <mxCell id="ent_client_1" value="Client App" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="30" y="50" width="110" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ent_auditor_1" value="Auditor UI" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="560" y="50" width="110" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- Processes -->
+        <mxCell id="proc_1_1" value="&lt;b&gt;1.0&lt;/b&gt;&lt;br&gt;Auth &amp;amp; Identity&lt;br&gt;Resolution" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="190" y="40" width="110" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="proc_1_2" value="&lt;b&gt;2.0&lt;/b&gt;&lt;br&gt;Serialization &amp;amp;&lt;br&gt;Pessimistic Lock" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="190" y="160" width="110" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="proc_1_3" value="&lt;b&gt;3.0&lt;/b&gt;&lt;br&gt;SHA-256 Hash&lt;br&gt;Chain Ingestion" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="190" y="280" width="110" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="proc_1_4" value="&lt;b&gt;4.0&lt;/b&gt;&lt;br&gt;Chain Verification&lt;br&gt;Walk Engine" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="420" y="160" width="110" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="proc_1_5" value="&lt;b&gt;5.0&lt;/b&gt;&lt;br&gt;WORM Checkpoint&lt;br&gt;&amp;amp; Reconciliation" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="420" y="380" width="110" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Data Stores (D1, D2, D3, D4) -->
+        <mxCell id="ds_api_keys" value="&lt;b&gt;D1&lt;/b&gt; api_keys &amp;amp; organizations" style="shape=partialRectangle;right=0;left=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="340" y="50" width="160" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ds_chain_heads" value="&lt;b&gt;D2&lt;/b&gt; chain_heads (Pessimistic Lock)" style="shape=partialRectangle;right=0;left=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="20" y="220" width="160" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ds_audit_events" value="&lt;b&gt;D3&lt;/b&gt; audit_events (Chain Table)" style="shape=partialRectangle;right=0;left=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontStyle=1;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="170" y="440" width="160" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ds_s3_worm" value="&lt;b&gt;D4&lt;/b&gt; AWS S3 Object Lock (WORM)" style="shape=partialRectangle;right=0;left=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;" vertex="1" parent="sec_b_box">
+          <mxGeometry x="400" y="520" width="180" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Connectors Level 1 -->
+        <mxCell id="f1_1" value="API Key" edge="1" parent="sec_b_box" source="ent_client_1" target="proc_1_1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f1_2" value="Validate Hash" edge="1" parent="sec_b_box" source="proc_1_1" target="ds_api_keys"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f1_3" value="Tenant ID" edge="1" parent="sec_b_box" source="proc_1_1" target="proc_1_2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f1_4" value="Lock &amp;amp; Read Head" edge="1" parent="sec_b_box" source="proc_1_2" target="ds_chain_heads"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f1_5" value="Seq+1, H_prev" edge="1" parent="sec_b_box" source="proc_1_2" target="proc_1_3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f1_6" value="Persist Event &amp;amp; Hash" edge="1" parent="sec_b_box" source="proc_1_3" target="ds_audit_events"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f1_7" value="Update Head" edge="1" parent="sec_b_box" source="proc_1_3" target="ds_chain_heads">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="100" y="310"/></Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Verification flows -->
+        <mxCell id="f1_8" value="Run Verify" edge="1" parent="sec_b_box" source="ent_auditor_1" target="proc_1_4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f1_9" value="Walk Chain Rows" edge="1" parent="sec_b_box" source="proc_1_4" target="ds_audit_events">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="360" y="270"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f1_10" value="Compare Checkpoints" edge="1" parent="sec_b_box" source="proc_1_4" target="proc_1_5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f1_11" value="Read Immutable Manifest" edge="1" parent="sec_b_box" source="proc_1_5" target="ds_s3_worm"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f1_12" value="Audit Report" edge="1" parent="sec_b_box" source="proc_1_4" target="ent_auditor_1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="540" y="120"/></Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

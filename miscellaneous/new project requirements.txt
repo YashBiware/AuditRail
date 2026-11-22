@@ -1,0 +1,334 @@
+delete
+
+
+
+v1.0-ENTERPRISE'
+
+SCOPE
+Audit Trail Layer
+Contextual metadata only; zero raw PII persisted.
+MODEL
+Append-Only Records
+Monotonic sequences under pessimistic row locks.
+ACCESS
+Role-Scoped Review
+Dual-role segregation for Administrators & Auditors.
+
+
+Interactive Operational Environment
+
+
+Connected: Spring Boot :8080
+
+
+Not Blockchain • Tamper-Evident
+
+
+
+
+
+
+-----------------------
+upadte
+ seperate landing page with whole main service access pages, landing page will only serve incomming traffic to riridect to login then service pages.
+
+on the landing page or anywhere in the wesite do not let the user know the tech stack we used, hide comlexities, and technical terms of ease of use for clients 
+
+
+
+add organisation login,( cloud/ manual code based login) method ??
+to we website's hero section, someting non technical "AuditRail creates a structured, cryptographically verifiable record of enterprise actions. Built on sequential SHA-256 hash chaining, RFC 8785 canonical metadata normalization, and out-of-band Write-Once-Read-Many (WORM) storage checkpoints"
+
+
+Live Hash-Chained Record Ledger not readable , change font 
+
+A conceptual map of the system, here do not mention the technical aspect of the system rather give a simple step guide of how it works 
+
+
+The posture the architecture is built around.
+good but hide tech side, because client base is not tech, then it will be overwhelling to them and confusing 
+
+
+the open live leddger will redirect to new secure login page if not already logged in but org, after login in by org, they will be able to use the apllication, to mailtain the multi tenency and deta isolation.
+
+
+------------------
+confusing section, explain the purpose 
+ 
+ 
+Live Hash-Chained Record Ledger
+Connected: Spring Boot :8080
+Live database state maintained under continuous cryptographic continuity.
+
+Audit Stream (0)
+Ingest Event
+Verification Engine
+
+Actor Reference
+svc-billing
+Action Identifier
+RECORD_READ
+Resource Target Reference
+account:usr_99826
+Contextual Metadata JSON (Subject to RFC 8785 Canonical Normalization)
+{"purpose": "quarterly_auudit", "scope": "financial"}
+Connection error: Failed to fetch
+Commit to Chain 
+
+
+------------must add section 
+
+since our product commnunicates with the clients application via 3 different methods 
+
+the below feature must be implemented after the login feature 
+simple flow 
+org login/register/signup 
+during first tym sign up our application will provided and assigned the api key to org, once to be stored in their env by client. 
+
+api key securely stored by client org in their env file 
+the client side will sent http request to auditrail, auditrail will recieve the http request sent by the user with their hashed api in the hhtp header.
+
+
+
+
+
+
+
+
+<
+ AuditRail is designed as an application-independent, drop-in evidentiary layer. Client systems do not need to alter their internal database schemas or adopt complex SDKs. They integrate over standard HTTPS via our REST Ingestion Gateway.
+
+Here is the complete walkthrough of how different client systems integrate with AuditRail in production:
+
+1. Integration Architecture Overview
+
+Every external system integrates via 3 simple steps:
+
+Authentication: The organization administrator provisions an Ingestion API Key in AuditRail (e.g., ar_live_demo01_acme_secret_key_9981).
+Payload Formatting: Whenever a sensitive action occurs (login, data export, policy change, financial transfer), the client system sends an HTTP POST request to /api/v1/events.
+Receipt & Proof: AuditRail returns an immutable receipt with the assigned Monotonic Sequence Number, the Previous Hash, and the Current Event Hash.
+2. Client Code Walkthroughs (By System Language)
+
+AuditRail accepts arbitrary contextual metadata inside the metadataJson field. The platform automatically normalizes this via RFC 8785 JSON Canonicalization (JCS), so clients do not have to worry about whitespace, indentation, or key ordering.
+
+A. Node.js / TypeScript Clients (Web Apps, Microservices)
+typescript
+import axios from 'axios';
+async function logAuditAction(actorId: string, action: string, resourceId: string, details: Record<string, any>) {
+  try {
+    const response = await axios.post(
+      'https://auditrail.company.com/api/v1/events',
+      {
+        actorReference: actorId,                // e.g. "usr_elena_admin"
+        action: action,                        // e.g. "CUSTOMER_EXPORT"
+        resourceReference: resourceId,          // e.g. "table:customers_q3"
+        eventTimestamp: new Date().toISOString(),
+        metadataJson: JSON.stringify(details)   // e.g. { recordsExported: 450, reason: "Tax Review" }
+      },
+      {
+        headers: {
+          'X-AuditRail-API-Key': process.env.AUDITRAIL_API_KEY,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    console.log(`[AuditRail] Action sealed at Sequence #${response.data.sequenceNumber}`);
+    return response.data.currentHash; // Optional: Store the hash receipt in local DB
+  } catch (error) {
+    console.error('[AuditRail] Logging failed:', error);
+  }
+}
+B. Python Clients (Data Pipelines, AWS Lambda, FastAPIs)
+python
+import requests
+from datetime import datetime, timezone
+import json
+import os
+AUDITRAIL_ENDPOINT = "https://auditrail.company.com/api/v1/events"
+AUDITRAIL_KEY = os.environ.get("AUDITRAIL_API_KEY")
+def record_compliance_event(actor: str, action: str, resource: str, metadata: dict):
+    payload = {
+        "actorReference": actor,
+        "action": action,
+        "resourceReference": resource,
+        "eventTimestamp": datetime.now(timezone.utc).isoformat(),
+        "metadataJson": json.dumps(metadata)
+    }
+    
+    headers = {
+        "X-AuditRail-API-Key": AUDITRAIL_KEY,
+        "Content-Type": "application/json"
+    }
+    resp = requests.post(AUDITRAIL_ENDPOINT, json=payload, headers=headers, timeout=3.0)
+    resp.raise_for_status()
+    
+    receipt = resp.json()
+    return receipt["sequenceNumber"], receipt["currentHash"]
+C. Java / Spring Boot Clients (Enterprise Services, Banking Systems)
+java
+@Service
+public class AuditTrailClient {
+    private final RestClient restClient;
+    public AuditTrailClient(@Value("${auditrail.api-key}") String apiKey,
+                            @Value("${auditrail.url}") String baseUrl) {
+        this.restClient = RestClient.builder()
+                .baseUrl(baseUrl)
+                .defaultHeader("X-AuditRail-API-Key", apiKey)
+                .defaultHeader("Content-Type", "application/json")
+                .build();
+    }
+    public void logEvent(String actor, String action, String resource, Map<String, Object> meta) {
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonMeta = mapper.writeValueAsString(meta);
+        Map<String, Object> body = Map.of(
+            "actorReference", actor,
+            "action", action,
+            "resourceReference", resource,
+            "eventTimestamp", Instant.now().toString(),
+            "metadataJson", jsonMeta
+        );
+        restClient.post()
+                .uri("/api/v1/events")
+                .body(body)
+                .retrieve()
+                .toBodilessEntity();
+    }
+}
+3. Asynchronous / Non-Blocking Patterns (High-Throughput Systems)
+
+For high-throughput systems processing tens of thousands of transactions per second (e.g., e-commerce checkouts or high-frequency trading), clients should not block the main user thread waiting for an HTTP call. They use an asynchronous event queue:
+
+The client system performs the financial transaction and drops a lightweight audit payload into an internal message queue (RabbitMQ, Kafka, or AWS SQS).
+The user receives their response immediately in sub-millisecond time.
+A lightweight background worker reads from the queue and flushes the events sequentially to AuditRail's /api/v1/events endpoint.
+4. How Multi-Tenant Isolation Protects Clients
+No Shared Database Pollution: Each client organization's events are segregated. A client never supplies an organizationId in their request body — AuditRail derives the tenant identity from the cryptographic SHA-256 hash of their API key.
+Zero Concurrency Interference: When Company A is ingesting 10,000 events/minute, their pessimistic write lock is applied strictly to Company A's chain_heads row. Company B experiences zero lock contention or latency degradation.
+Auditor Isolation: When Company A's regulatory auditor logs into the dashboard, they can only view, export, and verify Company A's events.
+5. Summary of What the Client Needs to Store
+Required: Only their secret API key (ar_live_...).
+Optional (Best Practice): Client systems can optionally store the returned currentHash alongside their own database records. This creates two-way verification: if a dispute arises 3 years later, the client can match the local hash against AuditRail's external S3 WORM-anchored ledger to prove the record has never been altered.
+>
+
+AuditRail generates the API key, NOT the external platform.
+
+This follows the exact same pattern used by platforms like AWS, Stripe, OpenAI, and GitHub:
+
+An Administrator logs into the AuditRail dashboard.
+The admin clicks "Create API Key" and gives it a label (e.g., "SAP Production ERP" or "Stripe Payment Sync").
+AuditRail generates the secret key and displays it on the screen only once.
+The admin copies the key and pastes it into the external platform's environment variables (.env or secret vault).
+The external platform uses that key in the HTTP header: X-AuditRail-API-Key: <key>.
+
+
+
+. How Data Separation is Created (Multi-Tenancy Architecture)
+
+AuditRail uses a 4-Layer Defense-in-Depth model so that different organizations (and different users) can never see or contaminate each other’s data:
+
+[Incoming Request]
+        │
+        ▼
+Layer 1: SERVER-DERIVED IDENTITY (TenantContext)
+         Client CANNOT supply "organizationId" in the body.
+         Server extracts orgId strictly from the API Key or JWT.
+        │
+        ▼
+Layer 2: DATABASE ROW-LEVEL QUERY ISOLATION
+         Every SQL query automatically injects:
+         "WHERE organization_id = :currentTenantId"
+        │
+        ▼
+Layer 3: INDEPENDENT CRYPTOGRAPHIC HASH CHAINS
+         Company A has Chain A (1, 2, 3...)
+         Company B has Chain B (1, 2, 3...)
+        │
+        ▼
+Layer 4: ROLE-BASED ACCESS CONTROL (RBAC)
+         Admin vs. Auditor vs. Ingest Service segregation.
+
+
+
+         Layer 1: Zero Trust on Client Tenant Input (TenantContext)
+
+Notice that in the ingestion payload, there is NO organizationId parameter:
+
+json
+{
+  "actorReference": "sap_erp:operator_412",
+  "action": "PAYMENT_RECONCILIATION",
+  "resourceReference": "invoice:inv_99812",
+  "eventTimestamp": "2026-11-21T18:00:00.000000Z",
+  "metadataJson": "..."
+}
+
+Why? If the client could send "organizationId": "comp_abc", a malicious user could spoof another company’s ID.
+
+Instead:
+
+When X-AuditRail-API-Key: ar_live_demo01_... arrives, the backend calculates SHA-256(key).
+It looks up the key in the database:
+sql
+SELECT organization_id, status FROM api_keys WHERE key_hash = ?;
+The server sets the resolved organization_id into a thread-safe TenantContext.
+The caller can only ever write to or read from the organization that owns that API key.
+Layer 2: Schema-Level Isolation & Compound Keys
+
+In the database schema (schema.sql), every single table is bound to organization_id:
+
+Composite Unique Constraints:
+sql
+-- Sequence numbers are unique PER organization, not globally!
+UNIQUE KEY uq_audit_events_org_seq (organization_id, sequence_number),
+-- Users' emails are unique PER organization (an auditor can belong to multiple client orgs)
+UNIQUE KEY uq_users_org_email (organization_id, email)
+Enforced Query Filter: Every Spring Data JPA query (e.g., in AuditQueryServiceImpl) automatically appends:
+java
+predicates.add(cb.equal(root.get("organizationId"), organizationId));
+Even if an auditor knows the UUID of an event belonging to another company, the database returns 404 Not Found.
+Layer 3: Independent Cryptographic Chains
+
+Each organization has its own private, isolated cryptographic ledger:
+
+Company A's chain: 0000...0 
+→
+→ Event #1 
+→
+→ Event #2 
+→
+→ Event #3.
+Company B's chain: 0000...0 
+→
+→ Event #1 
+→
+→ Event #2.
+When Company A ingests an event, AuditRail places a pessimistic lock (SELECT ... FOR UPDATE) ONLY on Company A’s row in the chain_heads table:
+sql
+SELECT * FROM chain_heads WHERE organization_id = 'org_company_a' FOR UPDATE;
+Because locks are scoped strictly to the organization, high traffic from Company A never delays or blocks Company B.
+Layer 4: Role-Based Access Control (RBAC) Inside the Organization
+
+Even within the same organization, users have different permissions:
+
+our AuditRail will not send back any acknowledegement, one way communication client to auditrail 
+
+then new org dashboard where registered org can see all the record and transaction or the logs 
+
+---- 
+site map 
+
+index/landing page ------ login page -------- org dash board page 
+|
+|
+-------- register/ signup ----- view once hashed copiable api key shown  to user ------- org dashboard 
+
+
+org dashboard ----- profile logout button 
+|______ veiw Audit Trails record---- download audit trail csv/ pdf file 
+
+the csv/ pdf file must have 
+org name
+org id 
+gst id 
+
+then comlete history of the audit trail 

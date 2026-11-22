@@ -1,10 +1,10 @@
 @echo off
-title AuditRail - Simulated Client Banking App & Isolation Showcase
+title Aarohi Global Bank - Client Banking Application
 color 0b
 
 echo ===============================================================================
-echo                AuditRail Simulated Client Banking Showcase
-echo                      Enterprise Multi-Tenant Isolation
+echo                Aarohi Global Bank - Client Banking Core
+echo              Connected to AuditRail Evidentiary Ledger
 echo ===============================================================================
 echo.
 echo  [1/2] Checking Python environment...
@@ -15,16 +15,16 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-echo  [2/2] Launching Simulated Client Banking Core on http://localhost:5050...
+echo  [2/2] Launching Aarohi Global Bank Application on http://localhost:5050...
 echo.
 echo  -----------------------------------------------------------------------------
-echo  * Demonstrates how client databases automatically push audit events to AuditRail
-echo  * Includes Tenant Isolation toggle: Apex Bank (FinTech) vs Horizon (Health)
-echo  * Includes DBA SQL Tamper & Row Deletion attack simulation buttons
+echo  * Bank: Aarohi Global Bank
+echo  * Pre-configured API Key: ar_live_admin-__IWk...
+echo  * Role-based access: Manager, Cashier, Employee
 echo  -----------------------------------------------------------------------------
 echo.
 
-cd /d "%~dp0demo-client-app\frontend"
+cd /d "%~dp0aarohi-bank-client\frontend"
 start http://localhost:5050/index.html
 python server.py
 

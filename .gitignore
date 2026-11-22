@@ -64,3 +64,5 @@ override.tf.json
 # Docker Volumes & Local Storage
 minio-data/
 mysql-data/
+
+backend/data/

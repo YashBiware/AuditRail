@@ -1,75 +1,124 @@
-<mxfile host="app.diagrams.net" modified="2026-11-22T09:45:00.000Z" agent="AuditRail" version="21.0.0" type="device">
-  <diagram id="class_diagram" name="3.3.4 Class Diagram">
+<mxfile host="app.diagrams.net" modified="2026-11-22T10:25:00.000Z" agent="AuditRail" version="21.0.0" type="device">
+  <diagram id="class_diagram_clean" name="3.3.4 Class Diagram">
     <mxGraphModel background="#ffffff" dx="1000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
 
-        <mxCell id="title" value="&lt;b&gt;Figure 3.3.4: UML Class Diagram — Core Architecture &amp;amp; Service Layer&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="114" y="30" width="600" height="30" as="geometry"/>
+        <!-- Title -->
+        <mxCell id="title" value="&lt;b style=&quot;font-size: 15px;&quot;&gt;Figure 3.3.4: UML Class Diagram — Core System Components&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="64" y="30" width="700" height="30" as="geometry"/>
         </mxCell>
 
-        <!-- Controller -->
-        <mxCell id="cls_ctrl" value="&lt;b&gt;AuditEventIngestionController&lt;/b&gt;&#xa;--&#xa;- ingestionService: AuditEventIngestionService&#xa;--&#xa;+ ingestEvent(request, apiKey): ResponseEntity&lt;IngestResponse&gt;&#xa;+ batchIngest(requests, apiKey): ResponseEntity&lt;BatchResponse&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="50" y="80" width="340" height="90" as="geometry"/>
+        <!-- ==================== ROW 1: CONTROLLER & API LAYER ==================== -->
+        <mxCell id="c_ctrl" value="&lt;b&gt;AuditEventIngestionController&lt;/b&gt;&lt;hr&gt;- ingestionService: AuditEventIngestionService&lt;hr&gt;+ ingestEvent(request, apiKey): ResponseEntity&lt;br&gt;+ batchIngest(requests, apiKey): ResponseEntity" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="80" width="320" height="90" as="geometry"/>
         </mxCell>
 
-        <!-- Service Interface -->
-        <mxCell id="cls_svc_iface" value="&lt;b&gt;&amp;lt;&amp;lt;interface&amp;gt;&amp;gt;&lt;br&gt;AuditEventIngestionService&lt;/b&gt;&#xa;--&#xa;--&#xa;+ ingest(orgId, request): AuditEventResponse&#xa;+ batchIngest(orgId, requests): List&lt;AuditEventResponse&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="50" y="210" width="340" height="80" as="geometry"/>
+        <mxCell id="c_verify_ctrl" value="&lt;b&gt;VerificationController&lt;/b&gt;&lt;hr&gt;- verificationService: IntegrityVerificationService&lt;hr&gt;+ runVerification(apiKey): ResponseEntity&lt;br&gt;+ verifyRange(fromSeq, toSeq): ResponseEntity" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="444" y="80" width="320" height="90" as="geometry"/>
         </mxCell>
 
-        <!-- Service Implementation -->
-        <mxCell id="cls_svc_impl" value="&lt;b&gt;AuditEventIngestionServiceImpl&lt;/b&gt;&#xa;--&#xa;- eventRepo: AuditEventRepository&#xa;- chainHeadRepo: ChainHeadRepository&#xa;- storageService: CheckpointStorageService&#xa;--&#xa;+ ingest(orgId, request): AuditEventResponse&#xa;- acquireTenantLock(orgId): ChainHead&#xa;- buildCanonicalPayload(event): String&#xa;- computeSha256(payload, prevHash): String" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="50" y="330" width="340" height="150" as="geometry"/>
+        <!-- ==================== ROW 2: SERVICE INTERFACES ==================== -->
+        <mxCell id="c_ingest_iface" value="&lt;b&gt;&amp;lt;&amp;lt;interface&amp;gt;&amp;gt;&lt;br&gt;AuditEventIngestionService&lt;/b&gt;&lt;hr&gt;+ ingest(orgId, request): AuditEventResponse&lt;br&gt;+ batchIngest(orgId, list): List&amp;lt;AuditEventResponse&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="210" width="320" height="75" as="geometry"/>
         </mxCell>
 
-        <!-- Storage Interface -->
-        <mxCell id="cls_store_iface" value="&lt;b&gt;&amp;lt;&amp;lt;interface&amp;gt;&amp;gt;&lt;br&gt;CheckpointStorageService&lt;/b&gt;&#xa;--&#xa;--&#xa;+ storeCheckpoint(data): StoredCheckpointResult&#xa;+ retrieveCheckpointContent(bucket, key): String&#xa;+ isAvailable(): boolean" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="440" y="210" width="330" height="90" as="geometry"/>
+        <mxCell id="c_verify_iface" value="&lt;b&gt;&amp;lt;&amp;lt;interface&amp;gt;&amp;gt;&lt;br&gt;IntegrityVerificationService&lt;/b&gt;&lt;hr&gt;+ verifyChain(orgId, fromSeq, toSeq): VerificationResult&lt;br&gt;+ verifyAgainstWorm(orgId): ReconciliationResult" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="444" y="210" width="320" height="75" as="geometry"/>
         </mxCell>
 
-        <!-- S3 Adapter -->
-        <mxCell id="cls_s3_adapter" value="&lt;b&gt;AwsS3CheckpointStorageAdapter&lt;/b&gt;&#xa;--&#xa;- s3Client: S3Client&#xa;- defaultBucket: String&#xa;- retentionDays: int&#xa;- kmsKeyId: String&#xa;--&#xa;+ storeCheckpoint(data): StoredCheckpointResult&#xa;+ retrieveCheckpointContent(bucket, key): String&#xa;+ isAvailable(): boolean" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="440" y="340" width="330" height="140" as="geometry"/>
+        <!-- ==================== ROW 3: SERVICE IMPLEMENTATIONS ==================== -->
+        <mxCell id="c_ingest_impl" value="&lt;b&gt;AuditEventIngestionServiceImpl&lt;/b&gt;&lt;hr&gt;- eventRepository: AuditEventRepository&lt;br&gt;- chainHeadRepository: ChainHeadRepository&lt;br&gt;- checkpointService: CheckpointStorageService&lt;hr&gt;+ ingest(orgId, request): AuditEventResponse&lt;br&gt;- acquireTenantLock(orgId): ChainHead&lt;br&gt;- computeSha256(payload, prevHash): String" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="325" width="320" height="120" as="geometry"/>
         </mxCell>
 
-        <!-- Domain Entities -->
-        <mxCell id="cls_entity_event" value="&lt;b&gt;AuditEvent&lt;/b&gt;&#xa;--&#xa;- id: UUID&#xa;- organizationId: UUID&#xa;- sequenceNumber: Long&#xa;- eventAction: String&#xa;- actorId: String&#xa;- targetId: String&#xa;- payloadJson: String&#xa;- recordHash: String&#xa;- previousRecordHash: String&#xa;- timestamp: Instant" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="50" y="530" width="220" height="190" as="geometry"/>
+        <mxCell id="c_verify_impl" value="&lt;b&gt;IntegrityVerificationServiceImpl&lt;/b&gt;&lt;hr&gt;- eventRepository: AuditEventRepository&lt;br&gt;- chainHeadRepository: ChainHeadRepository&lt;br&gt;- checkpointService: CheckpointStorageService&lt;hr&gt;+ verifyChain(orgId, fromSeq, toSeq): VerificationResult&lt;br&gt;- stepWalkVerification(events): VerificationReport" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="444" y="325" width="320" height="120" as="geometry"/>
         </mxCell>
 
-        <mxCell id="cls_entity_head" value="&lt;b&gt;ChainHead&lt;/b&gt;&#xa;--&#xa;- organizationId: UUID&#xa;- headSequenceNumber: Long&#xa;- headRecordHash: String&#xa;- genesisHash: String&#xa;- updatedAt: Instant" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="310" y="530" width="210" height="130" as="geometry"/>
+        <!-- ==================== ROW 4: STORAGE ADAPTER LAYER ==================== -->
+        <mxCell id="c_store_iface" value="&lt;b&gt;&amp;lt;&amp;lt;interface&amp;gt;&amp;gt;&lt;br&gt;CheckpointStorageService&lt;/b&gt;&lt;hr&gt;+ storeCheckpoint(data): StoredCheckpointResult&lt;br&gt;+ retrieveCheckpointContent(bucket, key): String&lt;br&gt;+ isAvailable(): boolean" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="485" width="320" height="85" as="geometry"/>
         </mxCell>
 
-        <mxCell id="cls_entity_checkpoint" value="&lt;b&gt;Checkpoint&lt;/b&gt;&#xa;--&#xa;- id: UUID&#xa;- organizationId: UUID&#xa;- sequenceNumber: Long&#xa;- checkpointHash: String&#xa;- s3ObjectKey: String&#xa;- s3VersionId: String&#xa;- status: String" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="555" y="530" width="215" height="160" as="geometry"/>
+        <mxCell id="c_s3_adapter" value="&lt;b&gt;AwsS3CheckpointStorageAdapter&lt;/b&gt;&lt;hr&gt;- s3Client: S3Client&lt;br&gt;- defaultBucket: String&lt;br&gt;- retentionDays: int (WORM COMPLIANCE)&lt;hr&gt;+ storeCheckpoint(data): StoredCheckpointResult&lt;br&gt;+ retrieveCheckpointContent(bucket, key): String" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="444" y="485" width="320" height="85" as="geometry"/>
         </mxCell>
 
-        <!-- Verification Service -->
-        <mxCell id="cls_verify_svc" value="&lt;b&gt;IntegrityVerificationServiceImpl&lt;/b&gt;&#xa;--&#xa;- eventRepo: AuditEventRepository&#xa;- chainHeadRepo: ChainHeadRepository&#xa;- storageService: CheckpointStorageService&#xa;--&#xa;+ verifyChain(orgId, fromSeq, toSeq): VerificationResult&#xa;+ verifyAgainstWorm(orgId): WormReconciliationResult&#xa;- recomputeHash(event, prevHash): String" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="220" y="770" width="380" height="140" as="geometry"/>
+        <!-- ==================== ROW 5: DOMAIN ENTITIES ==================== -->
+        <mxCell id="c_ent_event" value="&lt;b&gt;AuditEvent&lt;/b&gt;&lt;hr&gt;- id: UUID&lt;br&gt;- organizationId: UUID&lt;br&gt;- sequenceNumber: Long&lt;br&gt;- eventAction: String&lt;br&gt;- actorId: String&lt;br&gt;- payload: String (RFC 8785 JSON)&lt;br&gt;- recordHash: String (SHA-256)&lt;br&gt;- previousRecordHash: String&lt;br&gt;- createdAt: Instant" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="610" width="215" height="165" as="geometry"/>
         </mxCell>
 
-        <!-- Utility Classes -->
-        <mxCell id="cls_canonical_util" value="&lt;b&gt;CanonicalJsonUtil&lt;/b&gt;&#xa;--&#xa;+ canonicalize(rawJson): String&#xa;+ toCanonicalBytes(obj): byte[]" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="50" y="960" width="240" height="70" as="geometry"/>
+        <mxCell id="c_ent_head" value="&lt;b&gt;ChainHead&lt;/b&gt;&lt;hr&gt;- organizationId: UUID [PK]&lt;br&gt;- headSequenceNumber: Long&lt;br&gt;- headRecordHash: String&lt;br&gt;- genesisHash: String&lt;br&gt;- updatedAt: Instant" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="307" y="610" width="215" height="165" as="geometry"/>
         </mxCell>
 
-        <mxCell id="cls_hash_util" value="&lt;b&gt;HashUtil&lt;/b&gt;&#xa;--&#xa;+ sha256Hex(bytes): String&#xa;+ sha256Hex(inputString): String" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#333333;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="340" y="960" width="230" height="70" as="geometry"/>
+        <mxCell id="c_ent_checkpoint" value="&lt;b&gt;Checkpoint&lt;/b&gt;&lt;hr&gt;- id: UUID [PK]&lt;br&gt;- organizationId: UUID&lt;br&gt;- sequenceNumber: Long&lt;br&gt;- checkpointHash: String&lt;br&gt;- s3Bucket: String&lt;br&gt;- s3ObjectKey: String&lt;br&gt;- s3VersionId: String&lt;br&gt;- createdAt: Instant" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=10.5;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="549" y="610" width="215" height="165" as="geometry"/>
         </mxCell>
 
-        <!-- Connectors -->
-        <mxCell id="rel1" edge="1" parent="1" source="cls_ctrl" target="cls_svc_iface"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="rel2" edge="1" parent="1" source="cls_svc_impl" target="cls_svc_iface" style="dashed=1;endArrow=block;"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="rel3" edge="1" parent="1" source="cls_s3_adapter" target="cls_store_iface" style="dashed=1;endArrow=block;"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="rel4" edge="1" parent="1" source="cls_svc_impl" target="cls_store_iface"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="rel5" edge="1" parent="1" source="cls_svc_impl" target="cls_entity_event"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="rel6" edge="1" parent="1" source="cls_svc_impl" target="cls_entity_head"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="rel7" edge="1" parent="1" source="cls_verify_svc" target="cls_entity_event"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="rel8" edge="1" parent="1" source="cls_verify_svc" target="cls_entity_checkpoint"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <!-- ==================== ROW 6: CRYPTOGRAPHIC UTILITIES ==================== -->
+        <mxCell id="c_util_jcs" value="&lt;b&gt;CanonicalJsonUtil&lt;/b&gt;&lt;hr&gt;+ canonicalize(rawJson: String): String&lt;br&gt;+ toCanonicalBytes(payload: Object): byte[]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="64" y="815" width="320" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="c_util_hash" value="&lt;b&gt;HashUtil&lt;/b&gt;&lt;hr&gt;+ sha256Hex(bytes: byte[]): String&lt;br&gt;+ sha256Hex(input: String): String" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;align=left;spacingLeft=8;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="444" y="815" width="320" height="65" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== CLEAN ORTHOGONAL CONNECTORS ==================== -->
+        <!-- Controllers to Interfaces -->
+        <mxCell id="e_ctrl_ingest" edge="1" parent="1" source="c_ctrl" target="c_ingest_iface" style="endArrow=open;dashed=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_ctrl_verify" edge="1" parent="1" source="c_verify_ctrl" target="c_verify_iface" style="endArrow=open;dashed=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Impls realizing Interfaces (Dashed with triangular block arrow) -->
+        <mxCell id="e_impl_ingest" edge="1" parent="1" source="c_ingest_impl" target="c_ingest_iface" style="endArrow=block;dashed=1;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_impl_verify" edge="1" parent="1" source="c_verify_impl" target="c_verify_iface" style="endArrow=block;dashed=1;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Adapter realizing Storage Interface -->
+        <mxCell id="e_adapter_store" edge="1" parent="1" source="c_s3_adapter" target="c_store_iface" style="endArrow=block;dashed=1;endFill=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Ingestion Impl using Storage Interface -->
+        <mxCell id="e_ingest_to_store" edge="1" parent="1" source="c_ingest_impl" target="c_store_iface" style="endArrow=open;dashed=0;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Services using Entities -->
+        <mxCell id="e_ingest_to_event" edge="1" parent="1" source="c_ingest_impl" target="c_ent_event" style="endArrow=open;dashed=1;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="171" y="580"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_ingest_to_head" edge="1" parent="1" source="c_ingest_impl" target="c_ent_head" style="endArrow=open;dashed=1;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="414" y="580"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_verify_to_cp" edge="1" parent="1" source="c_verify_impl" target="c_ent_checkpoint" style="endArrow=open;dashed=1;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="656" y="580"/></Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Impl using Utility -->
+        <mxCell id="e_ingest_to_jcs" edge="1" parent="1" source="c_ent_event" target="c_util_jcs" style="endArrow=open;dashed=1;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_head_to_hash" edge="1" parent="1" source="c_ent_checkpoint" target="c_util_hash" style="endArrow=open;dashed=1;strokeColor=#333333;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
 
       </root>
     </mxGraphModel>

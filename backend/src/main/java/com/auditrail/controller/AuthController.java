@@ -24,6 +24,12 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<RegisterOrganizationResponse> register(@Valid @RequestBody RegisterOrganizationRequest request) {
+        RegisterOrganizationResponse response = authService.registerOrganization(request);
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/totp/verify")
     public ResponseEntity<LoginResponse> verifyTotp(@Valid @RequestBody TotpVerifyRequest request) {
         LoginResponse response = authService.verifyTotp(request);

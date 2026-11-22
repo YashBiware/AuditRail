@@ -15,4 +15,6 @@ public interface AuthService {
     TotpEnrollResponse setupTotp(String userId);
 
     UserSummaryResponse getCurrentUser();
+
+    com.auditrail.dto.auth.RegisterOrganizationResponse registerOrganization(com.auditrail.dto.auth.RegisterOrganizationRequest request);
 }

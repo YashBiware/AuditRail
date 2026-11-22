@@ -93,7 +93,7 @@
 <body>
 
 <div class="topbar">
-    <h1>AuditRail &mdash; Chapter 3 Design Diagrams (A4 Portrait &bull; White Canvas)</h1>
+    <h1>AuditRail &mdash; Chapter 3 Design Diagrams (A4 Portrait &bull; White Canvas &bull; Solid Black Connectors)</h1>
     <select class="nav-select" onchange="document.getElementById(this.value).scrollIntoView({behavior: 'smooth'})">
         <option value="page_1">Page 1: 3.1 Algorithm - Hash Chaining</option>
         <option value="page_2">Page 2: 3.2 Function Oriented Design</option>
@@ -114,42 +114,69 @@
         <div class="page-meta">Page 1 of 10 &bull; 3.1 Algorithm - Hash Chaining &bull; A4 Portrait (827 &times; 1169)</div>
         <div class="svg-wrapper">
             <svg viewBox="0 0 827 1169" width="827" height="1169" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;">
-                <text x="414.0" y="60" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">Algorithm 3.1: Monotonic Cryptographic Hash Chaining & Ingestion</text>
-  <ellipse cx="414.0" cy="115.0" rx="140.0" ry="25.0" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="414.0" y="119.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#111827" text-anchor="middle">START: Client Submits Audit Event Payload</text>
-  <rect x="274" y="170" width="280" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="282" y="186" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">Authenticate Client via SHA-256 Hashed API Key</text>
-  <text x="282" y="200" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">& Resolve Tenant Organization ID</text>
-  <rect x="274" y="250" width="280" height="55" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="282" y="266" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Acquire Pessimistic Write Lock on Tenant Chain Head</text>
-  <text x="282" y="280" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">(SELECT ... FOR UPDATE on chain_heads)</text>
-  <rect x="274" y="335" width="280" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="282" y="351" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">Read Current Sequence Number (S) and Previous Record Hash (H_prev)</text>
-  <rect x="274" y="415" width="280" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="282" y="431" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Calculate Monotonic Next Sequence Number:</text>
-  <text x="282" y="445" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">S_next = S + 1</text>
-  <rect x="274" y="495" width="280" height="55" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="282" y="511" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">Canonicalize Payload via RFC 8785 (JCS)</text>
-  <text x="282" y="525" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Normalize Timestamp to Microseconds Precision</text>
-  <rect x="274" y="580" width="280" height="60" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="282" y="596" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">Compute Cryptographic SHA-256 Record Hash:</text>
-  <text x="282" y="610" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">H_curr = SHA-256( JCS(payload) || H_prev )</text>
-  <rect x="274" y="670" width="280" height="60" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="282" y="686" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">Insert audit_events Record with (S_next, H_curr, H_prev)</text>
-  <text x="282" y="700" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Update chain_heads with (head_sequence=S_next, head_hash=H_curr)</text>
-  <polygon points="414.0,760 514,800.0 414.0,840 314,800.0" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="414.0" y="786.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#111827" text-anchor="middle">Is S_next a Checkpoint</text>
-  <text x="414.0" y="800.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#111827" text-anchor="middle">Interval Milestone?</text>
-  <text x="414.0" y="814.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#111827" text-anchor="middle">(e.g., mod 1000 == 0)</text>
-  <rect x="540" y="860" width="210" height="55" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="548" y="876" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Export Checkpoint Manifest & Anchor to</text>
-  <text x="548" y="890" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Immutable AWS S3 Object Lock (WORM)</text>
-  <rect x="274" y="940" width="280" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="282" y="956" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Commit RDBMS Transaction & Release Row Lock</text>
-  <rect x="274" y="1020" width="280" height="45" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="282" y="1036" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Return HTTP 201 Created with Sequence & Hash Receipt</text>
-  <ellipse cx="414.0" cy="1110.0" rx="70.0" ry="20.0" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="414.0" y="1114.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#111827" text-anchor="middle">END</text>
+                
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#000000" />
+      </marker>
+      <marker id="arrow-empty" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+      </marker>
+    </defs>
+    
+  <path d="M 414.0 140.0 L 414.0 170.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 220.0 L 414.0 250.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 305.0 L 414.0 335.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 385.0 L 414.0 415.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 465.0 L 414.0 495.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 550.0 L 414.0 580.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 640.0 L 414.0 670.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 730.0 L 414.0 760.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 514.0 800.0 L 645.0 800.0 L 540.0 887.5" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="523.0" y="829.75" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="539.0" y="841.75" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">YES</text>
+  <path d="M 414.0 840.0 L 414.0 940.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="410.0" y="876.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="426.0" y="888.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">NO</text>
+  <path d="M 540.0 887.5 L 645.0 965.0 L 554.0 965.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 990.0 L 414.0 1020.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 1065.0 L 414.0 1090.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <text x="414.0" y="60.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">Algorithm 3.1: Monotonic Cryptographic Hash Chaining & Ingestion</text>
+  <ellipse cx="414.0" cy="115.0" rx="140.0" ry="25.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="414.0" y="119.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000" text-anchor="middle">START: Client Submits Audit Event Payload</text>
+  <rect x="274.0" y="170.0" width="280.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="282.0" y="186.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">Authenticate Client via SHA-256 Hashed API Key</text>
+  <text x="282.0" y="200.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">& Resolve Tenant Organization ID</text>
+  <rect x="274.0" y="250.0" width="280.0" height="55.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="282.0" y="266.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Acquire Pessimistic Write Lock on Tenant Chain Head</text>
+  <text x="282.0" y="280.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">(SELECT ... FOR UPDATE on chain_heads)</text>
+  <rect x="274.0" y="335.0" width="280.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="282.0" y="351.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">Read Current Sequence Number (S) and Previous Record Hash (H_prev)</text>
+  <rect x="274.0" y="415.0" width="280.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="282.0" y="431.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Calculate Monotonic Next Sequence Number:</text>
+  <text x="282.0" y="445.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">S_next = S + 1</text>
+  <rect x="274.0" y="495.0" width="280.0" height="55.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="282.0" y="511.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">Canonicalize Payload via RFC 8785 (JCS)</text>
+  <text x="282.0" y="525.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Normalize Timestamp to Microseconds Precision</text>
+  <rect x="274.0" y="580.0" width="280.0" height="60.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="282.0" y="596.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">Compute Cryptographic SHA-256 Record Hash:</text>
+  <text x="282.0" y="610.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">H_curr = SHA-256( JCS(payload) || H_prev )</text>
+  <rect x="274.0" y="670.0" width="280.0" height="60.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="282.0" y="686.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">Insert audit_events Record with (S_next, H_curr, H_prev)</text>
+  <text x="282.0" y="700.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Update chain_heads with (head_sequence=S_next, head_hash=H_curr)</text>
+  <polygon points="414.0,760.0 514.0,800.0 414.0,840.0 314.0,800.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="414.0" y="786.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Is S_next a Checkpoint</text>
+  <text x="414.0" y="800.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Interval Milestone?</text>
+  <text x="414.0" y="814.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">(e.g., mod 1000 == 0)</text>
+  <rect x="540.0" y="860.0" width="210.0" height="55.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="548.0" y="876.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Export Checkpoint Manifest & Anchor to</text>
+  <text x="548.0" y="890.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Immutable AWS S3 Object Lock (WORM)</text>
+  <rect x="274.0" y="940.0" width="280.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="282.0" y="956.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Commit RDBMS Transaction & Release Row Lock</text>
+  <rect x="274.0" y="1020.0" width="280.0" height="45.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="282.0" y="1036.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Return HTTP 201 Created with Sequence & Hash Receipt</text>
+  <ellipse cx="414.0" cy="1110.0" rx="70.0" ry="20.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="414.0" y="1114.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000" text-anchor="middle">END</text>
             </svg>
         </div>
     </div>
@@ -159,61 +186,88 @@
         <div class="page-meta">Page 2 of 10 &bull; 3.2 Function Oriented Design &bull; A4 Portrait (827 &times; 1169)</div>
         <div class="svg-wrapper">
             <svg viewBox="0 0 827 1169" width="827" height="1169" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;">
-                <text x="414.0" y="70" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">Figure 3.2: Function Oriented Design (Top-Down Modular Structure Chart)</text>
-  <rect x="304" y="110" width="220" height="60" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="312" y="126" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">AUDITRAIL SYSTEM</text>
-  <text x="312" y="140" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Core Controller & Orchestration</text>
-  <rect x="84" y="230" width="150" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="92" y="246" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">1.0 Security & Auth</text>
-  <text x="92" y="260" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Identity Resolution</text>
-  <rect x="264" y="230" width="150" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="272" y="246" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">2.0 Ingestion Pipeline</text>
-  <text x="272" y="260" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Serialization & Chaining</text>
-  <rect x="444" y="230" width="150" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="452" y="246" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">3.0 Verification Engine</text>
-  <text x="452" y="260" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Chain Walk & Proof</text>
-  <rect x="614" y="230" width="150" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="622" y="246" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">4.0 Anchor Service</text>
-  <text x="622" y="260" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">WORM & S3 Checkpoints</text>
-  <rect x="84" y="340" width="150" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="92" y="356" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Authenticate API Key</text>
-  <text x="92" y="370" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">(SHA-256 Match)</text>
-  <rect x="84" y="410" width="150" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="92" y="426" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Validate JWT Claims</text>
-  <text x="92" y="440" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">& TOTP Token</text>
-  <rect x="84" y="480" width="150" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="92" y="496" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Resolve Org Isolation</text>
-  <text x="92" y="510" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">(Tenant Context)</text>
-  <rect x="264" y="340" width="150" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="272" y="356" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Acquire Pessimistic</text>
-  <text x="272" y="370" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Row Lock (FOR UPDATE)</text>
-  <rect x="264" y="410" width="150" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="272" y="426" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">RFC 8785 JSON</text>
-  <text x="272" y="440" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Canonicalization (JCS)</text>
-  <rect x="264" y="480" width="150" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="272" y="496" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">Compute SHA-256</text>
-  <text x="272" y="510" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Current Record Hash</text>
-  <rect x="264" y="550" width="150" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="272" y="566" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Insert Event & Advance</text>
-  <text x="272" y="580" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Chain Head Pointer</text>
-  <rect x="444" y="340" width="150" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="452" y="356" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Fetch Ordered Events</text>
-  <text x="452" y="370" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">(ORDER BY seq ASC)</text>
-  <rect x="444" y="410" width="150" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="452" y="426" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Recalculate JCS &</text>
-  <text x="452" y="440" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Step-by-Step Hash Walk</text>
-  <rect x="444" y="480" width="150" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="452" y="496" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Detect Sequence Gaps</text>
-  <text x="452" y="510" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">& Payload Mutations</text>
-  <rect x="614" y="340" width="150" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="622" y="356" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Generate Checkpoint</text>
-  <text x="622" y="370" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">JSON Manifest</text>
-  <rect x="614" y="410" width="150" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="622" y="426" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Upload to AWS S3</text>
-  <text x="622" y="440" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Object Lock (WORM)</text>
-  <rect x="614" y="480" width="150" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="622" y="496" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Reconcile Chain Head</text>
-  <text x="622" y="510" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">with Immutable WORM</text>
+                
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#000000" />
+      </marker>
+      <marker id="arrow-empty" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+      </marker>
+    </defs>
+    
+  <path d="M 304.0 140.0 L 234.0 255.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 170.0 L 339.0 230.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 170.0 L 519.0 230.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 524.0 140.0 L 614.0 255.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 159.0 280.0 L 159.0 340.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 159.0 380.0 L 159.0 410.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 159.0 450.0 L 159.0 480.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 339.0 280.0 L 339.0 340.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 339.0 380.0 L 339.0 410.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 339.0 450.0 L 339.0 480.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 339.0 520.0 L 339.0 550.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 519.0 280.0 L 519.0 340.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 519.0 380.0 L 519.0 410.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 519.0 450.0 L 519.0 480.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 689.0 280.0 L 689.0 340.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 689.0 380.0 L 689.0 410.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 689.0 450.0 L 689.0 480.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <text x="414.0" y="70.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">Figure 3.2: Function Oriented Design (Top-Down Modular Structure Chart)</text>
+  <rect x="304.0" y="110.0" width="220.0" height="60.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="312.0" y="126.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">AUDITRAIL SYSTEM</text>
+  <text x="312.0" y="140.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Core Controller & Orchestration</text>
+  <rect x="84.0" y="230.0" width="150.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="92.0" y="246.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">1.0 Security & Auth</text>
+  <text x="92.0" y="260.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Identity Resolution</text>
+  <rect x="264.0" y="230.0" width="150.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="272.0" y="246.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">2.0 Ingestion Pipeline</text>
+  <text x="272.0" y="260.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Serialization & Chaining</text>
+  <rect x="444.0" y="230.0" width="150.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="452.0" y="246.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">3.0 Verification Engine</text>
+  <text x="452.0" y="260.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Chain Walk & Proof</text>
+  <rect x="614.0" y="230.0" width="150.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="622.0" y="246.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">4.0 Anchor Service</text>
+  <text x="622.0" y="260.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">WORM & S3 Checkpoints</text>
+  <rect x="84.0" y="340.0" width="150.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="92.0" y="356.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Authenticate API Key</text>
+  <text x="92.0" y="370.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">(SHA-256 Match)</text>
+  <rect x="84.0" y="410.0" width="150.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="92.0" y="426.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Validate JWT Claims</text>
+  <text x="92.0" y="440.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">& TOTP Token</text>
+  <rect x="84.0" y="480.0" width="150.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="92.0" y="496.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Resolve Org Isolation</text>
+  <text x="92.0" y="510.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">(Tenant Context)</text>
+  <rect x="264.0" y="340.0" width="150.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="272.0" y="356.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Acquire Pessimistic</text>
+  <text x="272.0" y="370.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Row Lock (FOR UPDATE)</text>
+  <rect x="264.0" y="410.0" width="150.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="272.0" y="426.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">RFC 8785 JSON</text>
+  <text x="272.0" y="440.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Canonicalization (JCS)</text>
+  <rect x="264.0" y="480.0" width="150.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="272.0" y="496.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">Compute SHA-256</text>
+  <text x="272.0" y="510.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Current Record Hash</text>
+  <rect x="264.0" y="550.0" width="150.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="272.0" y="566.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Insert Event & Advance</text>
+  <text x="272.0" y="580.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Chain Head Pointer</text>
+  <rect x="444.0" y="340.0" width="150.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="452.0" y="356.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Fetch Ordered Events</text>
+  <text x="452.0" y="370.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">(ORDER BY seq ASC)</text>
+  <rect x="444.0" y="410.0" width="150.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="452.0" y="426.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Recalculate JCS &</text>
+  <text x="452.0" y="440.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Step-by-Step Hash Walk</text>
+  <rect x="444.0" y="480.0" width="150.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="452.0" y="496.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Detect Sequence Gaps</text>
+  <text x="452.0" y="510.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">& Payload Mutations</text>
+  <rect x="614.0" y="340.0" width="150.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="622.0" y="356.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Generate Checkpoint</text>
+  <text x="622.0" y="370.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">JSON Manifest</text>
+  <rect x="614.0" y="410.0" width="150.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="622.0" y="426.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Upload to AWS S3</text>
+  <text x="622.0" y="440.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Object Lock (WORM)</text>
+  <rect x="614.0" y="480.0" width="150.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="622.0" y="496.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Reconcile Chain Head</text>
+  <text x="622.0" y="510.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">with Immutable WORM</text>
             </svg>
         </div>
     </div>
@@ -223,40 +277,101 @@
         <div class="page-meta">Page 3 of 10 &bull; 3.3.1 Data Flow Diagrams &bull; A4 Portrait (827 &times; 1169)</div>
         <div class="svg-wrapper">
             <svg viewBox="0 0 827 1169" width="827" height="1169" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;">
-                <text x="414.0" y="50" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">Figure 3.3.1: Data Flow Diagrams (Level 0 Context Diagram & Level 1 DFD)</text>
-  <rect x="64" y="70" width="700" height="260" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="86" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">DFD LEVEL 0: CONTEXT DIAGRAM</text>
-  <rect x="40" y="60" width="160" height="60" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="48" y="76" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">External Client Application</text>
-  <text x="48" y="90" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">(Core Banking, Healthcare, FinTech)</text>
-  <text x="350.0" y="65" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">0.0<br>AUDITRAIL PLATFORM<br>Tamper-Evident Ingestion & Cryptographic Verification</text>
-  <rect x="500" y="60" width="160" height="60" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="508" y="76" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Compliance Auditor / Dashboard</text>
-  <text x="508" y="90" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">(DPDP / SOC2 / ISO 27001)</text>
-  <rect x="270" y="190" width="160" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="278" y="206" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">AWS S3 Object Lock</text>
-  <text x="278" y="220" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">(Out-of-band WORM Anchor)</text>
-  <rect x="64" y="350" width="700" height="780" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="366" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">DFD LEVEL 1: DETAILED DATA FLOW PROCESS</text>
-  <text x="85.0" y="70" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">Client App</text>
-  <text x="615.0" y="70" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">Auditor UI</text>
-  <ellipse cx="245.0" cy="70.0" rx="55.0" ry="30.0" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="245.0" y="74.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#111827" text-anchor="middle">1.0 Auth & Identity Resolution</text>
-  <ellipse cx="245.0" cy="190.0" rx="55.0" ry="30.0" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="245.0" y="194.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#111827" text-anchor="middle">2.0 Serialization & Pessimistic Lock</text>
-  <ellipse cx="245.0" cy="310.0" rx="55.0" ry="30.0" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="245.0" y="314.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#111827" text-anchor="middle">3.0 SHA-256 Hash Chain Ingestion</text>
-  <ellipse cx="475.0" cy="190.0" rx="55.0" ry="30.0" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="475.0" y="194.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#111827" text-anchor="middle">4.0 Chain Verification Walk Engine</text>
-  <ellipse cx="475.0" cy="410.0" rx="55.0" ry="30.0" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="475.0" y="414.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#111827" text-anchor="middle">5.0 WORM Checkpoint & Reconciliation</text>
-  <text x="420.0" y="70" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">D1 api_keys & organizations</text>
-  <rect x="20" y="220" width="160" height="30" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="28" y="236" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">D2 chain_heads (Pessimistic Lock)</text>
-  <rect x="170" y="440" width="160" height="30" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="178" y="456" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">D3 audit_events (Chain Table)</text>
-  <rect x="400" y="520" width="180" height="30" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="408" y="536" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">D4 AWS S3 Object Lock (WORM)</text>
+                
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#000000" />
+      </marker>
+      <marker id="arrow-empty" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+      </marker>
+    </defs>
+    
+  <path d="M 200.0 90.0 L 230.0 75.0 L 270.0 90.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="231.0" y="76.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="247.0" y="88.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Audit Event Payload + API Key</text>
+  <path d="M 270.0 90.0 L 230.0 105.0 L 200.0 90.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="231.0" y="76.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="247.0" y="88.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Sequence & Hash Receipt</text>
+  <path d="M 500.0 90.0 L 470.0 75.0 L 430.0 90.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="461.0" y="76.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="477.0" y="88.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Verification Request</text>
+  <path d="M 430.0 90.0 L 470.0 105.0 L 500.0 90.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="461.0" y="76.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="477.0" y="88.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Mathematical Proof & Report</text>
+  <path d="M 350.0 135.0 L 350.0 190.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="346.0" y="148.5" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="362.0" y="160.5" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">WORM Checkpoint Upload</text>
+  <path d="M 140.0 70.0 L 190.0 70.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="161.0" y="56.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="177.0" y="68.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">API Key</text>
+  <path d="M 300.0 70.0 L 340.0 65.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="316.0" y="53.5" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="332.0" y="65.5" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Validate Hash</text>
+  <path d="M 245.0 100.0 L 245.0 160.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="241.0" y="116.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="257.0" y="128.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Tenant ID</text>
+  <path d="M 190.0 190.0 L 180.0 235.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="181.0" y="198.5" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="197.0" y="210.5" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Lock & Read Head</text>
+  <path d="M 245.0 220.0 L 245.0 280.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="241.0" y="236.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="257.0" y="248.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Seq+1, H_prev</text>
+  <path d="M 245.0 340.0 L 250.0 440.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="243.5" y="376.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="259.5" y="388.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Persist Event & Hash</text>
+  <path d="M 190.0 310.0 L 100.0 310.0 L 180.0 235.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="181.0" y="258.5" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="197.0" y="270.5" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Update Head</text>
+  <path d="M 560.0 70.0 L 530.0 190.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="541.0" y="116.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="557.0" y="128.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Run Verify</text>
+  <path d="M 475.0 220.0 L 360.0 270.0 L 250.0 440.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="358.5" y="316.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="374.5" y="328.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Walk Chain Rows</text>
+  <path d="M 475.0 220.0 L 475.0 380.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="471.0" y="286.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="487.0" y="298.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Compare Checkpoints</text>
+  <path d="M 475.0 440.0 L 490.0 520.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="478.5" y="466.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="494.5" y="478.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Read Immutable Manifest</text>
+  <path d="M 530.0 190.0 L 540.0 120.0 L 560.0 70.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="541.0" y="116.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="557.0" y="128.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Audit Report</text>
+  <text x="414.0" y="50.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">Figure 3.3.1: Data Flow Diagrams (Level 0 Context Diagram & Level 1 DFD)</text>
+  <rect x="64.0" y="70.0" width="700.0" height="260.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="86.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">DFD LEVEL 0: CONTEXT DIAGRAM</text>
+  <rect x="40.0" y="60.0" width="160.0" height="60.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="48.0" y="76.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">External Client Application</text>
+  <text x="48.0" y="90.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">(Core Banking, Healthcare, FinTech)</text>
+  <text x="350.0" y="65.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">0.0<br>AUDITRAIL PLATFORM<br>Tamper-Evident Ingestion & Cryptographic Verification</text>
+  <rect x="500.0" y="60.0" width="160.0" height="60.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="508.0" y="76.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Compliance Auditor / Dashboard</text>
+  <text x="508.0" y="90.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">(DPDP / SOC2 / ISO 27001)</text>
+  <rect x="270.0" y="190.0" width="160.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="278.0" y="206.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">AWS S3 Object Lock</text>
+  <text x="278.0" y="220.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">(Out-of-band WORM Anchor)</text>
+  <rect x="64.0" y="350.0" width="700.0" height="780.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="366.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">DFD LEVEL 1: DETAILED DATA FLOW PROCESS</text>
+  <text x="85.0" y="70.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">Client App</text>
+  <text x="615.0" y="70.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">Auditor UI</text>
+  <ellipse cx="245.0" cy="70.0" rx="55.0" ry="30.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="245.0" y="74.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000" text-anchor="middle">1.0 Auth & Identity Resolution</text>
+  <ellipse cx="245.0" cy="190.0" rx="55.0" ry="30.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="245.0" y="194.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000" text-anchor="middle">2.0 Serialization & Pessimistic Lock</text>
+  <ellipse cx="245.0" cy="310.0" rx="55.0" ry="30.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="245.0" y="314.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000" text-anchor="middle">3.0 SHA-256 Hash Chain Ingestion</text>
+  <ellipse cx="475.0" cy="190.0" rx="55.0" ry="30.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="475.0" y="194.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000" text-anchor="middle">4.0 Chain Verification Walk Engine</text>
+  <ellipse cx="475.0" cy="410.0" rx="55.0" ry="30.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="475.0" y="414.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000" text-anchor="middle">5.0 WORM Checkpoint & Reconciliation</text>
+  <text x="420.0" y="70.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">D1 api_keys & organizations</text>
+  <rect x="20.0" y="220.0" width="160.0" height="30.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="28.0" y="236.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">D2 chain_heads (Pessimistic Lock)</text>
+  <rect x="170.0" y="440.0" width="160.0" height="30.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="178.0" y="456.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">D3 audit_events (Chain Table)</text>
+  <rect x="400.0" y="520.0" width="180.0" height="30.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="408.0" y="536.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">D4 AWS S3 Object Lock (WORM)</text>
             </svg>
         </div>
     </div>
@@ -266,58 +381,86 @@
         <div class="page-meta">Page 4 of 10 &bull; 3.3.2 Activity Diagram &bull; A4 Portrait (827 &times; 1169)</div>
         <div class="svg-wrapper">
             <svg viewBox="0 0 827 1169" width="827" height="1169" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;">
-                <text x="414.0" y="50" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">Figure 3.3.2: UML Activity Diagram — Ingestion & Tamper Verification</text>
-  <rect x="40" y="70" width="180" height="1040" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="48" y="86" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Client Application</text>
-  <ellipse cx="90.0" cy="60.0" rx="15.0" ry="15.0" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="90.0" y="64.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#111827" text-anchor="middle"></text>
-  <rect x="20" y="100" width="140" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="28" y="116" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Send POST /api/v1/events</text>
-  <text x="28" y="130" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">with X-AuditRail-API-Key</text>
-  <rect x="20" y="860" width="140" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="28" y="876" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Receive Monotonic</text>
-  <text x="28" y="890" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Receipt (Seq & Hash)</text>
-  <ellipse cx="90.0" cy="955.0" rx="15.0" ry="15.0" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="90.0" y="959.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#111827" text-anchor="middle"></text>
-  <rect x="220" y="70" width="220" height="1040" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="228" y="86" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">AuditRail Core Backend</text>
-  <rect x="30" y="100" width="160" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="38" y="116" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Authenticate & Resolve</text>
-  <text x="38" y="130" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Organization Context</text>
-  <rect x="30" y="180" width="160" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="38" y="196" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Request Row Lock on</text>
-  <text x="38" y="210" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">chain_heads (FOR UPDATE)</text>
-  <rect x="30" y="340" width="160" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="38" y="356" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Compute Sequence Number</text>
-  <text x="38" y="370" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">S_next = S_prev + 1</text>
-  <rect x="30" y="420" width="160" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="38" y="436" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Canonicalize Payload via</text>
-  <text x="38" y="450" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">RFC 8785 (JCS standard)</text>
-  <rect x="30" y="500" width="160" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="38" y="516" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">Calculate SHA-256 Hash:</text>
-  <text x="38" y="530" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">SHA-256(JCS || H_prev)</text>
-  <polygon points="110.0,660 180,695.0 110.0,730 40,695.0" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="110.0" y="688.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#111827" text-anchor="middle">Is Milestone Checkpoint?</text>
-  <text x="110.0" y="702.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#111827" text-anchor="middle">(Seq % Interval == 0)</text>
-  <rect x="30" y="770" width="160" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="38" y="786" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Commit Transaction &</text>
-  <text x="38" y="800" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Release Row Lock</text>
-  <rect x="440" y="70" width="180" height="1040" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="448" y="86" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">Relational Database (MySQL)</text>
-  <rect x="20" y="250" width="140" height="60" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="28" y="266" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Acquire Exclusive</text>
-  <text x="28" y="280" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Pessimistic Row Lock</text>
-  <text x="28" y="294" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">on Chain Head</text>
-  <rect x="20" y="580" width="140" height="60" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="28" y="596" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Insert audit_events</text>
-  <text x="28" y="610" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">& Update chain_heads</text>
-  <text x="28" y="624" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Head Sequence & Hash</text>
-  <rect x="620" y="70" width="170" height="1040" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="628" y="86" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">AWS S3 Object Lock (WORM)</text>
-  <rect x="15" y="665" width="140" height="60" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="23" y="681" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">PutObject with</text>
-  <text x="23" y="695" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">ObjectLockMode = COMPLIANCE</text>
-  <text x="23" y="709" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">& LegalHold = ON</text>
+                
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#000000" />
+      </marker>
+      <marker id="arrow-empty" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+      </marker>
+    </defs>
+    
+  <path d="M 90.0 75.0 L 90.0 100.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 160.0 125.0 L 190.0 125.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 110.0 150.0 L 110.0 180.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 110.0 230.0 L 90.0 250.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 90.0 310.0 L 110.0 340.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 110.0 390.0 L 110.0 420.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 110.0 470.0 L 110.0 500.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 110.0 550.0 L 90.0 580.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 90.0 640.0 L 110.0 660.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 40.0 695.0 L 15.0 695.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="23.5" y="681.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="39.5" y="693.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">YES</text>
+  <path d="M 110.0 730.0 L 110.0 770.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="106.0" y="736.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="122.0" y="748.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">NO</text>
+  <path d="M 85.0 725.0 L 705.0 870.0 L 330.0 870.0 L 110.0 770.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 110.0 820.0 L 90.0 860.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 90.0 910.0 L 90.0 940.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <text x="414.0" y="50.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">Figure 3.3.2: UML Activity Diagram — Ingestion & Tamper Verification</text>
+  <rect x="40.0" y="70.0" width="180.0" height="1040.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="48.0" y="86.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Client Application</text>
+  <ellipse cx="90.0" cy="60.0" rx="15.0" ry="15.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="90.0" y="64.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000" text-anchor="middle"></text>
+  <rect x="20.0" y="100.0" width="140.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="28.0" y="116.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Send POST /api/v1/events</text>
+  <text x="28.0" y="130.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">with X-AuditRail-API-Key</text>
+  <rect x="20.0" y="860.0" width="140.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="28.0" y="876.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Receive Monotonic</text>
+  <text x="28.0" y="890.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Receipt (Seq & Hash)</text>
+  <ellipse cx="90.0" cy="955.0" rx="15.0" ry="15.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="90.0" y="959.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000" text-anchor="middle"></text>
+  <rect x="220.0" y="70.0" width="220.0" height="1040.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="228.0" y="86.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">AuditRail Core Backend</text>
+  <rect x="30.0" y="100.0" width="160.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="38.0" y="116.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Authenticate & Resolve</text>
+  <text x="38.0" y="130.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Organization Context</text>
+  <rect x="30.0" y="180.0" width="160.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="38.0" y="196.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Request Row Lock on</text>
+  <text x="38.0" y="210.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">chain_heads (FOR UPDATE)</text>
+  <rect x="30.0" y="340.0" width="160.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="38.0" y="356.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Compute Sequence Number</text>
+  <text x="38.0" y="370.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">S_next = S_prev + 1</text>
+  <rect x="30.0" y="420.0" width="160.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="38.0" y="436.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Canonicalize Payload via</text>
+  <text x="38.0" y="450.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">RFC 8785 (JCS standard)</text>
+  <rect x="30.0" y="500.0" width="160.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="38.0" y="516.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">Calculate SHA-256 Hash:</text>
+  <text x="38.0" y="530.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">SHA-256(JCS || H_prev)</text>
+  <polygon points="110.0,660.0 180.0,695.0 110.0,730.0 40.0,695.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="110.0" y="688.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Is Milestone Checkpoint?</text>
+  <text x="110.0" y="702.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">(Seq % Interval == 0)</text>
+  <rect x="30.0" y="770.0" width="160.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="38.0" y="786.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Commit Transaction &</text>
+  <text x="38.0" y="800.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Release Row Lock</text>
+  <rect x="440.0" y="70.0" width="180.0" height="1040.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="448.0" y="86.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">Relational Database (MySQL)</text>
+  <rect x="20.0" y="250.0" width="140.0" height="60.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="28.0" y="266.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Acquire Exclusive</text>
+  <text x="28.0" y="280.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Pessimistic Row Lock</text>
+  <text x="28.0" y="294.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">on Chain Head</text>
+  <rect x="20.0" y="580.0" width="140.0" height="60.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="28.0" y="596.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Insert audit_events</text>
+  <text x="28.0" y="610.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">& Update chain_heads</text>
+  <text x="28.0" y="624.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Head Sequence & Hash</text>
+  <rect x="620.0" y="70.0" width="170.0" height="1040.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="628.0" y="86.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">AWS S3 Object Lock (WORM)</text>
+  <rect x="15.0" y="665.0" width="140.0" height="60.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="23.0" y="681.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">PutObject with</text>
+  <text x="23.0" y="695.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">ObjectLockMode = COMPLIANCE</text>
+  <text x="23.0" y="709.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">& LegalHold = ON</text>
             </svg>
         </div>
     </div>
@@ -327,50 +470,87 @@
         <div class="page-meta">Page 5 of 10 &bull; 3.3.3 Flow Chart &bull; A4 Portrait (827 &times; 1169)</div>
         <div class="svg-wrapper">
             <svg viewBox="0 0 827 1169" width="827" height="1169" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;">
-                <text x="414.0" y="50" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">Figure 3.3.3: System Flowchart — End-to-End Ingestion & Continuous Audit</text>
-  <ellipse cx="414.0" cy="97.5" rx="120.0" ry="22.5" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="414.0" y="101.5" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#111827" text-anchor="middle">START: Audit Event Emitted</text>
-  <polygon points="414.0,150 499,190.0 414.0,230 329,190.0" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="414.0" y="183.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#111827" text-anchor="middle">Is API Key Valid &amp;</text>
-  <text x="414.0" y="197.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#111827" text-anchor="middle">Active in Database?</text>
-  <ellipse cx="665.0" cy="189.5" rx="95.0" ry="22.5" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="665.0" y="193.5" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#111827" text-anchor="middle">Return HTTP 401 Unauthorized</text>
-  <rect x="284" y="260" width="260" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="292" y="276" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Acquire Pessimistic Lock on chain_heads</text>
-  <text x="292" y="290" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">(SELECT ... FOR UPDATE)</text>
-  <rect x="284" y="340" width="260" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="292" y="356" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Apply RFC 8785 Canonical JSON</text>
-  <text x="292" y="370" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Transform & Microsecond Timestamp</text>
-  <rect x="284" y="420" width="260" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="292" y="436" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">Compute Monotonic SHA-256 Hash:</text>
-  <text x="292" y="450" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">H_curr = SHA-256(JCS || H_prev)</text>
-  <rect x="284" y="500" width="260" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="292" y="516" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Insert audit_events Record</text>
-  <text x="292" y="530" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Update chain_heads Pointer</text>
-  <polygon points="414.0,580 499,620.0 414.0,660 329,620.0" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="414.0" y="613.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#111827" text-anchor="middle">Milestone Reached?</text>
-  <text x="414.0" y="627.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#111827" text-anchor="middle">(Seq % 1000 == 0)</text>
-  <rect x="540" y="675" width="240" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="548" y="691" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Upload Signed Checkpoint to</text>
-  <text x="548" y="705" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">AWS S3 WORM Object Lock (COMPLIANCE)</text>
-  <rect x="284" y="750" width="260" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="292" y="766" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Commit RDBMS Transaction &</text>
-  <text x="292" y="780" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Release Pessimistic Row Lock</text>
-  <rect x="294" y="830" width="240" height="60" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="302" y="846" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Return HTTP 201 Created</text>
-  <text x="302" y="860" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">with Monotonic Sequence & Hash</text>
-  <rect x="60" y="750" width="180" height="50" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="68" y="766" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Scheduled Audit Job / Auditor Trigger</text>
-  <rect x="50" y="835" width="200" height="55" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="58" y="851" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">Walk Chain Rows (ORDER BY seq ASC)</text>
-  <text x="58" y="865" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Recalculate H_curr & Match S3 Anchor</text>
-  <polygon points="150.0,920 235,960.0 150.0,1000 65,960.0" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="150.0" y="953.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#111827" text-anchor="middle">Any Hash Drift or</text>
-  <text x="150.0" y="967.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#111827" text-anchor="middle">Missing Sequence?</text>
-  <ellipse cx="150.0" cy="1062.5" rx="95.0" ry="22.5" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="150.0" y="1066.5" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#111827" text-anchor="middle">Raise Immediate Tamper Alert (Log Breach Sequence)</text>
-  <ellipse cx="425.0" cy="959.5" rx="105.0" ry="22.5" fill="#ffffff" stroke="#333333" stroke-width="1.5" />
-  <text x="425.0" y="963.5" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#111827" text-anchor="middle">Confirm Cryptographic Integrity (100% Chain Valid)</text>
+                
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#000000" />
+      </marker>
+      <marker id="arrow-empty" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+      </marker>
+    </defs>
+    
+  <path d="M 414.0 120.0 L 414.0 150.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 499.0 190.0 L 570.0 190.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="530.5" y="176.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="546.5" y="188.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">NO</text>
+  <path d="M 414.0 230.0 L 414.0 260.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="410.0" y="231.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="426.0" y="243.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">YES</text>
+  <path d="M 414.0 310.0 L 414.0 340.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 390.0 L 414.0 420.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 470.0 L 414.0 500.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 550.0 L 414.0 580.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 499.0 620.0 L 660.0 620.0 L 540.0 700.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="515.5" y="646.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="531.5" y="658.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">YES</text>
+  <path d="M 414.0 660.0 L 414.0 750.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="410.0" y="691.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="426.0" y="703.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">NO</text>
+  <path d="M 540.0 700.0 L 660.0 775.0 L 544.0 775.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 800.0 L 414.0 830.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 150.0 800.0 L 150.0 835.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 150.0 890.0 L 150.0 920.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 150.0 1000.0 L 150.0 1040.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="146.0" y="1006.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="162.0" y="1018.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">YES</text>
+  <path d="M 235.0 960.0 L 320.0 960.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <rect x="273.5" y="946.0" width="32" height="15" fill="#ffffff" rx="2" />
+  <text x="289.5" y="958.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">NO</text>
+  <text x="414.0" y="50.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">Figure 3.3.3: System Flowchart — End-to-End Ingestion & Continuous Audit</text>
+  <ellipse cx="414.0" cy="97.5" rx="120.0" ry="22.5" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="414.0" y="101.5" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000" text-anchor="middle">START: Audit Event Emitted</text>
+  <polygon points="414.0,150.0 499.0,190.0 414.0,230.0 329.0,190.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="414.0" y="183.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Is API Key Valid &amp;</text>
+  <text x="414.0" y="197.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Active in Database?</text>
+  <ellipse cx="665.0" cy="190.0" rx="95.0" ry="22.5" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="665.0" y="194.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000" text-anchor="middle">Return HTTP 401 Unauthorized</text>
+  <rect x="284.0" y="260.0" width="260.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="292.0" y="276.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Acquire Pessimistic Lock on chain_heads</text>
+  <text x="292.0" y="290.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">(SELECT ... FOR UPDATE)</text>
+  <rect x="284.0" y="340.0" width="260.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="292.0" y="356.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Apply RFC 8785 Canonical JSON</text>
+  <text x="292.0" y="370.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Transform & Microsecond Timestamp</text>
+  <rect x="284.0" y="420.0" width="260.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="292.0" y="436.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">Compute Monotonic SHA-256 Hash:</text>
+  <text x="292.0" y="450.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">H_curr = SHA-256(JCS || H_prev)</text>
+  <rect x="284.0" y="500.0" width="260.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="292.0" y="516.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Insert audit_events Record</text>
+  <text x="292.0" y="530.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Update chain_heads Pointer</text>
+  <polygon points="414.0,580.0 499.0,620.0 414.0,660.0 329.0,620.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="414.0" y="613.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Milestone Reached?</text>
+  <text x="414.0" y="627.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">(Seq % 1000 == 0)</text>
+  <rect x="540.0" y="675.0" width="240.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="548.0" y="691.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Upload Signed Checkpoint to</text>
+  <text x="548.0" y="705.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">AWS S3 WORM Object Lock (COMPLIANCE)</text>
+  <rect x="284.0" y="750.0" width="260.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="292.0" y="766.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Commit RDBMS Transaction &</text>
+  <text x="292.0" y="780.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Release Pessimistic Row Lock</text>
+  <rect x="294.0" y="830.0" width="240.0" height="60.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="302.0" y="846.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Return HTTP 201 Created</text>
+  <text x="302.0" y="860.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">with Monotonic Sequence & Hash</text>
+  <rect x="60.0" y="750.0" width="180.0" height="50.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="68.0" y="766.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Scheduled Audit Job / Auditor Trigger</text>
+  <rect x="50.0" y="835.0" width="200.0" height="55.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="58.0" y="851.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">Walk Chain Rows (ORDER BY seq ASC)</text>
+  <text x="58.0" y="865.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Recalculate H_curr & Match S3 Anchor</text>
+  <polygon points="150.0,920.0 235.0,960.0 150.0,1000.0 65.0,960.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="150.0" y="953.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Any Hash Drift or</text>
+  <text x="150.0" y="967.0" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">Missing Sequence?</text>
+  <ellipse cx="150.0" cy="1062.5" rx="95.0" ry="22.5" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="150.0" y="1066.5" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000" text-anchor="middle">Raise Immediate Tamper Alert (Log Breach Sequence)</text>
+  <ellipse cx="425.0" cy="960.0" rx="105.0" ry="22.5" fill="#ffffff" stroke="#000000" stroke-width="1.8" />
+  <text x="425.0" y="964.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000" text-anchor="middle">Confirm Cryptographic Integrity (100% Chain Valid)</text>
             </svg>
         </div>
     </div>
@@ -380,109 +560,130 @@
         <div class="page-meta">Page 6 of 10 &bull; 3.3.4 Class Diagram &bull; A4 Portrait (827 &times; 1169)</div>
         <div class="svg-wrapper">
             <svg viewBox="0 0 827 1169" width="827" height="1169" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;">
-                <text x="414.0" y="50" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle"><b style="font-size: 15px;">Figure 3.3.4: UML Class Diagram — Core System Components</text>
-  <rect x="64" y="80" width="320" height="90" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="96" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">AuditEventIngestionController</text>
-  <line x1="64" y1="104" x2="384" y2="104" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="114" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- ingestionService: AuditEventIngestionService</text>
-  <line x1="64" y1="122" x2="384" y2="122" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="132" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ ingestEvent(request, apiKey): ResponseEntity</text>
-  <text x="72" y="146" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ batchIngest(requests, apiKey): ResponseEntity</text>
-  <rect x="444" y="80" width="320" height="90" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="452" y="96" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">VerificationController</text>
-  <line x1="444" y1="104" x2="764" y2="104" stroke="#cccccc" stroke-width="1" />
-  <text x="452" y="114" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- verificationService: IntegrityVerificationService</text>
-  <line x1="444" y1="122" x2="764" y2="122" stroke="#cccccc" stroke-width="1" />
-  <text x="452" y="132" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ runVerification(apiKey): ResponseEntity</text>
-  <text x="452" y="146" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ verifyRange(fromSeq, toSeq): ResponseEntity</text>
-  <rect x="64" y="210" width="320" height="75" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="226" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333"><<interface>></text>
-  <text x="72" y="240" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">AuditEventIngestionService</text>
-  <line x1="64" y1="248" x2="384" y2="248" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="258" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ ingest(orgId, request): AuditEventResponse</text>
-  <text x="72" y="272" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ batchIngest(orgId, list): List<AuditEventResponse></text>
-  <rect x="444" y="210" width="320" height="75" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="452" y="226" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333"><<interface>></text>
-  <text x="452" y="240" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">IntegrityVerificationService</text>
-  <line x1="444" y1="248" x2="764" y2="248" stroke="#cccccc" stroke-width="1" />
-  <text x="452" y="258" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ verifyChain(orgId, fromSeq, toSeq): VerificationResult</text>
-  <text x="452" y="272" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ verifyAgainstWorm(orgId): ReconciliationResult</text>
-  <rect x="64" y="325" width="320" height="120" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="341" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">AuditEventIngestionServiceImpl</text>
-  <line x1="64" y1="349" x2="384" y2="349" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="359" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- eventRepository: AuditEventRepository</text>
-  <text x="72" y="373" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- chainHeadRepository: ChainHeadRepository</text>
-  <text x="72" y="387" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- checkpointService: CheckpointStorageService</text>
-  <line x1="64" y1="395" x2="384" y2="395" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="405" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ ingest(orgId, request): AuditEventResponse</text>
-  <text x="72" y="419" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- acquireTenantLock(orgId): ChainHead</text>
-  <text x="72" y="433" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- computeSha256(payload, prevHash): String</text>
-  <rect x="444" y="325" width="320" height="120" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="452" y="341" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">IntegrityVerificationServiceImpl</text>
-  <line x1="444" y1="349" x2="764" y2="349" stroke="#cccccc" stroke-width="1" />
-  <text x="452" y="359" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- eventRepository: AuditEventRepository</text>
-  <text x="452" y="373" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- chainHeadRepository: ChainHeadRepository</text>
-  <text x="452" y="387" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- checkpointService: CheckpointStorageService</text>
-  <line x1="444" y1="395" x2="764" y2="395" stroke="#cccccc" stroke-width="1" />
-  <text x="452" y="405" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ verifyChain(orgId, fromSeq, toSeq): VerificationResult</text>
-  <text x="452" y="419" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- stepWalkVerification(events): VerificationReport</text>
-  <rect x="64" y="485" width="320" height="85" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="501" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333"><<interface>></text>
-  <text x="72" y="515" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">CheckpointStorageService</text>
-  <line x1="64" y1="523" x2="384" y2="523" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="533" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ storeCheckpoint(data): StoredCheckpointResult</text>
-  <text x="72" y="547" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ retrieveCheckpointContent(bucket, key): String</text>
-  <text x="72" y="561" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ isAvailable(): boolean</text>
-  <rect x="444" y="485" width="320" height="85" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="452" y="501" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">AwsS3CheckpointStorageAdapter</text>
-  <line x1="444" y1="509" x2="764" y2="509" stroke="#cccccc" stroke-width="1" />
-  <text x="452" y="519" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- s3Client: S3Client</text>
-  <text x="452" y="533" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- defaultBucket: String</text>
-  <text x="452" y="547" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- retentionDays: int (WORM COMPLIANCE)</text>
-  <line x1="444" y1="555" x2="764" y2="555" stroke="#cccccc" stroke-width="1" />
-  <text x="452" y="565" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ storeCheckpoint(data): StoredCheckpointResult</text>
-  <text x="452" y="579" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ retrieveCheckpointContent(bucket, key): String</text>
-  <rect x="64" y="610" width="215" height="165" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="626" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">AuditEvent</text>
-  <line x1="64" y1="634" x2="279" y2="634" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="644" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">- id: UUID</text>
-  <text x="72" y="658" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">- organizationId: UUID</text>
-  <text x="72" y="672" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- sequenceNumber: Long</text>
-  <text x="72" y="686" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- eventAction: String</text>
-  <text x="72" y="700" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- actorId: String</text>
-  <text x="72" y="714" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- payload: String (RFC 8785 JSON)</text>
-  <text x="72" y="728" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">- recordHash: String (SHA-256)</text>
-  <text x="72" y="742" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- previousRecordHash: String</text>
-  <text x="72" y="756" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- createdAt: Instant</text>
-  <rect x="307" y="610" width="215" height="165" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="315" y="626" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">ChainHead</text>
-  <line x1="307" y1="634" x2="522" y2="634" stroke="#cccccc" stroke-width="1" />
-  <text x="315" y="644" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">- organizationId: UUID [PK]</text>
-  <text x="315" y="658" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- headSequenceNumber: Long</text>
-  <text x="315" y="672" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- headRecordHash: String</text>
-  <text x="315" y="686" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- genesisHash: String</text>
-  <text x="315" y="700" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- updatedAt: Instant</text>
-  <rect x="549" y="610" width="215" height="165" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="557" y="626" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Checkpoint</text>
-  <line x1="549" y1="634" x2="764" y2="634" stroke="#cccccc" stroke-width="1" />
-  <text x="557" y="644" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">- id: UUID [PK]</text>
-  <text x="557" y="658" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">- organizationId: UUID</text>
-  <text x="557" y="672" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- sequenceNumber: Long</text>
-  <text x="557" y="686" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- checkpointHash: String</text>
-  <text x="557" y="700" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- s3Bucket: String</text>
-  <text x="557" y="714" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- s3ObjectKey: String</text>
-  <text x="557" y="728" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- s3VersionId: String</text>
-  <text x="557" y="742" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">- createdAt: Instant</text>
-  <rect x="64" y="815" width="320" height="65" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="831" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">CanonicalJsonUtil</text>
-  <line x1="64" y1="839" x2="384" y2="839" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="849" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ canonicalize(rawJson: String): String</text>
-  <text x="72" y="863" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ toCanonicalBytes(payload: Object): byte[]</text>
-  <rect x="444" y="815" width="320" height="65" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="452" y="831" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">HashUtil</text>
-  <line x1="444" y1="839" x2="764" y2="839" stroke="#cccccc" stroke-width="1" />
-  <text x="452" y="849" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ sha256Hex(bytes: byte[]): String</text>
-  <text x="452" y="863" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ sha256Hex(input: String): String</text>
+                
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#000000" />
+      </marker>
+      <marker id="arrow-empty" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+      </marker>
+    </defs>
+    
+  <path d="M 224.0 170.0 L 224.0 210.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 604.0 170.0 L 604.0 210.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 224.0 325.0 L 224.0 285.0" fill="none" stroke="#000000" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arrow-empty)" />
+  <path d="M 604.0 325.0 L 604.0 285.0" fill="none" stroke="#000000" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arrow-empty)" />
+  <path d="M 444.0 527.5 L 384.0 527.5" fill="none" stroke="#000000" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arrow-empty)" />
+  <path d="M 224.0 445.0 L 224.0 485.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 224.0 445.0 L 171.0 580.0 L 171.5 610.0" fill="none" stroke="#000000" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arrow)" />
+  <path d="M 224.0 445.0 L 414.0 580.0 L 414.5 610.0" fill="none" stroke="#000000" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arrow)" />
+  <path d="M 604.0 445.0 L 656.0 580.0 L 656.5 610.0" fill="none" stroke="#000000" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arrow)" />
+  <path d="M 171.5 775.0 L 224.0 815.0" fill="none" stroke="#000000" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arrow)" />
+  <path d="M 656.5 775.0 L 604.0 815.0" fill="none" stroke="#000000" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arrow)" />
+  <text x="414.0" y="50.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle"><b style="font-size: 15px;">Figure 3.3.4: UML Class Diagram — Core System Components</text>
+  <rect x="64.0" y="80.0" width="320.0" height="90.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="96.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">AuditEventIngestionController</text>
+  <line x1="64.0" y1="104.0" x2="384.0" y2="104.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="114.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- ingestionService: AuditEventIngestionService</text>
+  <line x1="64.0" y1="122.0" x2="384.0" y2="122.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="132.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ ingestEvent(request, apiKey): ResponseEntity</text>
+  <text x="72.0" y="146.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ batchIngest(requests, apiKey): ResponseEntity</text>
+  <rect x="444.0" y="80.0" width="320.0" height="90.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="452.0" y="96.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">VerificationController</text>
+  <line x1="444.0" y1="104.0" x2="764.0" y2="104.0" stroke="#000000" stroke-width="1.2" />
+  <text x="452.0" y="114.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- verificationService: IntegrityVerificationService</text>
+  <line x1="444.0" y1="122.0" x2="764.0" y2="122.0" stroke="#000000" stroke-width="1.2" />
+  <text x="452.0" y="132.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ runVerification(apiKey): ResponseEntity</text>
+  <text x="452.0" y="146.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ verifyRange(fromSeq, toSeq): ResponseEntity</text>
+  <rect x="64.0" y="210.0" width="320.0" height="75.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="226.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000"><<interface>></text>
+  <text x="72.0" y="240.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">AuditEventIngestionService</text>
+  <line x1="64.0" y1="248.0" x2="384.0" y2="248.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="258.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ ingest(orgId, request): AuditEventResponse</text>
+  <text x="72.0" y="272.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ batchIngest(orgId, list): List<AuditEventResponse></text>
+  <rect x="444.0" y="210.0" width="320.0" height="75.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="452.0" y="226.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000"><<interface>></text>
+  <text x="452.0" y="240.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">IntegrityVerificationService</text>
+  <line x1="444.0" y1="248.0" x2="764.0" y2="248.0" stroke="#000000" stroke-width="1.2" />
+  <text x="452.0" y="258.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ verifyChain(orgId, fromSeq, toSeq): VerificationResult</text>
+  <text x="452.0" y="272.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ verifyAgainstWorm(orgId): ReconciliationResult</text>
+  <rect x="64.0" y="325.0" width="320.0" height="120.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="341.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">AuditEventIngestionServiceImpl</text>
+  <line x1="64.0" y1="349.0" x2="384.0" y2="349.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="359.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- eventRepository: AuditEventRepository</text>
+  <text x="72.0" y="373.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- chainHeadRepository: ChainHeadRepository</text>
+  <text x="72.0" y="387.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- checkpointService: CheckpointStorageService</text>
+  <line x1="64.0" y1="395.0" x2="384.0" y2="395.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="405.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ ingest(orgId, request): AuditEventResponse</text>
+  <text x="72.0" y="419.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- acquireTenantLock(orgId): ChainHead</text>
+  <text x="72.0" y="433.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- computeSha256(payload, prevHash): String</text>
+  <rect x="444.0" y="325.0" width="320.0" height="120.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="452.0" y="341.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">IntegrityVerificationServiceImpl</text>
+  <line x1="444.0" y1="349.0" x2="764.0" y2="349.0" stroke="#000000" stroke-width="1.2" />
+  <text x="452.0" y="359.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- eventRepository: AuditEventRepository</text>
+  <text x="452.0" y="373.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- chainHeadRepository: ChainHeadRepository</text>
+  <text x="452.0" y="387.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- checkpointService: CheckpointStorageService</text>
+  <line x1="444.0" y1="395.0" x2="764.0" y2="395.0" stroke="#000000" stroke-width="1.2" />
+  <text x="452.0" y="405.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ verifyChain(orgId, fromSeq, toSeq): VerificationResult</text>
+  <text x="452.0" y="419.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- stepWalkVerification(events): VerificationReport</text>
+  <rect x="64.0" y="485.0" width="320.0" height="85.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="501.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000"><<interface>></text>
+  <text x="72.0" y="515.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">CheckpointStorageService</text>
+  <line x1="64.0" y1="523.0" x2="384.0" y2="523.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="533.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ storeCheckpoint(data): StoredCheckpointResult</text>
+  <text x="72.0" y="547.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ retrieveCheckpointContent(bucket, key): String</text>
+  <text x="72.0" y="561.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ isAvailable(): boolean</text>
+  <rect x="444.0" y="485.0" width="320.0" height="85.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="452.0" y="501.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">AwsS3CheckpointStorageAdapter</text>
+  <line x1="444.0" y1="509.0" x2="764.0" y2="509.0" stroke="#000000" stroke-width="1.2" />
+  <text x="452.0" y="519.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- s3Client: S3Client</text>
+  <text x="452.0" y="533.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- defaultBucket: String</text>
+  <text x="452.0" y="547.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- retentionDays: int (WORM COMPLIANCE)</text>
+  <line x1="444.0" y1="555.0" x2="764.0" y2="555.0" stroke="#000000" stroke-width="1.2" />
+  <text x="452.0" y="565.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ storeCheckpoint(data): StoredCheckpointResult</text>
+  <text x="452.0" y="579.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ retrieveCheckpointContent(bucket, key): String</text>
+  <rect x="64.0" y="610.0" width="215.0" height="165.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="626.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">AuditEvent</text>
+  <line x1="64.0" y1="634.0" x2="279.0" y2="634.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="644.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">- id: UUID</text>
+  <text x="72.0" y="658.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">- organizationId: UUID</text>
+  <text x="72.0" y="672.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- sequenceNumber: Long</text>
+  <text x="72.0" y="686.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- eventAction: String</text>
+  <text x="72.0" y="700.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- actorId: String</text>
+  <text x="72.0" y="714.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- payload: String (RFC 8785 JSON)</text>
+  <text x="72.0" y="728.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">- recordHash: String (SHA-256)</text>
+  <text x="72.0" y="742.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- previousRecordHash: String</text>
+  <text x="72.0" y="756.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- createdAt: Instant</text>
+  <rect x="307.0" y="610.0" width="215.0" height="165.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="315.0" y="626.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">ChainHead</text>
+  <line x1="307.0" y1="634.0" x2="522.0" y2="634.0" stroke="#000000" stroke-width="1.2" />
+  <text x="315.0" y="644.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">- organizationId: UUID [PK]</text>
+  <text x="315.0" y="658.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- headSequenceNumber: Long</text>
+  <text x="315.0" y="672.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- headRecordHash: String</text>
+  <text x="315.0" y="686.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- genesisHash: String</text>
+  <text x="315.0" y="700.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- updatedAt: Instant</text>
+  <rect x="549.0" y="610.0" width="215.0" height="165.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="557.0" y="626.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Checkpoint</text>
+  <line x1="549.0" y1="634.0" x2="764.0" y2="634.0" stroke="#000000" stroke-width="1.2" />
+  <text x="557.0" y="644.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">- id: UUID [PK]</text>
+  <text x="557.0" y="658.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">- organizationId: UUID</text>
+  <text x="557.0" y="672.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- sequenceNumber: Long</text>
+  <text x="557.0" y="686.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- checkpointHash: String</text>
+  <text x="557.0" y="700.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- s3Bucket: String</text>
+  <text x="557.0" y="714.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- s3ObjectKey: String</text>
+  <text x="557.0" y="728.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- s3VersionId: String</text>
+  <text x="557.0" y="742.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">- createdAt: Instant</text>
+  <rect x="64.0" y="815.0" width="320.0" height="65.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="831.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">CanonicalJsonUtil</text>
+  <line x1="64.0" y1="839.0" x2="384.0" y2="839.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="849.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ canonicalize(rawJson: String): String</text>
+  <text x="72.0" y="863.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ toCanonicalBytes(payload: Object): byte[]</text>
+  <rect x="444.0" y="815.0" width="320.0" height="65.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="452.0" y="831.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">HashUtil</text>
+  <line x1="444.0" y1="839.0" x2="764.0" y2="839.0" stroke="#000000" stroke-width="1.2" />
+  <text x="452.0" y="849.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ sha256Hex(bytes: byte[]): String</text>
+  <text x="452.0" y="863.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ sha256Hex(input: String): String</text>
             </svg>
         </div>
     </div>
@@ -492,86 +693,102 @@
         <div class="page-meta">Page 7 of 10 &bull; 3.3.5 Entity Relationship Diagram &bull; A4 Portrait (827 &times; 1169)</div>
         <div class="svg-wrapper">
             <svg viewBox="0 0 827 1169" width="827" height="1169" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;">
-                <text x="414.0" y="50" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle"><b style="font-size: 15px;">Figure 3.3.5: Entity-Relationship Diagram (ERD) — Multi-Tenant Schema</text>
-  <rect x="274" y="80" width="280" height="105" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="282" y="96" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">organizations</text>
-  <line x1="274" y1="104" x2="554" y2="104" stroke="#cccccc" stroke-width="1" />
-  <text x="282" y="114" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">PK id : CHAR(36)</text>
-  <text x="282" y="128" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">name : VARCHAR(255)</text>
-  <text x="282" y="142" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">slug : VARCHAR(100) [UNIQUE]</text>
-  <text x="282" y="156" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">status : VARCHAR(50)</text>
-  <text x="282" y="170" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">created_at : TIMESTAMP(6)</text>
-  <rect x="64" y="240" width="210" height="130" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="256" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">api_keys</text>
-  <line x1="64" y1="264" x2="274" y2="264" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="274" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">PK id : CHAR(36)</text>
-  <text x="72" y="288" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">FK organization_id : CHAR(36)</text>
-  <text x="72" y="302" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">key_prefix : VARCHAR(16)</text>
-  <text x="72" y="316" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">key_hash : CHAR(64) [UNIQUE]</text>
-  <text x="72" y="330" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">label : VARCHAR(100)</text>
-  <text x="72" y="344" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">status : VARCHAR(20)</text>
-  <text x="72" y="358" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">created_at : TIMESTAMP(6)</text>
-  <rect x="309" y="240" width="210" height="130" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="317" y="256" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">chain_heads (Pessimistic Lock)</text>
-  <line x1="309" y1="264" x2="519" y2="264" stroke="#cccccc" stroke-width="1" />
-  <text x="317" y="274" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">PK, FK organization_id : CHAR(36)</text>
-  <text x="317" y="288" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">head_sequence_number : BIGINT</text>
-  <text x="317" y="302" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">head_record_hash : CHAR(64)</text>
-  <text x="317" y="316" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">genesis_hash : CHAR(64)</text>
-  <text x="317" y="330" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">updated_at : TIMESTAMP(6)</text>
-  <rect x="554" y="240" width="210" height="130" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="562" y="256" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">users (Platform RBAC)</text>
-  <line x1="554" y1="264" x2="764" y2="264" stroke="#cccccc" stroke-width="1" />
-  <text x="562" y="274" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">PK id : CHAR(36)</text>
-  <text x="562" y="288" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">FK organization_id : CHAR(36)</text>
-  <text x="562" y="302" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">email : VARCHAR(255) [UNIQUE]</text>
-  <text x="562" y="316" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">password_hash : VARCHAR(255)</text>
-  <text x="562" y="330" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">role : VARCHAR(50)</text>
-  <text x="562" y="344" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">account_status : VARCHAR(20)</text>
-  <text x="562" y="358" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">created_at : TIMESTAMP(6)</text>
-  <rect x="64" y="425" width="455" height="195" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="441" font-family="monospace" font-size="10.5" font-weight="bold" fill="#000000">audit_events (Cryptographic SHA-256 Ledger)</text>
-  <line x1="64" y1="449" x2="519" y2="449" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="459" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">PK id : CHAR(36)</text>
-  <text x="72" y="473" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">FK organization_id : CHAR(36)</text>
-  <text x="72" y="487" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">UQ (organization_id, sequence_number)</text>
-  <text x="72" y="501" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">sequence_number : BIGINT [Monotonic]</text>
-  <text x="72" y="515" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">event_action : VARCHAR(100)</text>
-  <text x="72" y="529" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">actor_id : VARCHAR(100)</text>
-  <text x="72" y="543" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">target_id : VARCHAR(100)</text>
-  <text x="72" y="557" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">payload : TEXT [RFC 8785 Canonical JSON]</text>
-  <text x="72" y="571" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">record_hash : CHAR(64) [Current SHA-256 Digest]</text>
-  <text x="72" y="585" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">prev_record_hash : CHAR(64) [Previous Chain Digest]</text>
-  <text x="72" y="599" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">created_at : TIMESTAMP(6) [Microsecond UTC]</text>
-  <rect x="544" y="425" width="220" height="195" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="552" y="441" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">checkpoints (WORM Anchors)</text>
-  <line x1="544" y1="449" x2="764" y2="449" stroke="#cccccc" stroke-width="1" />
-  <text x="552" y="459" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">PK id : CHAR(36)</text>
-  <text x="552" y="473" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">FK organization_id : CHAR(36)</text>
-  <text x="552" y="487" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">sequence_number : BIGINT</text>
-  <text x="552" y="501" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">checkpoint_hash : CHAR(64)</text>
-  <text x="552" y="515" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">storage_provider : VARCHAR(32)</text>
-  <text x="552" y="529" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">s3_bucket : VARCHAR(100)</text>
-  <text x="552" y="543" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">s3_object_key : VARCHAR(255)</text>
-  <text x="552" y="557" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">s3_version_id : VARCHAR(100)</text>
-  <text x="552" y="571" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">created_at : TIMESTAMP(6)</text>
-  <rect x="64" y="665" width="700" height="135" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="681" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">verification_runs (Continuous Mathematical Verification Logs)</text>
-  <line x1="64" y1="689" x2="764" y2="689" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="699" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">PK id : CHAR(36)</text>
-  <text x="72" y="713" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">FK organization_id : CHAR(36)</text>
-  <text x="72" y="727" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">verified_from_sequence : BIGINT</text>
-  <text x="72" y="741" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">verified_to_sequence : BIGINT</text>
-  <text x="72" y="755" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">result_status : VARCHAR(50) ['SUCCESS', 'TAMPER_DETECTED', 'CORRUPT']</text>
-  <text x="72" y="769" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">discrepancies_count : INT</text>
-  <text x="72" y="783" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">failure_reason : TEXT</text>
-  <text x="72" y="797" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">verified_at : TIMESTAMP(6)</text>
-  <text x="50.0" y="20" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">1 : N</text>
-  <text x="50.0" y="20" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">1 : 1</text>
-  <text x="50.0" y="20" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">1 : N</text>
-  <text x="50.0" y="20" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">1 : N</text>
-  <text x="50.0" y="20" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">1 : N</text>
-  <text x="50.0" y="20" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">1 : N</text>
+                
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#000000" />
+      </marker>
+      <marker id="arrow-empty" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+      </marker>
+    </defs>
+    
+  <path d="M 274.0 132.5 L 169.0 132.0 L 274.0 305.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 185.0 L 414.0 240.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 554.0 132.5 L 659.0 132.0 L 554.0 305.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 370.0 L 414.0 395.0 L 291.0 395.0 L 291.5 425.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 519.0 305.0 L 414.0 395.0 L 654.0 395.0 L 544.0 522.5" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 291.5 620.0 L 414.0 665.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <text x="414.0" y="50.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle"><b style="font-size: 15px;">Figure 3.3.5: Entity-Relationship Diagram (ERD) — Multi-Tenant Schema</text>
+  <rect x="274.0" y="80.0" width="280.0" height="105.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="282.0" y="96.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">organizations</text>
+  <line x1="274.0" y1="104.0" x2="554.0" y2="104.0" stroke="#000000" stroke-width="1.2" />
+  <text x="282.0" y="114.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">PK id : CHAR(36)</text>
+  <text x="282.0" y="128.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">name : VARCHAR(255)</text>
+  <text x="282.0" y="142.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">slug : VARCHAR(100) [UNIQUE]</text>
+  <text x="282.0" y="156.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">status : VARCHAR(50)</text>
+  <text x="282.0" y="170.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">created_at : TIMESTAMP(6)</text>
+  <rect x="64.0" y="240.0" width="210.0" height="130.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="256.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">api_keys</text>
+  <line x1="64.0" y1="264.0" x2="274.0" y2="264.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="274.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">PK id : CHAR(36)</text>
+  <text x="72.0" y="288.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">FK organization_id : CHAR(36)</text>
+  <text x="72.0" y="302.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">key_prefix : VARCHAR(16)</text>
+  <text x="72.0" y="316.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">key_hash : CHAR(64) [UNIQUE]</text>
+  <text x="72.0" y="330.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">label : VARCHAR(100)</text>
+  <text x="72.0" y="344.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">status : VARCHAR(20)</text>
+  <text x="72.0" y="358.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">created_at : TIMESTAMP(6)</text>
+  <rect x="309.0" y="240.0" width="210.0" height="130.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="317.0" y="256.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">chain_heads (Pessimistic Lock)</text>
+  <line x1="309.0" y1="264.0" x2="519.0" y2="264.0" stroke="#000000" stroke-width="1.2" />
+  <text x="317.0" y="274.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">PK, FK organization_id : CHAR(36)</text>
+  <text x="317.0" y="288.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">head_sequence_number : BIGINT</text>
+  <text x="317.0" y="302.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">head_record_hash : CHAR(64)</text>
+  <text x="317.0" y="316.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">genesis_hash : CHAR(64)</text>
+  <text x="317.0" y="330.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">updated_at : TIMESTAMP(6)</text>
+  <rect x="554.0" y="240.0" width="210.0" height="130.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="562.0" y="256.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">users (Platform RBAC)</text>
+  <line x1="554.0" y1="264.0" x2="764.0" y2="264.0" stroke="#000000" stroke-width="1.2" />
+  <text x="562.0" y="274.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">PK id : CHAR(36)</text>
+  <text x="562.0" y="288.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">FK organization_id : CHAR(36)</text>
+  <text x="562.0" y="302.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">email : VARCHAR(255) [UNIQUE]</text>
+  <text x="562.0" y="316.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">password_hash : VARCHAR(255)</text>
+  <text x="562.0" y="330.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">role : VARCHAR(50)</text>
+  <text x="562.0" y="344.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">account_status : VARCHAR(20)</text>
+  <text x="562.0" y="358.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">created_at : TIMESTAMP(6)</text>
+  <rect x="64.0" y="425.0" width="455.0" height="195.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="441.0" font-family="monospace" font-size="10.5" font-weight="bold" fill="#000000">audit_events (Cryptographic SHA-256 Ledger)</text>
+  <line x1="64.0" y1="449.0" x2="519.0" y2="449.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="459.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">PK id : CHAR(36)</text>
+  <text x="72.0" y="473.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">FK organization_id : CHAR(36)</text>
+  <text x="72.0" y="487.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">UQ (organization_id, sequence_number)</text>
+  <text x="72.0" y="501.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">sequence_number : BIGINT [Monotonic]</text>
+  <text x="72.0" y="515.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">event_action : VARCHAR(100)</text>
+  <text x="72.0" y="529.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">actor_id : VARCHAR(100)</text>
+  <text x="72.0" y="543.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">target_id : VARCHAR(100)</text>
+  <text x="72.0" y="557.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">payload : TEXT [RFC 8785 Canonical JSON]</text>
+  <text x="72.0" y="571.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">record_hash : CHAR(64) [Current SHA-256 Digest]</text>
+  <text x="72.0" y="585.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">prev_record_hash : CHAR(64) [Previous Chain Digest]</text>
+  <text x="72.0" y="599.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">created_at : TIMESTAMP(6) [Microsecond UTC]</text>
+  <rect x="544.0" y="425.0" width="220.0" height="195.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="552.0" y="441.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">checkpoints (WORM Anchors)</text>
+  <line x1="544.0" y1="449.0" x2="764.0" y2="449.0" stroke="#000000" stroke-width="1.2" />
+  <text x="552.0" y="459.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">PK id : CHAR(36)</text>
+  <text x="552.0" y="473.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">FK organization_id : CHAR(36)</text>
+  <text x="552.0" y="487.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">sequence_number : BIGINT</text>
+  <text x="552.0" y="501.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">checkpoint_hash : CHAR(64)</text>
+  <text x="552.0" y="515.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">storage_provider : VARCHAR(32)</text>
+  <text x="552.0" y="529.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">s3_bucket : VARCHAR(100)</text>
+  <text x="552.0" y="543.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">s3_object_key : VARCHAR(255)</text>
+  <text x="552.0" y="557.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">s3_version_id : VARCHAR(100)</text>
+  <text x="552.0" y="571.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">created_at : TIMESTAMP(6)</text>
+  <rect x="64.0" y="665.0" width="700.0" height="135.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="681.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">verification_runs (Continuous Mathematical Verification Logs)</text>
+  <line x1="64.0" y1="689.0" x2="764.0" y2="689.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="699.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">PK id : CHAR(36)</text>
+  <text x="72.0" y="713.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">FK organization_id : CHAR(36)</text>
+  <text x="72.0" y="727.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">verified_from_sequence : BIGINT</text>
+  <text x="72.0" y="741.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">verified_to_sequence : BIGINT</text>
+  <text x="72.0" y="755.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">result_status : VARCHAR(50) ['SUCCESS', 'TAMPER_DETECTED', 'CORRUPT']</text>
+  <text x="72.0" y="769.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">discrepancies_count : INT</text>
+  <text x="72.0" y="783.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">failure_reason : TEXT</text>
+  <text x="72.0" y="797.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">verified_at : TIMESTAMP(6)</text>
+  <text x="50.2" y="20.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">1 : N</text>
+  <text x="50.1" y="20.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">1 : 1</text>
+  <text x="50.2" y="20.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">1 : N</text>
+  <text x="50.3" y="20.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">1 : N</text>
+  <text x="50.3" y="20.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">1 : N</text>
+  <text x="50.1" y="20.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">1 : N</text>
             </svg>
         </div>
     </div>
@@ -581,22 +798,32 @@
         <div class="page-meta">Page 8 of 10 &bull; 3.3.6 Sequence Diagram &bull; A4 Portrait (827 &times; 1169)</div>
         <div class="svg-wrapper">
             <svg viewBox="0 0 827 1169" width="827" height="1169" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;">
-                <text x="414.0" y="50" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">Figure 3.3.6: UML Sequence Diagram — Concurrent Tamper-Evident Ingestion</text>
-  <rect x="40" y="80" width="120" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="48" y="96" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Client Application</text>
-  <rect x="180" y="80" width="120" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="188" y="96" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">ApiKeyAuthFilter</text>
-  <rect x="320" y="80" width="130" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="328" y="96" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">IngestionService</text>
-  <rect x="470" y="80" width="130" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="478" y="96" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">MySQL (InnoDB)</text>
-  <rect x="620" y="80" width="130" height="40" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="628" y="96" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">AWS S3 WORM</text>
-  <rect x="545" y="310" width="170" height="45" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="553" y="326" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Pessimistic row lock acquired;
+                
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#000000" />
+      </marker>
+      <marker id="arrow-empty" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+      </marker>
+    </defs>
+    
+  <text x="414.0" y="50.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">Figure 3.3.6: UML Sequence Diagram — Concurrent Tamper-Evident Ingestion</text>
+  <rect x="40.0" y="80.0" width="120.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="48.0" y="96.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Client Application</text>
+  <rect x="180.0" y="80.0" width="120.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="188.0" y="96.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">ApiKeyAuthFilter</text>
+  <rect x="320.0" y="80.0" width="130.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="328.0" y="96.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">IngestionService</text>
+  <rect x="470.0" y="80.0" width="130.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="478.0" y="96.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">MySQL (InnoDB)</text>
+  <rect x="620.0" y="80.0" width="130.0" height="40.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="628.0" y="96.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">AWS S3 WORM</text>
+  <rect x="545.0" y="310.0" width="170.0" height="45.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="553.0" y="326.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Pessimistic row lock acquired;
 serializes all concurrent writers per tenant</text>
-  <rect x="350" y="710" width="370" height="150" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="358" y="726" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">alt [S_next is Milestone Checkpoint (e.g., % 1000 == 0)]</text>
+  <rect x="350.0" y="710.0" width="370.0" height="150.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="358.0" y="726.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000">alt [S_next is Milestone Checkpoint (e.g., % 1000 == 0)]</text>
             </svg>
         </div>
     </div>
@@ -606,76 +833,91 @@ serializes all concurrent writers per tenant</text>
         <div class="page-meta">Page 9 of 10 &bull; 3.4.1 Logical Database Design &bull; A4 Portrait (827 &times; 1169)</div>
         <div class="svg-wrapper">
             <svg viewBox="0 0 827 1169" width="827" height="1169" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;">
-                <text x="414.0" y="50" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle"><b style="font-size: 15px;">Figure 3.4.1: Logical Database Design (Relational Multi-Tenant Model & Integrity Constraints)</text>
-  <rect x="64" y="80" width="320" height="120" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="96" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">ORGANIZATIONS [Logical Root]</text>
-  <line x1="64" y1="104" x2="384" y2="104" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="114" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ id : UUID <PK></text>
-  <text x="72" y="128" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ name : VARCHAR(255) [NOT NULL]</text>
-  <text x="72" y="142" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ slug : VARCHAR(100) <UQ></text>
-  <text x="72" y="156" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ status : ENUM('ACTIVE', 'SUSPENDED')</text>
-  <text x="72" y="170" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ created_at : TIMESTAMP(6)</text>
-  <text x="72" y="184" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ updated_at : TIMESTAMP(6)</text>
-  <rect x="444" y="80" width="320" height="120" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="452" y="96" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">CHAIN_HEADS [Concurrency Lock Target]</text>
-  <line x1="444" y1="104" x2="764" y2="104" stroke="#cccccc" stroke-width="1" />
-  <text x="452" y="114" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ organization_id : UUID <PK, FK->ORGANIZATIONS.id></text>
-  <text x="452" y="128" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ head_sequence_number : BIGINT [NOT NULL, DEF 0]</text>
-  <text x="452" y="142" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ head_record_hash : CHAR(64) [SHA-256 Hex]</text>
-  <text x="452" y="156" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ genesis_hash : CHAR(64) [64 Zeros Genesis]</text>
-  <text x="452" y="170" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ updated_at : TIMESTAMP(6) [ON UPDATE CURRENT]</text>
-  <rect x="64" y="240" width="320" height="140" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="256" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">API_KEYS [Zero-Trust Ingestion Credentials]</text>
-  <line x1="64" y1="264" x2="384" y2="264" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="274" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ id : UUID <PK></text>
-  <text x="72" y="288" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ organization_id : UUID <FK->ORGANIZATIONS.id></text>
-  <text x="72" y="302" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ key_prefix : VARCHAR(16) [NOT NULL]</text>
-  <text x="72" y="316" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ key_hash : CHAR(64) <UQ, SHA-256></text>
-  <text x="72" y="330" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ label : VARCHAR(100)</text>
-  <text x="72" y="344" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ status : ENUM('ACTIVE', 'REVOKED')</text>
-  <text x="72" y="358" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ created_at : TIMESTAMP(6)</text>
-  <rect x="444" y="240" width="320" height="155" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="452" y="256" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">CHECKPOINTS [WORM Out-of-Band Anchors]</text>
-  <line x1="444" y1="264" x2="764" y2="264" stroke="#cccccc" stroke-width="1" />
-  <text x="452" y="274" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ id : UUID <PK></text>
-  <text x="452" y="288" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ organization_id : UUID <FK->ORGANIZATIONS.id></text>
-  <text x="452" y="302" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ sequence_number : BIGINT [Snapshot Seq]</text>
-  <text x="452" y="316" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ checkpoint_hash : CHAR(64) [Chain Digest]</text>
-  <text x="452" y="330" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ storage_provider : ENUM('AWS_S3', 'MINIO', 'LOCAL')</text>
-  <text x="452" y="344" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ s3_bucket : VARCHAR(100)</text>
-  <text x="452" y="358" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ s3_object_key : VARCHAR(255)</text>
-  <text x="452" y="372" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ s3_version_id : VARCHAR(100) [WORM Version ID]</text>
-  <rect x="64" y="430" width="700" height="195" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="446" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">AUDIT_EVENTS [Immutable Append-Only Cryptographic Chain Table]</text>
-  <line x1="64" y1="454" x2="764" y2="454" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="464" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ id : UUID <PK></text>
-  <text x="72" y="478" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ organization_id : UUID <FK->ORGANIZATIONS.id></text>
-  <text x="72" y="492" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ sequence_number : BIGINT [NOT NULL, STRICTLY MONOTONIC 1, 2, 3...]</text>
-  <text x="72" y="506" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ event_action : VARCHAR(100) [NOT NULL]</text>
-  <text x="72" y="520" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ actor_id : VARCHAR(100) [NOT NULL]</text>
-  <text x="72" y="534" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ target_id : VARCHAR(100) [NOT NULL]</text>
-  <text x="72" y="548" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ payload : TEXT [Canonical RFC 8785 JSON representation]</text>
-  <text x="72" y="562" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ record_hash : CHAR(64) [SHA-256( JCS(payload) || prev_record_hash )]</text>
-  <text x="72" y="576" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ prev_record_hash : CHAR(64) [Cryptographic predecessor link]</text>
-  <text x="72" y="590" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ created_at : TIMESTAMP(6) [Microsecond UTC timestamp]</text>
-  <line x1="64" y1="598" x2="764" y2="598" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="608" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">UQ_org_seq : UNIQUE (organization_id, sequence_number)</text>
-  <rect x="64" y="660" width="700" height="150" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="676" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">VERIFICATION_RUNS [Audit Proof Reports & Tamper Telemetry]</text>
-  <line x1="64" y1="684" x2="764" y2="684" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="694" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ id : UUID <PK></text>
-  <text x="72" y="708" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">+ organization_id : UUID <FK->ORGANIZATIONS.id></text>
-  <text x="72" y="722" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ verified_from_sequence : BIGINT</text>
-  <text x="72" y="736" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ verified_to_sequence : BIGINT</text>
-  <text x="72" y="750" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ result_status : ENUM('SUCCESS', 'TAMPER_DETECTED', 'SEQUENCE_GAP')</text>
-  <text x="72" y="764" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ discrepancies_count : INT</text>
-  <text x="72" y="778" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ failure_reason : TEXT [Identifies sequence & mismatch delta]</text>
-  <text x="72" y="792" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">+ verified_at : TIMESTAMP(6)</text>
-  <text x="50.0" y="20" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">1 : 1</text>
-  <text x="50.0" y="20" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">1 : N</text>
-  <text x="50.0" y="20" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">1 : N</text>
-  <text x="50.0" y="20" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">1 : N</text>
-  <text x="50.0" y="20" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle">1 : N</text>
+                
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#000000" />
+      </marker>
+      <marker id="arrow-empty" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+      </marker>
+    </defs>
+    
+  <path d="M 384.0 140.0 L 444.0 140.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 224.0 200.0 L 224.0 240.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 604.0 200.0 L 604.0 240.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 604.0 200.0 L 604.0 215.0 L 414.0 215.0 L 414.0 420.0 L 414.0 430.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <path d="M 414.0 625.0 L 414.0 660.0" fill="none" stroke="#000000" stroke-width="1.8"  marker-end="url(#arrow)" />
+  <text x="414.0" y="50.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle"><b style="font-size: 15px;">Figure 3.4.1: Logical Database Design (Relational Multi-Tenant Model & Integrity Constraints)</text>
+  <rect x="64.0" y="80.0" width="320.0" height="120.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="96.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">ORGANIZATIONS [Logical Root]</text>
+  <line x1="64.0" y1="104.0" x2="384.0" y2="104.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="114.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ id : UUID <PK></text>
+  <text x="72.0" y="128.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ name : VARCHAR(255) [NOT NULL]</text>
+  <text x="72.0" y="142.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ slug : VARCHAR(100) <UQ></text>
+  <text x="72.0" y="156.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ status : ENUM('ACTIVE', 'SUSPENDED')</text>
+  <text x="72.0" y="170.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ created_at : TIMESTAMP(6)</text>
+  <text x="72.0" y="184.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ updated_at : TIMESTAMP(6)</text>
+  <rect x="444.0" y="80.0" width="320.0" height="120.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="452.0" y="96.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">CHAIN_HEADS [Concurrency Lock Target]</text>
+  <line x1="444.0" y1="104.0" x2="764.0" y2="104.0" stroke="#000000" stroke-width="1.2" />
+  <text x="452.0" y="114.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ organization_id : UUID <PK, FK->ORGANIZATIONS.id></text>
+  <text x="452.0" y="128.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ head_sequence_number : BIGINT [NOT NULL, DEF 0]</text>
+  <text x="452.0" y="142.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ head_record_hash : CHAR(64) [SHA-256 Hex]</text>
+  <text x="452.0" y="156.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ genesis_hash : CHAR(64) [64 Zeros Genesis]</text>
+  <text x="452.0" y="170.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ updated_at : TIMESTAMP(6) [ON UPDATE CURRENT]</text>
+  <rect x="64.0" y="240.0" width="320.0" height="140.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="256.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">API_KEYS [Zero-Trust Ingestion Credentials]</text>
+  <line x1="64.0" y1="264.0" x2="384.0" y2="264.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="274.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ id : UUID <PK></text>
+  <text x="72.0" y="288.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ organization_id : UUID <FK->ORGANIZATIONS.id></text>
+  <text x="72.0" y="302.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ key_prefix : VARCHAR(16) [NOT NULL]</text>
+  <text x="72.0" y="316.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ key_hash : CHAR(64) <UQ, SHA-256></text>
+  <text x="72.0" y="330.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ label : VARCHAR(100)</text>
+  <text x="72.0" y="344.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ status : ENUM('ACTIVE', 'REVOKED')</text>
+  <text x="72.0" y="358.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ created_at : TIMESTAMP(6)</text>
+  <rect x="444.0" y="240.0" width="320.0" height="155.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="452.0" y="256.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">CHECKPOINTS [WORM Out-of-Band Anchors]</text>
+  <line x1="444.0" y1="264.0" x2="764.0" y2="264.0" stroke="#000000" stroke-width="1.2" />
+  <text x="452.0" y="274.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ id : UUID <PK></text>
+  <text x="452.0" y="288.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ organization_id : UUID <FK->ORGANIZATIONS.id></text>
+  <text x="452.0" y="302.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ sequence_number : BIGINT [Snapshot Seq]</text>
+  <text x="452.0" y="316.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ checkpoint_hash : CHAR(64) [Chain Digest]</text>
+  <text x="452.0" y="330.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ storage_provider : ENUM('AWS_S3', 'MINIO', 'LOCAL')</text>
+  <text x="452.0" y="344.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ s3_bucket : VARCHAR(100)</text>
+  <text x="452.0" y="358.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ s3_object_key : VARCHAR(255)</text>
+  <text x="452.0" y="372.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ s3_version_id : VARCHAR(100) [WORM Version ID]</text>
+  <rect x="64.0" y="430.0" width="700.0" height="195.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="446.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">AUDIT_EVENTS [Immutable Append-Only Cryptographic Chain Table]</text>
+  <line x1="64.0" y1="454.0" x2="764.0" y2="454.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="464.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ id : UUID <PK></text>
+  <text x="72.0" y="478.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ organization_id : UUID <FK->ORGANIZATIONS.id></text>
+  <text x="72.0" y="492.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ sequence_number : BIGINT [NOT NULL, STRICTLY MONOTONIC 1, 2, 3...]</text>
+  <text x="72.0" y="506.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ event_action : VARCHAR(100) [NOT NULL]</text>
+  <text x="72.0" y="520.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ actor_id : VARCHAR(100) [NOT NULL]</text>
+  <text x="72.0" y="534.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ target_id : VARCHAR(100) [NOT NULL]</text>
+  <text x="72.0" y="548.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ payload : TEXT [Canonical RFC 8785 JSON representation]</text>
+  <text x="72.0" y="562.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ record_hash : CHAR(64) [SHA-256( JCS(payload) || prev_record_hash )]</text>
+  <text x="72.0" y="576.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ prev_record_hash : CHAR(64) [Cryptographic predecessor link]</text>
+  <text x="72.0" y="590.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ created_at : TIMESTAMP(6) [Microsecond UTC timestamp]</text>
+  <line x1="64.0" y1="598.0" x2="764.0" y2="598.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="608.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">UQ_org_seq : UNIQUE (organization_id, sequence_number)</text>
+  <rect x="64.0" y="660.0" width="700.0" height="150.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="676.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">VERIFICATION_RUNS [Audit Proof Reports & Tamper Telemetry]</text>
+  <line x1="64.0" y1="684.0" x2="764.0" y2="684.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="694.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ id : UUID <PK></text>
+  <text x="72.0" y="708.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">+ organization_id : UUID <FK->ORGANIZATIONS.id></text>
+  <text x="72.0" y="722.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ verified_from_sequence : BIGINT</text>
+  <text x="72.0" y="736.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ verified_to_sequence : BIGINT</text>
+  <text x="72.0" y="750.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ result_status : ENUM('SUCCESS', 'TAMPER_DETECTED', 'SEQUENCE_GAP')</text>
+  <text x="72.0" y="764.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ discrepancies_count : INT</text>
+  <text x="72.0" y="778.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ failure_reason : TEXT [Identifies sequence & mismatch delta]</text>
+  <text x="72.0" y="792.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">+ verified_at : TIMESTAMP(6)</text>
+  <text x="50.1" y="20.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">1 : 1</text>
+  <text x="50.1" y="20.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">1 : N</text>
+  <text x="50.1" y="20.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">1 : N</text>
+  <text x="50.4" y="20.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">1 : N</text>
+  <text x="50.1" y="20.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">1 : N</text>
             </svg>
         </div>
     </div>
@@ -685,66 +927,76 @@ serializes all concurrent writers per tenant</text>
         <div class="page-meta">Page 10 of 10 &bull; 3.4.2 Physical Database Design &bull; A4 Portrait (827 &times; 1169)</div>
         <div class="svg-wrapper">
             <svg viewBox="0 0 827 1169" width="827" height="1169" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;">
-                <text x="414.0" y="50" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#111827" text-anchor="middle"><b style="font-size: 15px;">Figure 3.4.2: Physical Database Design (MySQL 8.0 / InnoDB Engine Storage & B-Tree Index Topology)</text>
-  <rect x="64" y="80" width="700" height="295" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="96" font-family="monospace" font-size="10.5" font-weight="bold" fill="#000000"><b style="font-size: 11.5px;">TABLE: audit_events (ENGINE=InnoDB, ROW_FORMA</text>
-  <line x1="64" y1="104" x2="764" y2="104" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="114" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">PHYSICAL COLUMN SPECIFICATION:</text>
-  <text x="72" y="128" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">* id : CHAR(36) NOT NULL [36 Bytes Clustered Primary Key Inode]</text>
-  <text x="72" y="142" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">* organization_id : CHAR(36) NOT NULL [36 Bytes Tenant Isolation Key]</text>
-  <text x="72" y="156" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">* sequence_number : BIGINT UNSIGNED NOT NULL [8 Bytes Monotonic Sequence 1,</text>
-  <text x="72" y="170" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">* event_action : VARCHAR(100) NOT NULL [1-100 Bytes UTF-8 Variable String]</text>
-  <text x="72" y="184" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">* actor_id : VARCHAR(100) NOT NULL [1-100 Bytes Principal Identifier]</text>
-  <text x="72" y="198" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">* target_id : VARCHAR(100) NOT NULL [1-100 Bytes Entity Subject]</text>
-  <text x="72" y="212" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">* payload : TEXT NOT NULL [LOB Overflow Page Storage, RFC 8785 Canonical JS</text>
-  <text x="72" y="226" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">* record_hash : CHAR(64) NOT NULL [64 Bytes Hexadecimal SHA-256 Digest]</text>
-  <text x="72" y="240" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">* prev_record_hash : CHAR(64) NOT NULL [64 Bytes Predecessor Digest Link]</text>
-  <text x="72" y="254" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">* created_at : DATETIME(6) NOT NULL [8 Bytes Microsecond Precision UTC Time</text>
-  <line x1="64" y1="262" x2="764" y2="262" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="272" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">B-TREE INDEX TOPOLOGY & BUFFER ALLOCATION:</text>
-  <text x="72" y="286" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">1. PRIMARY KEY (id) USING BTREE [Clustered Index, In-Memory Buffer Pool]</text>
-  <text x="72" y="300" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">2. UNIQUE KEY uq_org_seq (organization_id, sequence_number) USING BTREE [Co</text>
-  <text x="72" y="314" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">3. KEY idx_org_created (organization_id, created_at) USING BTREE [Time-Rang</text>
-  <text x="72" y="328" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">4. KEY idx_record_hash (record_hash) USING BTREE [O(log N) Cryptographic Po</text>
-  <rect x="64" y="405" width="335" height="225" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="421" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000"><b style="font-size: 11px;">TABLE: chain_heads (Pessimistic Row Lock)</text>
-  <line x1="64" y1="429" x2="399" y2="429" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="439" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">PHYSICAL SPECIFICATIONS:</text>
-  <text x="72" y="453" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">* organization_id : CHAR(36) NOT NULL [PK Inode]</text>
-  <text x="72" y="467" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">* head_sequence_number : BIGINT UNSIGNED NOT NULL</text>
-  <text x="72" y="481" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">* head_record_hash : CHAR(64) NOT NULL [SHA-256]</text>
-  <text x="72" y="495" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">* genesis_hash : CHAR(64) NOT NULL [64 Zeros]</text>
-  <text x="72" y="509" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">* updated_at : DATETIME(6) NOT NULL [Microsecond]</text>
-  <line x1="64" y1="517" x2="399" y2="517" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="527" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">LOCKING TOPOLOGY:</text>
-  <text x="72" y="541" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">PRIMARY KEY (organization_id) USING BTREE</text>
-  <text x="72" y="555" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Target of SELECT ... FOR UPDATE exclusive row lock</text>
-  <rect x="429" y="405" width="335" height="225" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="437" y="421" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000"><b style="font-size: 11px;">TABLE: checkpoints (WORM Storage Anchors)</text>
-  <line x1="429" y1="429" x2="764" y2="429" stroke="#cccccc" stroke-width="1" />
-  <text x="437" y="439" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">PHYSICAL SPECIFICATIONS:</text>
-  <text x="437" y="453" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">* id : CHAR(36) NOT NULL [36 Bytes PK]</text>
-  <text x="437" y="467" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">* organization_id : CHAR(36) NOT NULL [FK Inode]</text>
-  <text x="437" y="481" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">* sequence_number : BIGINT UNSIGNED NOT NULL</text>
-  <text x="437" y="495" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">* checkpoint_hash : CHAR(64) NOT NULL [SHA-256]</text>
-  <text x="437" y="509" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">* storage_provider : VARCHAR(32) NOT NULL</text>
-  <text x="437" y="523" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">* s3_bucket : VARCHAR(100) NOT NULL</text>
-  <text x="437" y="537" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">* s3_object_key : VARCHAR(255) NOT NULL</text>
-  <text x="437" y="551" font-family="monospace" font-size="9.5" font-weight="normal" fill="#333333">* s3_version_id : VARCHAR(100) [WORM Version]</text>
-  <text x="437" y="565" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">* created_at : DATETIME(6) NOT NULL [Microsecond]</text>
-  <line x1="429" y1="573" x2="764" y2="573" stroke="#cccccc" stroke-width="1" />
-  <text x="437" y="583" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">INDEX TOPOLOGY:</text>
-  <text x="437" y="597" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">PRIMARY KEY (id) USING BTREE</text>
-  <text x="437" y="611" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">KEY idx_cp_org_seq (organization_id, sequence_number)</text>
-  <rect x="64" y="660" width="700" height="205" fill="#ffffff" stroke="#333333" stroke-width="1.5" rx="2" />
-  <text x="72" y="676" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333"><b style="font-size: 11.5px;">HARDWARE, MEMORY & OUT-OF-BAND IMMUTABILITY P</text>
-  <line x1="64" y1="684" x2="764" y2="684" stroke="#cccccc" stroke-width="1" />
-  <text x="72" y="694" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">1. Buffer Pool Optimization (innodb_buffer_pool_size = 256M):</text>
-  <text x="72" y="708" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Indexes uq_org_seq and chain_heads are locked resident in RAM. This provide</text>
-  <text x="72" y="722" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">2. Zero Page Splitting Overhead:</text>
-  <text x="72" y="736" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Because sequence numbers strictly increment by +1 (1, 2, 3...) per tenant, </text>
-  <text x="72" y="750" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">3. Out-of-Band Hardware Immutability (AWS S3 Object Lock COMPLIANCE Mode):</text>
-  <text x="72" y="764" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#333333">Checkpoint digests are replicated directly to AWS S3 Object Lock buckets wi</text>
+                
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#000000" />
+      </marker>
+      <marker id="arrow-empty" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+      </marker>
+    </defs>
+    
+  <text x="414.0" y="50.0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle"><b style="font-size: 15px;">Figure 3.4.2: Physical Database Design (MySQL 8.0 / InnoDB Engine Storage & B-Tree Index Topology)</text>
+  <rect x="64.0" y="80.0" width="700.0" height="295.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="96.0" font-family="monospace" font-size="10.5" font-weight="bold" fill="#000000"><b style="font-size: 11.5px;">TABLE: audit_events (ENGINE=InnoDB, ROW_FORMA</text>
+  <line x1="64.0" y1="104.0" x2="764.0" y2="104.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="114.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">PHYSICAL COLUMN SPECIFICATION:</text>
+  <text x="72.0" y="128.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">* id : CHAR(36) NOT NULL [36 Bytes Clustered Primary Key Inode]</text>
+  <text x="72.0" y="142.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">* organization_id : CHAR(36) NOT NULL [36 Bytes Tenant Isolation Key]</text>
+  <text x="72.0" y="156.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">* sequence_number : BIGINT UNSIGNED NOT NULL [8 Bytes Monotonic Sequence 1,</text>
+  <text x="72.0" y="170.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">* event_action : VARCHAR(100) NOT NULL [1-100 Bytes UTF-8 Variable String]</text>
+  <text x="72.0" y="184.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">* actor_id : VARCHAR(100) NOT NULL [1-100 Bytes Principal Identifier]</text>
+  <text x="72.0" y="198.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">* target_id : VARCHAR(100) NOT NULL [1-100 Bytes Entity Subject]</text>
+  <text x="72.0" y="212.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">* payload : TEXT NOT NULL [LOB Overflow Page Storage, RFC 8785 Canonical JS</text>
+  <text x="72.0" y="226.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">* record_hash : CHAR(64) NOT NULL [64 Bytes Hexadecimal SHA-256 Digest]</text>
+  <text x="72.0" y="240.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">* prev_record_hash : CHAR(64) NOT NULL [64 Bytes Predecessor Digest Link]</text>
+  <text x="72.0" y="254.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">* created_at : DATETIME(6) NOT NULL [8 Bytes Microsecond Precision UTC Time</text>
+  <line x1="64.0" y1="262.0" x2="764.0" y2="262.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="272.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">B-TREE INDEX TOPOLOGY & BUFFER ALLOCATION:</text>
+  <text x="72.0" y="286.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">1. PRIMARY KEY (id) USING BTREE [Clustered Index, In-Memory Buffer Pool]</text>
+  <text x="72.0" y="300.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">2. UNIQUE KEY uq_org_seq (organization_id, sequence_number) USING BTREE [Co</text>
+  <text x="72.0" y="314.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">3. KEY idx_org_created (organization_id, created_at) USING BTREE [Time-Rang</text>
+  <text x="72.0" y="328.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">4. KEY idx_record_hash (record_hash) USING BTREE [O(log N) Cryptographic Po</text>
+  <rect x="64.0" y="405.0" width="335.0" height="225.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="421.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000"><b style="font-size: 11px;">TABLE: chain_heads (Pessimistic Row Lock)</text>
+  <line x1="64.0" y1="429.0" x2="399.0" y2="429.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="439.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">PHYSICAL SPECIFICATIONS:</text>
+  <text x="72.0" y="453.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">* organization_id : CHAR(36) NOT NULL [PK Inode]</text>
+  <text x="72.0" y="467.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">* head_sequence_number : BIGINT UNSIGNED NOT NULL</text>
+  <text x="72.0" y="481.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">* head_record_hash : CHAR(64) NOT NULL [SHA-256]</text>
+  <text x="72.0" y="495.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">* genesis_hash : CHAR(64) NOT NULL [64 Zeros]</text>
+  <text x="72.0" y="509.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">* updated_at : DATETIME(6) NOT NULL [Microsecond]</text>
+  <line x1="64.0" y1="517.0" x2="399.0" y2="517.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="527.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">LOCKING TOPOLOGY:</text>
+  <text x="72.0" y="541.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">PRIMARY KEY (organization_id) USING BTREE</text>
+  <text x="72.0" y="555.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Target of SELECT ... FOR UPDATE exclusive row lock</text>
+  <rect x="429.0" y="405.0" width="335.0" height="225.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="437.0" y="421.0" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000000"><b style="font-size: 11px;">TABLE: checkpoints (WORM Storage Anchors)</text>
+  <line x1="429.0" y1="429.0" x2="764.0" y2="429.0" stroke="#000000" stroke-width="1.2" />
+  <text x="437.0" y="439.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">PHYSICAL SPECIFICATIONS:</text>
+  <text x="437.0" y="453.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">* id : CHAR(36) NOT NULL [36 Bytes PK]</text>
+  <text x="437.0" y="467.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">* organization_id : CHAR(36) NOT NULL [FK Inode]</text>
+  <text x="437.0" y="481.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">* sequence_number : BIGINT UNSIGNED NOT NULL</text>
+  <text x="437.0" y="495.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">* checkpoint_hash : CHAR(64) NOT NULL [SHA-256]</text>
+  <text x="437.0" y="509.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">* storage_provider : VARCHAR(32) NOT NULL</text>
+  <text x="437.0" y="523.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">* s3_bucket : VARCHAR(100) NOT NULL</text>
+  <text x="437.0" y="537.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">* s3_object_key : VARCHAR(255) NOT NULL</text>
+  <text x="437.0" y="551.0" font-family="monospace" font-size="9.5" font-weight="normal" fill="#000000">* s3_version_id : VARCHAR(100) [WORM Version]</text>
+  <text x="437.0" y="565.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">* created_at : DATETIME(6) NOT NULL [Microsecond]</text>
+  <line x1="429.0" y1="573.0" x2="764.0" y2="573.0" stroke="#000000" stroke-width="1.2" />
+  <text x="437.0" y="583.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">INDEX TOPOLOGY:</text>
+  <text x="437.0" y="597.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">PRIMARY KEY (id) USING BTREE</text>
+  <text x="437.0" y="611.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">KEY idx_cp_org_seq (organization_id, sequence_number)</text>
+  <rect x="64.0" y="660.0" width="700.0" height="205.0" fill="#ffffff" stroke="#000000" stroke-width="1.8" rx="2" />
+  <text x="72.0" y="676.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000"><b style="font-size: 11.5px;">HARDWARE, MEMORY & OUT-OF-BAND IMMUTABILITY P</text>
+  <line x1="64.0" y1="684.0" x2="764.0" y2="684.0" stroke="#000000" stroke-width="1.2" />
+  <text x="72.0" y="694.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">1. Buffer Pool Optimization (innodb_buffer_pool_size = 256M):</text>
+  <text x="72.0" y="708.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Indexes uq_org_seq and chain_heads are locked resident in RAM. This provide</text>
+  <text x="72.0" y="722.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">2. Zero Page Splitting Overhead:</text>
+  <text x="72.0" y="736.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Because sequence numbers strictly increment by +1 (1, 2, 3...) per tenant, </text>
+  <text x="72.0" y="750.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">3. Out-of-Band Hardware Immutability (AWS S3 Object Lock COMPLIANCE Mode):</text>
+  <text x="72.0" y="764.0" font-family="Arial, sans-serif" font-size="9.5" font-weight="normal" fill="#000000">Checkpoint digests are replicated directly to AWS S3 Object Lock buckets wi</text>
             </svg>
         </div>
     </div>

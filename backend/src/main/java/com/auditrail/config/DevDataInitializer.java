@@ -73,26 +73,26 @@ public class DevDataInitializer {
                 log.info("Initialized default Acme Global Logistics organization.");
             }
 
-            // 2. Apex National Bank
-            String apexOrgId = "11111111-1111-1111-1111-111111111111";
-            if (!orgRepo.existsById(apexOrgId)) {
+            // 2. Aarohi Global Bank
+            String aarohiOrgId = "11111111-1111-1111-1111-111111111111";
+            if (!orgRepo.existsById(aarohiOrgId)) {
                 Organization org = new Organization();
-                org.setId(apexOrgId);
-                org.setName("Apex National Bank");
-                org.setSlug("apex-bank");
+                org.setId(aarohiOrgId);
+                org.setName("Aarohi Global Bank");
+                org.setSlug("aarohi-bank");
                 org.setStatus("ACTIVE");
                 orgRepo.save(org);
 
                 ChainHead head = new ChainHead();
-                head.setOrganizationId(apexOrgId);
+                head.setOrganizationId(aarohiOrgId);
                 head.setLatestSequenceNumber(0L);
                 head.setLatestEventHash("0000000000000000000000000000000000000000000000000000000000000000");
                 chainHeadRepo.save(head);
 
                 User admin = new User();
                 admin.setId("11111111-1111-1111-1111-111111111110");
-                admin.setOrganizationId(apexOrgId);
-                admin.setEmail("admin@apexbank.com");
+                admin.setOrganizationId(aarohiOrgId);
+                admin.setEmail("admin@aarohibank.com");
                 admin.setPasswordHash(passwordEncoder.encode("Admin@AuditRail2026!"));
                 admin.setRole("ADMIN");
                 admin.setAccountStatus("ACTIVE");
@@ -101,15 +101,34 @@ public class DevDataInitializer {
 
                 ApiKey key = new ApiKey();
                 key.setId("11111111-1111-1111-1111-111111111120");
-                key.setOrganizationId(apexOrgId);
-                key.setKeyPrefix("ar_live_apex_bank");
-                key.setKeyHash(HashUtil.sha256Hex("ar_live_apex_bank_secret_key_8821"));
-                key.setLabel("Apex Core Banking Gateway");
+                key.setOrganizationId(aarohiOrgId);
+                key.setKeyPrefix("ar_live_admin");
+                key.setKeyHash("91cc2e501534a12e9831f1e87f6c21970be151b275fb34e16b6e9a6dbf8a2593");
+                key.setLabel("Aarohi Core Banking Ingestion Key");
                 key.setStatus("ACTIVE");
                 key.setCreatedByUserId(admin.getId());
                 apiKeyRepo.save(key);
 
-                log.info("Initialized default Apex National Bank organization.");
+                log.info("Initialized default Aarohi Global Bank organization with user key.");
+            } else {
+                // Ensure existing org name and API key match
+                Organization existing = orgRepo.findById(aarohiOrgId).get();
+                existing.setName("Aarohi Global Bank");
+                existing.setSlug("aarohi-bank");
+                orgRepo.save(existing);
+
+                ApiKey key = apiKeyRepo.findByOrganizationId(aarohiOrgId).stream().findFirst().orElseGet(() -> {
+                    ApiKey k = new ApiKey();
+                    k.setId(java.util.UUID.randomUUID().toString());
+                    k.setOrganizationId(aarohiOrgId);
+                    return k;
+                });
+                key.setKeyPrefix("ar_live_admin");
+                key.setKeyHash("91cc2e501534a12e9831f1e87f6c21970be151b275fb34e16b6e9a6dbf8a2593");
+                key.setLabel("Aarohi Core Banking Ingestion Key");
+                key.setStatus("ACTIVE");
+                apiKeyRepo.save(key);
+                log.info("Updated Aarohi Global Bank API key.");
             }
 
             log.info("Dev seed organizations check complete.");

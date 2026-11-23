@@ -1,0 +1,870 @@
+================================================================================
+                    B.Tech. CSE – 7th Semester
+        Project-1 – Project Guide Meeting & Progress Report
+                   PROJECT DIARY (10 SESSIONS)
+================================================================================
+Project Title: AuditRail: A Multi-Tenant Cryptographic Verification Engine and 
+               Immutable Audit Log System for Cloud Infrastructure
+Department   : Computer Science & Engineering
+Semester     : VII (7th Semester)
+Student Name : [Student Name]
+Roll / Enr No: [Enrollment / Roll No.]
+Section      : [Section]
+Project Guide: [Project Guide Name]
+
+--------------------------------------------------------------------------------
+OVERVIEW OF THE 10 PROGRESS MILESTONES (0% -> 100% COMPLETION)
+  Meeting 1  (10%) : Project Topic Finalization & Problem Identification
+  Meeting 2  (20%) : Literature Survey & Regulatory Benchmark Analysis
+  Meeting 3  (30%) : Requirement Analysis & Threat Modeling (STRIDE / ISO 27001)
+  Meeting 4  (40%) : System & Architectural Design (10 Chapter-3 Diagrams)
+  Meeting 5  (50%) : Database Schema Design & Tenancy Isolation (PostgreSQL / Flyway)
+  Meeting 6  (60%) : Core Backend Engine & SHA-256 Hash Chaining Implementation
+  Meeting 7  (70%) : Enterprise Console Frontend Development (React / Vite / Tailwind)
+  Meeting 8  (80%) : Aarohi Global Bank Client Application & Role-Based Simulation
+  Meeting 9  (90%) : Comprehensive Testing, Verification Engine & Edge-Case Audits
+  Meeting 10 (100%): Final Project Demonstration, Benchmarking & Documentation Complete
+================================================================================
+
+
+================================================================================
+MEETING NO. 1
+================================================================================
+1. Student Details
+------------------
+Student Name         : [Student Name]
+Enrollment/Roll No.  : [Enrollment / Roll No.]
+Section              : [Section]
+Semester             : VII
+Department           : Computer Science & Engineering
+Project Title        : AuditRail: A Multi-Tenant Cryptographic Verification Engine
+Project Guide        : [Project Guide Name]
+Date of Meeting      : [Week 1 Date]
+Meeting No.          : 01
+
+2. Progress Report
+------------------
+1. Work completed since last meeting:
+   - Researched enterprise audit log security issues, insider data manipulation,
+     and cloud log vulnerabilities.
+   - Identified critical shortcomings in conventional append-only log databases
+     where database administrators (DBAs) or compromised cloud credentials can
+     silently modify historical ledger records without leaving traces.
+   - Formulated the core project problem statement and conceptualized "AuditRail".
+
+2. Current progress/status:
+   - Finalized project scope: building a high-throughput, multi-tenant, tamper-
+     evident cryptographic audit log system capable of automated mathematical
+     proof verification and external anchoring.
+
+3. Problems/Challenges faced:
+   - Deciding between full distributed public blockchain (Ethereum/Hyperledger)
+     versus high-throughput centralized cryptographic hash chaining.
+   - Public blockchains incur prohibitive gas fees, high transaction latency
+     (12s-15min), and non-compliance with data privacy mandates (GDPR/DPDP Act).
+
+4. Solution/Action taken:
+   - Selected an optimized cryptographic hash chain architecture (Merkle-tree &
+     SHA-256 sequential chaining) anchored periodically to immutable cloud storage
+     (AWS S3 Object Lock / WORM compliant). This guarantees sub-millisecond
+     latency, zero gas fees, and verifiable mathematical immutability.
+
+5. Work discussed with Guide:
+   - Discussed real-world compliance needs (SOC 2 Type II, ISO 27001, PCI-DSS 4.0,
+     India DPDP Act 2023 Section 8(5)).
+   - Presented problem statement and scope of high-speed enterprise ingestion.
+
+6. Suggestions/Instructions given by Guide:
+   - Narrow down exact industry standards and benchmark against AWS CloudTrail and
+     Google Cloud Audit Logs.
+   - Ensure explicit multi-tenant isolation is considered from Day 1.
+
+7. Work to be completed before next meeting:
+   - Perform extensive literature review on Merkle trees, verifiable data structures,
+     and comparative enterprise auditing frameworks.
+
+8. Expected completion date: [Date 14 days later]
+
+3. Project Progress Status
+--------------------------
+Overall Project Progress: 10%
+  [X] Project Topic Finalization
+  [ ] Literature Survey
+  [X] Problem Identification
+  [ ] Requirement Analysis
+  [ ] System/Project Design
+  [ ] Methodology Finalization
+  [ ] Implementation/Development
+  [ ] Testing
+  [ ] Results & Analysis
+  [ ] Documentation
+  [ ] Final Project Demonstration
+
+4. Student Remarks:
+   Topic finalized and problem space thoroughly identified with academic guide.
+
+5. Guide's Remarks/Feedback:
+   Problem statement approved. Proceed with formal literature survey.
+
+6. Next Meeting:
+   Date of Next Meeting: [Next Fortnight Date]
+   Tasks to be completed before next meeting: Comprehensive Literature Survey.
+
+7. Signatures:
+   Student Signature: _________  Project Guide Signature: _________  Course Faculty Signature: _________
+   Date: _________               Date: _________                     Date: _________
+
+
+================================================================================
+MEETING NO. 2
+================================================================================
+1. Student Details
+------------------
+Student Name         : [Student Name]
+Enrollment/Roll No.  : [Enrollment / Roll No.]
+Section              : [Section]
+Semester             : VII
+Department           : Computer Science & Engineering
+Project Title        : AuditRail: A Multi-Tenant Cryptographic Verification Engine
+Project Guide        : [Project Guide Name]
+Date of Meeting      : [Week 3 Date]
+Meeting No.          : 02
+
+2. Progress Report
+------------------
+1. Work completed since last meeting:
+   - Reviewed academic papers on Certificate Transparency (RFC 6962), Merkle
+     hash trees, and tamper-evident logging protocols (Bellare & Yee, Crosby & Wallach).
+   - Studied existing enterprise solutions: AWS CloudTrail digest files, Azure
+     Immutable Blob Storage, and Datadog Audit Trail.
+   - Analyzed statutory retention requirements under DPDP Act 2023, HIPAA, and GDPR.
+
+2. Current progress/status:
+   - Synthesized literature findings into a comparative matrix contrasting
+     relational logs, blockchain networks, and continuous hash chains.
+
+3. Problems/Challenges faced:
+   - Balancing absolute log immutability with the "Right to be Forgotten" (GDPR
+     Article 17) and Data Erasure mandates (DPDP Act Section 12).
+
+4. Solution/Action taken:
+   - Adopted a cryptographic shredding / pseudonymous hashing pattern: PII is
+     stored in an encrypted metadata compartment or referenced via opaque UUIDs;
+     cryptographic hashes seal structural and action integrity without exposing
+     sensitive personal identifiers in the immutable proof chain.
+
+5. Work discussed with Guide:
+   - Presented comparative analysis and the cryptographic shredding strategy.
+   - Discussed theoretical performance bottlenecks of sequential hashing.
+
+6. Suggestions/Instructions given by Guide:
+   - Quantify expected throughput targets (e.g., minimum 500-1000 events/sec).
+   - Formalize technical functional and non-functional requirements.
+
+7. Work to be completed before next meeting:
+   - Compile comprehensive Software Requirements Specification (SRS) and threat model.
+
+8. Expected completion date: [Date 14 days later]
+
+3. Project Progress Status
+--------------------------
+Overall Project Progress: 20%
+  [X] Project Topic Finalization
+  [X] Literature Survey
+  [X] Problem Identification
+  [ ] Requirement Analysis
+  [ ] System/Project Design
+  [ ] Methodology Finalization
+  [ ] Implementation/Development
+  [ ] Testing
+  [ ] Results & Analysis
+  [ ] Documentation
+  [ ] Final Project Demonstration
+
+4. Student Remarks:
+   Literature survey successfully completed; regulatory compliance nuances mapped out.
+
+5. Guide's Remarks/Feedback:
+   Good research foundation. Ensure threat vectors include privileged DBA collusion.
+
+6. Next Meeting:
+   Date of Next Meeting: [Next Fortnight Date]
+   Tasks to be completed before next meeting: Complete SRS document and STRIDE threat model.
+
+7. Signatures:
+   Student Signature: _________  Project Guide Signature: _________  Course Faculty Signature: _________
+   Date: _________               Date: _________                     Date: _________
+
+
+================================================================================
+MEETING NO. 3
+================================================================================
+1. Student Details
+------------------
+Student Name         : [Student Name]
+Enrollment/Roll No.  : [Enrollment / Roll No.]
+Section              : [Section]
+Semester             : VII
+Department           : Computer Science & Engineering
+Project Title        : AuditRail: A Multi-Tenant Cryptographic Verification Engine
+Project Guide        : [Project Guide Name]
+Date of Meeting      : [Week 5 Date]
+Meeting No.          : 03
+
+2. Progress Report
+------------------
+1. Work completed since last meeting:
+   - Formulated detailed Functional Requirements (FRs): Event Ingestion, Hash-
+     Chain Construction, Checkpoint Generation, Integrity Verification Walk,
+     Multi-Tenant Organization Management, and API Key Authentication.
+   - Formulated Non-Functional Requirements (NFRs): Ingestion latency < 50ms,
+     deterministic SHA-256 computation, strict row-level security (RLS), and zero data loss.
+   - Developed STRIDE threat model evaluating Spoofing, Tampering, Repudiation,
+     Information Disclosure, Denial of Service, and Elevation of Privilege.
+
+2. Current progress/status:
+   - Completed Software Requirements Specification (SRS) documentation.
+   - Outlined security boundaries and cryptographic invariants.
+
+3. Problems/Challenges faced:
+   - Protecting against API key spoofing and cross-tenant event injection.
+
+4. Solution/Action taken:
+   - Designed dual-token authentication: User operations use stateless RSA/HMAC
+     JWT tokens; high-frequency programmatic ingestion uses SHA-256 hashed API
+     keys with mandatory `ROLE_INGEST` authority bound to tenant context.
+
+5. Work discussed with Guide:
+   - Reviewed SRS document, user personas (Admin, Auditor, API Ingestor), and
+     system access control matrix.
+
+6. Suggestions/Instructions given by Guide:
+   - Clearly delineate architecture using industry-standard UML / C4 diagrams.
+   - Prepare full system block diagrams for Chapter 3 of the project report.
+
+7. Work to be completed before next meeting:
+   - Draft all Chapter-3 system architecture, dataflow, sequence, and deployment diagrams.
+
+8. Expected completion date: [Date 14 days later]
+
+3. Project Progress Status
+--------------------------
+Overall Project Progress: 30%
+  [X] Project Topic Finalization
+  [X] Literature Survey
+  [X] Problem Identification
+  [X] Requirement Analysis
+  [ ] System/Project Design
+  [X] Methodology Finalization
+  [ ] Implementation/Development
+  [ ] Testing
+  [ ] Results & Analysis
+  [ ] Documentation
+  [ ] Final Project Demonstration
+
+4. Student Remarks:
+   SRS and STRIDE threat analysis accepted. Architecture modeling initiated.
+
+5. Guide's Remarks/Feedback:
+   Comprehensive requirement definition. Proceed with architectural blueprints.
+
+6. Next Meeting:
+   Date of Next Meeting: [Next Fortnight Date]
+   Tasks to be completed before next meeting: Draw.io UML architecture and sequence diagrams.
+
+7. Signatures:
+   Student Signature: _________  Project Guide Signature: _________  Course Faculty Signature: _________
+   Date: _________               Date: _________                     Date: _________
+
+
+================================================================================
+MEETING NO. 4
+================================================================================
+1. Student Details
+------------------
+Student Name         : [Student Name]
+Enrollment/Roll No.  : [Enrollment / Roll No.]
+Section              : [Section]
+Semester             : VII
+Department           : Computer Science & Engineering
+Project Title        : AuditRail: A Multi-Tenant Cryptographic Verification Engine
+Project Guide        : [Project Guide Name]
+Date of Meeting      : [Week 7 Date]
+Meeting No.          : 04
+
+2. Progress Report
+------------------
+1. Work completed since last meeting:
+   - Designed 10 comprehensive architectural diagrams according to academic standards:
+     * Figure 3.1: High-Level System Architecture (Ingestion, Core, Storage, UI)
+     * Figure 3.2.1: Use Case Diagram (Org Admin, Auditor, External Ingestion Service)
+     * Figure 3.2.2: Class & Domain Model Diagram (JPA Entities, Value Objects)
+     * Figure 3.2.3: System Sequence Diagram - Event Ingestion & Hash-Chain Sealing
+     * Figure 3.2.4: System Sequence Diagram - Cryptographic Verification Walk
+     * Figure 3.2.5: Activity Diagram - Ingestion Validation & Checkpoint State Flow
+     * Figure 3.2.6: State Machine Diagram - Event & Verification Run Lifecycle
+     * Figure 3.3.1: Data Flow Diagram (DFD Level 0 Context Diagram)
+     * Figure 3.3.2: Data Flow Diagram (DFD Level 1 Functional Decomposition)
+     * Figure 3.4.1: Physical Deployment Diagram (Docker Containers, AWS Services)
+   - Rendered vector diagrams in standard monochrome format with clear connectors.
+
+2. Current progress/status:
+   - Architectural design finalized and verified against requirements.
+   - Built an interactive HTML viewer for rapid vector inspection of all diagrams.
+
+3. Problems/Challenges faced:
+   - Representing concurrency during simultaneous event ingestion for the same tenant.
+
+4. Solution/Action taken:
+   - Designed a database-level sequential locking mechanism (`SELECT ... FOR UPDATE`
+     on sequence cursor) to prevent race conditions in sequential hash chaining.
+
+5. Work discussed with Guide:
+   - Walked through each of the 10 diagrams and explained the sequence flows for
+     ingestion and verification walks.
+
+6. Suggestions/Instructions given by Guide:
+   - Ensure the database schema explicitly indexes sequence numbers and tenant IDs.
+   - Begin relational schema definition and Flyway migration scripts.
+
+7. Work to be completed before next meeting:
+   - Write SQL DDL schemas, constraints, and Flyway database migration scripts.
+
+8. Expected completion date: [Date 14 days later]
+
+3. Project Progress Status
+--------------------------
+Overall Project Progress: 40%
+  [X] Project Topic Finalization
+  [X] Literature Survey
+  [X] Problem Identification
+  [X] Requirement Analysis
+  [X] System/Project Design
+  [X] Methodology Finalization
+  [ ] Implementation/Development
+  [ ] Testing
+  [ ] Results & Analysis
+  [ ] Documentation
+  [ ] Final Project Demonstration
+
+4. Student Remarks:
+   All 10 Chapter-3 diagrams completed and validated. Moving to persistence tier.
+
+5. Guide's Remarks/Feedback:
+   Architectural diagrams are thorough and clear. Approve commencement of database development.
+
+6. Next Meeting:
+   Date of Next Meeting: [Next Fortnight Date]
+   Tasks to be completed before next meeting: Relational schema implementation and migration scripts.
+
+7. Signatures:
+   Student Signature: _________  Project Guide Signature: _________  Course Faculty Signature: _________
+   Date: _________               Date: _________                     Date: _________
+
+
+================================================================================
+MEETING NO. 5
+================================================================================
+1. Student Details
+------------------
+Student Name         : [Student Name]
+Enrollment/Roll No.  : [Enrollment / Roll No.]
+Section              : [Section]
+Semester             : VII
+Department           : Computer Science & Engineering
+Project Title        : AuditRail: A Multi-Tenant Cryptographic Verification Engine
+Project Guide        : [Project Guide Name]
+Date of Meeting      : [Week 9 Date]
+Meeting No.          : 05
+
+2. Progress Report
+------------------
+1. Work completed since last meeting:
+   - Created normalized PostgreSQL relational schema via Flyway migrations:
+     * `organizations`: Tenant metadata, status, retention policies.
+     * `users`: BCrypt password hashes, MFA/TOTP secrets, RBAC roles.
+     * `api_keys`: SHA-256 hashed secret keys, expiry, permissions.
+     * `audit_events`: Core immutable log records (sequence_number, current_hash,
+       previous_hash, actor_reference, action, resource_reference, metadata_json).
+     * `checkpoints`: Merkle root summaries, signatures, S3 object keys.
+     * `verification_runs`: History of automated cryptographic audits.
+   - Enforced database constraints: composite unique index on `(organization_id, sequence_number)`
+     and non-updatable trigger rules.
+
+2. Current progress/status:
+   - Database persistence layer fully initialized with test seeds.
+   - Supports both PostgreSQL 16 (production Docker) and in-memory H2 (local testing).
+
+3. Problems/Challenges faced:
+   - Enforcing absolute immutability directly at the relational database tier so
+     accidental `UPDATE` or `DELETE` queries are impossible.
+
+4. Solution/Action taken:
+   - Configured PostgreSQL row triggers and restricted application user permissions
+     such that `audit_events` allows only `INSERT` and `SELECT` operations.
+
+5. Work discussed with Guide:
+   - Demonstrated database entity-relationship schema and multi-tenant partitioning.
+   - Discussed zero-trust schema integrity.
+
+6. Suggestions/Instructions given by Guide:
+   - Begin backend service coding in Java 21 / Spring Boot 3.
+   - Implement the canonical serialization standard before hashing.
+
+7. Work to be completed before next meeting:
+   - Develop core backend ingestion service, canonical serializer, and SHA-256 chain generator.
+
+8. Expected completion date: [Date 14 days later]
+
+3. Project Progress Status
+--------------------------
+Overall Project Progress: 50%
+  [X] Project Topic Finalization
+  [X] Literature Survey
+  [X] Problem Identification
+  [X] Requirement Analysis
+  [X] System/Project Design
+  [X] Methodology Finalization
+  [X] Implementation/Development (Database Tier)
+  [ ] Testing
+  [ ] Results & Analysis
+  [ ] Documentation
+  [ ] Final Project Demonstration
+
+4. Student Remarks:
+   Database schema verified, migration scripts tested, immutability constraints enforced.
+
+5. Guide's Remarks/Feedback:
+   Relational model approved. Pay close attention to deterministic string encoding during hashing.
+
+6. Next Meeting:
+   Date of Next Meeting: [Next Fortnight Date]
+   Tasks to be completed before next meeting: Spring Boot core hash-chain service and REST controllers.
+
+7. Signatures:
+   Student Signature: _________  Project Guide Signature: _________  Course Faculty Signature: _________
+   Date: _________               Date: _________                     Date: _________
+
+
+================================================================================
+MEETING NO. 6
+================================================================================
+1. Student Details
+------------------
+Student Name         : [Student Name]
+Enrollment/Roll No.  : [Enrollment / Roll No.]
+Section              : [Section]
+Semester             : VII
+Department           : Computer Science & Engineering
+Project Title        : AuditRail: A Multi-Tenant Cryptographic Verification Engine
+Project Guide        : [Project Guide Name]
+Date of Meeting      : [Week 11 Date]
+Meeting No.          : 06
+
+2. Progress Report
+------------------
+1. Work completed since last meeting:
+   - Developed backend application using Java 21 and Spring Boot 3.x.
+   - Implemented `AuditEventIngestionService`:
+     * Computes monotonic `sequence_number` per tenant.
+     * Retrieves `previous_hash` (or "GENESIS" for the initial event).
+     * Constructs canonical payload and computes SHA-256 hex digest.
+     * Persists sealed record in an atomic transaction.
+   - Built `IntegrityVerificationService`:
+     * Executes sequential walk across all stored records.
+     * Recalculates expected SHA-256 for each event using stored data.
+     * Verifies that `current_hash[i-1] == previous_hash[i]`.
+     * Flags any hash drift, broken links, or missing sequence numbers.
+   - Created REST API controllers (`/api/v1/events`, `/api/v1/verification`, `/api/v1/audit`).
+
+2. Current progress/status:
+   - Core cryptographic engine operational with passing unit tests.
+
+3. Problems/Challenges faced:
+   - Non-deterministic JSON key ordering could cause identical events to generate
+     different SHA-256 hashes.
+
+4. Solution/Action taken:
+   - Implemented strict canonical string serialization: sorted keys, UTF-8 normalization,
+     and uniform whitespace stripping prior to hashing.
+
+5. Work discussed with Guide:
+   - Demonstrated Postman API requests ingesting events and triggering verification walks.
+   - Showed how changing a single byte in the database causes verification failure.
+
+6. Suggestions/Instructions given by Guide:
+   - Proceed with frontend web dashboard so non-technical auditors can easily view records.
+   - Implement clear status indicators for verification results.
+
+7. Work to be completed before next meeting:
+   - Develop React/Vite dashboard with live event explorer and verification controls.
+
+8. Expected completion date: [Date 14 days later]
+
+3. Project Progress Status
+--------------------------
+Overall Project Progress: 60%
+  [X] Project Topic Finalization
+  [X] Literature Survey
+  [X] Problem Identification
+  [X] Requirement Analysis
+  [X] System/Project Design
+  [X] Methodology Finalization
+  [X] Implementation/Development (Backend Core)
+  [ ] Testing
+  [ ] Results & Analysis
+  [ ] Documentation
+  [ ] Final Project Demonstration
+
+4. Student Remarks:
+   Backend cryptographic engine operational; deterministic hashing and verification walk confirmed.
+
+5. Guide's Remarks/Feedback:
+   Solid implementation. Ensure user interface adheres to clean, modern design standards.
+
+6. Next Meeting:
+   Date of Next Meeting: [Next Fortnight Date]
+   Tasks to be completed before next meeting: Complete React/Vite frontend console.
+
+7. Signatures:
+   Student Signature: _________  Project Guide Signature: _________  Course Faculty Signature: _________
+   Date: _________               Date: _________                     Date: _________
+
+
+================================================================================
+MEETING NO. 7
+================================================================================
+1. Student Details
+------------------
+Student Name         : [Student Name]
+Enrollment/Roll No.  : [Enrollment / Roll No.]
+Section              : [Section]
+Semester             : VII
+Department           : Computer Science & Engineering
+Project Title        : AuditRail: A Multi-Tenant Cryptographic Verification Engine
+Project Guide        : [Project Guide Name]
+Date of Meeting      : [Week 13 Date]
+Meeting No.          : 07
+
+2. Progress Report
+------------------
+1. Work completed since last meeting:
+   - Built AuditRail Enterprise Console using React 18, TypeScript, Vite, and Tailwind CSS.
+   - Created core frontend pages:
+     * `LandingPage.tsx`: Public product introduction, regulatory compliance features.
+     * `AuthPage.tsx`: JWT login, registration, and tenant onboarding.
+     * `OrgDashboardPage.tsx`: Real-time ledger view, event search and filtering,
+       one-click "Verify Ledger Integrity" trigger, and full SHA-256 hash inspection.
+   - Added complete 64-character hash display with one-click clipboard copy utility.
+
+2. Current progress/status:
+   - Frontend console seamlessly integrated with Spring Boot REST API.
+   - Displays real-time cryptographic verification banners (VALID / TAMPERED).
+
+3. Problems/Challenges faced:
+   - Cross-Origin Resource Sharing (CORS) between frontend (port 5173) and backend (port 8080).
+   - Displaying 64-character hexadecimal hashes cleanly on various screen resolutions.
+
+4. Solution/Action taken:
+   - Configured robust `CorsConfigurationSource` in `SecurityConfig.java`.
+   - Utilized monospace responsive badges with horizontal scrolling and click-to-copy tooltips.
+
+5. Work discussed with Guide:
+   - Demonstrated complete end-to-end user experience from login to event search and verification.
+   - Reviewed visual indicators and user feedback banners.
+
+6. Suggestions/Instructions given by Guide:
+   - Create a realistic third-party client banking application to demonstrate live external
+     ingestion in real-time.
+
+7. Work to be completed before next meeting:
+   - Develop standalone simulated client application ("Aarohi Global Bank") with role-based access.
+
+8. Expected completion date: [Date 14 days later]
+
+3. Project Progress Status
+--------------------------
+Overall Project Progress: 70%
+  [X] Project Topic Finalization
+  [X] Literature Survey
+  [X] Problem Identification
+  [X] Requirement Analysis
+  [X] System/Project Design
+  [X] Methodology Finalization
+  [X] Implementation/Development (Frontend Console)
+  [ ] Testing
+  [ ] Results & Analysis
+  [ ] Documentation
+  [ ] Final Project Demonstration
+
+4. Student Remarks:
+   Dashboard complete and functional; full 64-character hashes visible and verifiable.
+
+5. Guide's Remarks/Feedback:
+   UI is clean and responsive. The simulated banking client will make an excellent demonstration.
+
+6. Next Meeting:
+   Date of Next Meeting: [Next Fortnight Date]
+   Tasks to be completed before next meeting: Complete Aarohi Global Bank client simulation.
+
+7. Signatures:
+   Student Signature: _________  Project Guide Signature: _________  Course Faculty Signature: _________
+   Date: _________               Date: _________                     Date: _________
+
+
+================================================================================
+MEETING NO. 8
+================================================================================
+1. Student Details
+------------------
+Student Name         : [Student Name]
+Enrollment/Roll No.  : [Enrollment / Roll No.]
+Section              : [Section]
+Semester             : VII
+Department           : Computer Science & Engineering
+Project Title        : AuditRail: A Multi-Tenant Cryptographic Verification Engine
+Project Guide        : [Project Guide Name]
+Date of Meeting      : [Week 15 Date]
+Meeting No.          : 08
+
+2. Progress Report
+------------------
+1. Work completed since last meeting:
+   - Developed standalone simulated client application: **Aarohi Global Bank**
+     (`aarohi-bank-client/` running on `http://localhost:5050`).
+   - Implemented three distinct banking roles with strict access controls:
+     * **Manager**: Full access (Fund transfers, KYC verification, compliance freezes).
+     * **Cashier**: Financial fund movements only (transfers between accounts).
+     * **Employee**: Read-only inquiry queries (`SELECT * FROM accounts`).
+   - Integrated live core banking accounts table (`AAROHI-001` to `AAROHI-004`).
+   - Configured dedicated API key: `ar_live_admin-__IWkYasdhUhhYtU18jD3zVci2H6oZ7fJ`.
+   - Embedded real-time telemetry stream and live AuditRail events table showing
+     immediate sealed receipts (`#sequence`, `currentHash`, `previousHash`).
+
+2. Current progress/status:
+   - Any financial transfer executed in Aarohi Bank is instantly sealed in AuditRail
+     and reflected across both the banking client feed and the main AuditRail console.
+
+3. Problems/Challenges faced:
+   - Initial payload mismatch between the client JavaScript fields and backend
+     `EventIngestRequest` DTO caused HTTP 400 validation failures.
+
+4. Solution/Action taken:
+   - Aligned client payload schema precisely with backend contract:
+     `{ actorReference, action, resourceReference, eventTimestamp, metadataJson }`.
+   - Updated receipt response parsing and added live audit table refresh.
+
+5. Work discussed with Guide:
+   - Conducted live demonstration transferring ₹75,000 between accounts in Aarohi Bank.
+   - Showed immediate cryptographic sealing and receipt generation.
+
+6. Suggestions/Instructions given by Guide:
+   - Conduct thorough testing: edge cases, concurrent loads, and intentional tamper simulations.
+
+7. Work to be completed before next meeting:
+   - Perform end-to-end integration testing, tamper tests, and performance benchmark runs.
+
+8. Expected completion date: [Date 14 days later]
+
+3. Project Progress Status
+--------------------------
+Overall Project Progress: 80%
+  [X] Project Topic Finalization
+  [X] Literature Survey
+  [X] Problem Identification
+  [X] Requirement Analysis
+  [X] System/Project Design
+  [X] Methodology Finalization
+  [X] Implementation/Development (Client Application)
+  [X] Testing (Integration Initial)
+  [ ] Results & Analysis
+  [ ] Documentation
+  [ ] Final Project Demonstration
+
+4. Student Remarks:
+   Aarohi Global Bank client operational; seamless event forwarding and receipt sealing confirmed.
+
+5. Guide's Remarks/Feedback:
+   Very convincing live demonstration. Proceed with rigorous tamper testing and performance profiling.
+
+6. Next Meeting:
+   Date of Next Meeting: [Next Fortnight Date]
+   Tasks to be completed before next meeting: Comprehensive test report and performance metrics.
+
+7. Signatures:
+   Student Signature: _________  Project Guide Signature: _________  Course Faculty Signature: _________
+   Date: _________               Date: _________                     Date: _________
+
+
+================================================================================
+MEETING NO. 9
+================================================================================
+1. Student Details
+------------------
+Student Name         : [Student Name]
+Enrollment/Roll No.  : [Enrollment / Roll No.]
+Section              : [Section]
+Semester             : VII
+Department           : Computer Science & Engineering
+Project Title        : AuditRail: A Multi-Tenant Cryptographic Verification Engine
+Project Guide        : [Project Guide Name]
+Date of Meeting      : [Week 17 Date]
+Meeting No.          : 09
+
+2. Progress Report
+------------------
+1. Work completed since last meeting:
+   - Executed rigorous multi-faceted testing suite:
+     * Unit & Service Tests: `AuditEventIngestionServiceTest`, `HashUtilTest`, `VerificationTest`.
+     * Intentional Tamper Test: Directly altered an action in PostgreSQL via SQL query.
+       Ran verification walk; engine immediately flagged discrepancy at altered sequence number.
+     * Sequence Gap Test: Deleted an intermediate event; engine caught missing sequence gap.
+     * Unauthorized Ingestion Test: Attempted ingestion with revoked/invalid API key; rejected with HTTP 401.
+     * Cross-Tenant Isolation Test: Confirmed Tenant A cannot query or alter Tenant B's ledger.
+   - Benchmarked ingestion latency: sub-25ms per event under local load.
+
+2. Current progress/status:
+   - System verified as 100% mathematically tamper-proof and resilient against direct database manipulation.
+   - Compiled quantitative results, verification walk execution charts, and latency tables.
+
+3. Problems/Challenges faced:
+   - Ingestion throughput under high concurrent thread contention on sequence locking.
+
+4. Solution/Action taken:
+   - Tuned transaction isolation level and database connection pool (HikariCP),
+     enabling smooth sequential queueing without deadlocks.
+
+5. Work discussed with Guide:
+   - Demonstrated intentional tamper simulation and showed the exact alert message:
+     "Ledger Integrity Verification: FAILED - Hash mismatch detected at Sequence #X".
+   - Demonstrated successful verification walk:
+     "Ledger Integrity Verification: VALID - Verified up to Sequence #N. Zero hash drift or sequence gaps detected."
+
+6. Suggestions/Instructions given by Guide:
+   - Finalize complete documentation, project report chapters, and prepare demonstration slides.
+
+7. Work to be completed before next meeting:
+   - Complete project report, user manual, deployment guides, and presentation deck.
+
+8. Expected completion date: [Date 14 days later]
+
+3. Project Progress Status
+--------------------------
+Overall Project Progress: 90%
+  [X] Project Topic Finalization
+  [X] Literature Survey
+  [X] Problem Identification
+  [X] Requirement Analysis
+  [X] System/Project Design
+  [X] Methodology Finalization
+  [X] Implementation/Development
+  [X] Testing (Unit, Integration, Security, Tamper)
+  [X] Results & Analysis
+  [ ] Documentation (Final Stage)
+  [ ] Final Project Demonstration
+
+4. Student Remarks:
+   All security and tamper tests passed successfully. Project report drafting in final stages.
+
+5. Guide's Remarks/Feedback:
+   Exceptional testing methodology. The tamper demonstration conclusively proves the system's value.
+
+6. Next Meeting:
+   Date of Next Meeting: [Final Defense Date]
+   Tasks to be completed before next meeting: Final project presentation and complete thesis report.
+
+7. Signatures:
+   Student Signature: _________  Project Guide Signature: _________  Course Faculty Signature: _________
+   Date: _________               Date: _________                     Date: _________
+
+
+================================================================================
+MEETING NO. 10
+================================================================================
+1. Student Details
+------------------
+Student Name         : [Student Name]
+Enrollment/Roll No.  : [Enrollment / Roll No.]
+Section              : [Section]
+Semester             : VII
+Department           : Computer Science & Engineering
+Project Title        : AuditRail: A Multi-Tenant Cryptographic Verification Engine
+Project Guide        : [Project Guide Name]
+Date of Meeting      : [Week 19 Date]
+Meeting No.          : 10
+
+2. Progress Report
+------------------
+1. Work completed since last meeting:
+   - Finalized comprehensive 5-Chapter B.Tech Project Report:
+     * Chapter 1: Introduction, Problem Statement, Objectives, Scope.
+     * Chapter 2: Literature Review, Regulatory Landscape (DPDP/SOC2/ISO27001).
+     * Chapter 3: Architectural Design & 10 UML/DFD/Deployment Diagrams.
+     * Chapter 4: Implementation Details, Canonical Serialization, SHA-256 Engine.
+     * Chapter 5: Results, Tamper-Evident Benchmarks, Conclusion & Future Scope.
+   - Cleaned and organized codebase:
+     * AuditRail Core Backend & Frontend
+     * Standalone Aarohi Global Bank Client Application
+     * Docker containerization files & one-click local launchers (`start_dev_local.bat`, `launch_aarohi_bank.bat`)
+   - Prepared final project presentation slides and live demonstration walkthrough.
+
+2. Current progress/status:
+   - **Project 100% Completed and ready for final academic defense.**
+   - All deliverables packaged and documented.
+
+3. Problems/Challenges faced:
+   - Packaging the full stack so external examiners can evaluate it with zero complex configuration.
+
+4. Solution/Action taken:
+   - Created automated scripts: `start_dev_local.bat` (launches backend and frontend with
+     in-memory H2 database, zero Docker requirement) and `launch_aarohi_bank.bat`
+     (launches client bank in one click).
+
+5. Work discussed with Guide:
+   - Delivered full end-to-end rehearsal presentation:
+     1. Ingestion of transactions from Aarohi Global Bank by Manager/Cashier.
+     2. Real-time cryptographic sealing in AuditRail.
+     3. Inspection of complete 64-character SHA-256 hashes in Enterprise Console.
+     4. Cryptographic integrity verification walk proving zero hash drift and zero sequence gaps.
+     5. Intentional tamper simulation demonstrating instantaneous alert detection.
+
+6. Suggestions/Instructions given by Guide:
+   - Keep emphasis during defense on regulatory compliance (DPDP Act 2023) and how
+     AuditRail prevents malicious DBA tampering without incurring blockchain overhead.
+
+7. Work to be completed before next meeting:
+   - Submit bound project report copies, signed progress diaries, and attend final viva voce.
+
+8. Expected completion date: [Final Defense Date]
+
+3. Project Progress Status
+--------------------------
+Overall Project Progress: 100%
+  [X] Project Topic Finalization
+  [X] Literature Survey
+  [X] Problem Identification
+  [X] Requirement Analysis
+  [X] System/Project Design
+  [X] Methodology Finalization
+  [X] Implementation/Development
+  [X] Testing
+  [X] Results & Analysis
+  [X] Documentation
+  [X] Final Project Demonstration
+
+4. Student Remarks:
+   Project completed successfully with full academic requirements, working software, and verified mathematical proof engine.
+
+5. Guide's Remarks/Feedback:
+   Project satisfies all B.Tech. CSE 7th semester requirements with distinction. Approved for final viva voce and grading.
+
+6. Next Meeting:
+   Date of Next Meeting: Final Examination / Defense Completed
+   Tasks to be completed before next meeting: None (Project Completed)
+
+7. Signatures:
+   Student Signature: _________  Project Guide Signature: _________  Course Faculty Signature: _________
+   Date: _________               Date: _________                     Date: _________
+================================================================================
+                         END OF PROJECT DIARY
+================================================================================

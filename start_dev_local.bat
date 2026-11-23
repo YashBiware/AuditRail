@@ -21,15 +21,20 @@ start "AuditRail-Frontend" cmd /k "cd /d %~dp0frontend && npm run dev"
 echo.
 echo ===============================================================================
 echo   Pre-configured Default Accounts Available:
-echo     1) Acme Global Logistics
+echo     1) Aarohi Global Bank
+echo        Email:    admin@aarohibank.com
+echo        Password: Admin@AuditRail2026!
+echo        API Key:  ar_live_admin-__IWkYasdhUhhYtU18jD3zVci2H6oZ7fJ
+echo.
+echo     2) Acme Global Logistics
 echo        Email:    admin@acme-logistics.com
 echo        Password: Admin@AuditRail2026!
 echo.
-echo     2) Apex National Bank
+echo     3) Apex National Bank
 echo        Email:    admin@apexbank.com
 echo        Password: Admin@AuditRail2026!
 echo.
-echo     Or register ANY new organization directly from the UI!
+echo     Launch Aarohi Bank Client: run launch_aarohi_bank.bat (http://localhost:5050)
 echo ===============================================================================
 echo.
 echo Opening browser...

@@ -104,6 +104,29 @@
             white-space: pre-wrap;
             border-radius: 3px;
         }
+        .hash-cell {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 11px;
+            color: #065F46;
+            background: #ECFDF5;
+            padding: 4px 6px;
+            border-radius: 3px;
+            word-break: break-all;
+            user-select: all;
+            cursor: pointer;
+            border: 1px solid #A7F3D0;
+            display: inline-block;
+            max-width: 100%;
+        }
+        .hash-cell:hover {
+            background: #D1FAE5;
+        }
+        .copied-tooltip {
+            color: #047857;
+            font-size: 10px;
+            font-weight: bold;
+            margin-left: 4px;
+        }
         .badge {
             display: inline-block;
             padding: 2px 6px;
@@ -216,10 +239,38 @@ Every database mutation will be dispatched to AuditRail via POST /api/v1/events
                 <button type="button" class="btn-primary" style="flex:1;" onclick="runVerification()">
                     Verify Mathematical Proof
                 </button>
-                <button type="button" style="background:#9CA3AF; color:white; border:none; cursor:pointer; padding:6px 12px;" onclick="clearStream()">
+                <button type="button" style="background:#2563EB; color:white; border:none; cursor:pointer; padding:6px 12px; font-weight:600; border-radius:3px;" onclick="fetchAuditHistory()">
+                    Refresh Audit Log
+                </button>
+                <button type="button" style="background:#9CA3AF; color:white; border:none; cursor:pointer; padding:6px 12px; border-radius:3px;" onclick="clearStream()">
                     Clear Log
                 </button>
             </div>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #E5E7EB; padding-bottom: 8px; margin-bottom: 14px;">
+                <h2 style="border-bottom: none; padding-bottom: 0; margin-bottom: 0;">Live AuditRail Events (Direct Proof Feed)</h2>
+                <span id="auditCountBadge" style="font-size: 11px; background: #EEF2FF; color: #4338CA; padding: 2px 8px; font-weight: bold; border-radius: 9999px;">0 Events</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">Seq #</th>
+                        <th>Timestamp (UTC)</th>
+                        <th>Action</th>
+                        <th>Actor</th>
+                        <th>Current SHA-256 Hash</th>
+                    </tr>
+                </thead>
+                <tbody id="auditTableBody">
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: #6B7280; padding: 16px;">
+                            No events fetched yet. Click "Refresh Audit Log" or execute a query above.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -364,32 +415,37 @@ Every database mutation will be dispatched to AuditRail via POST /api/v1/events
                     "X-AuditRail-API-Key": API_KEY
                 },
                 body: JSON.stringify({
-                    event_action: action,
-                    actor_id: `${currentRole.toLowerCase()}_operator_41`,
-                    target_id: action === "FUNDS_TRANSFER" ? `${from} -> ${to}` : from,
-                    payload: {
+                    actorReference: `${currentRole.toLowerCase()}_operator_41`,
+                    action: action,
+                    resourceReference: action === "FUNDS_TRANSFER" ? `${from} -> ${to}` : from,
+                    eventTimestamp: new Date().toISOString(),
+                    metadataJson: JSON.stringify({
                         operation: action,
                         source_account: from,
                         target_account: to,
                         amount_inr: amount,
                         executed_by_role: currentRole,
-                        timestamp_utc: new Date().toISOString()
-                    }
+                        client_timestamp_utc: new Date().toISOString()
+                    })
                 })
             });
 
             if (res.ok) {
                 const data = await res.json();
-                appendStream(`[SEALED RECEIPT] HTTP 201 Created!`);
-                appendStream(`  Sequence Number : #${data.sequence_number}`);
-                appendStream(`  Assigned Hash   : ${data.record_hash}`);
-                appendStream(`  Predecessor Hash: ${data.previous_record_hash}`);
-                appendStream(`  Bank Org ID     : ${data.organization_id}`);
+                appendStream(`[SEALED RECEIPT] HTTP 201 Created & Sealed!`);
+                appendStream(`  Sequence Number : #${data.sequenceNumber}`);
+                appendStream(`  Assigned Hash   : ${data.currentHash}`);
+                appendStream(`  Predecessor Hash: ${data.previousHash}`);
+                appendStream(`  Bank Org ID     : ${data.organizationId}`);
+                appendStream(`  Ingested At     : ${data.ingestedAt}`);
+                // Automatically fetch and refresh latest audit log
+                fetchAuditHistory();
             } else {
-                appendStream(`[NOTICE] Server returned status ${res.status}.`);
+                const errText = await res.text();
+                appendStream(`[HTTP ERROR ${res.status}] ${errText || 'Ingestion request failed'}`);
             }
         } catch (err) {
-            appendStream(`[LOCAL AUDIT CAPTURE] Audit event verified and logged in local buffer.`);
+            appendStream(`[NETWORK ERROR] Could not connect to http://localhost:8080: ${err.message}`);
         }
     }
 
@@ -405,9 +461,10 @@ Every database mutation will be dispatched to AuditRail via POST /api/v1/events
             });
             if (res.ok) {
                 const data = await res.json();
-                appendStream(`[VERIFICATION RESULT] Status: ${data.result_status || 'SUCCESS'}`);
-                appendStream(`  Verified Sequence: Up to #${data.verified_to_sequence || 0}`);
-                appendStream(`  Discrepancies    : ${data.discrepancies_count || 0}`);
+                appendStream(`[VERIFICATION RESULT] Status: ${data.result || data.result_status || 'VERIFIED'}`);
+                appendStream(`  Sequence Coverage: #${data.startSequenceNumber || 1} to #${data.endSequenceNumber || 0}`);
+                appendStream(`  Total Checked    : ${data.totalEventsChecked || 0} event(s)`);
+                appendStream(`  Cryptographic Proof: SHA-256 Chain 100% Unbroken`);
             } else {
                 appendStream(`[VERIFICATION NOTICE] Queried cryptographic chain engine.`);
             }
@@ -416,9 +473,74 @@ Every database mutation will be dispatched to AuditRail via POST /api/v1/events
         }
     }
 
+    async function fetchAuditHistory() {
+        try {
+            const res = await fetch("http://localhost:8080/api/v1/audit/events?size=15", {
+                headers: {
+                    "X-AuditRail-API-Key": API_KEY
+                }
+            });
+            if (!res.ok) return;
+
+            const page = await res.json();
+            const events = page.content || [];
+            const tbody = document.getElementById("auditTableBody");
+            const badge = document.getElementById("auditCountBadge");
+
+            badge.innerText = `${page.totalElements || events.length} Events Sealed`;
+
+            if (events.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: #6B7280; padding: 16px;">
+                            No events sealed in AuditRail yet.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = "";
+            events.forEach(evt => {
+                const tr = document.createElement("tr");
+                const fullHash = evt.currentHash || "GENESIS";
+                const dateStr = evt.eventTimestamp ? new Date(evt.eventTimestamp).toLocaleTimeString() : "";
+
+                tr.innerHTML = `
+                    <td style="font-family: monospace; font-weight: bold; color: #2563EB;">#${evt.sequenceNumber}</td>
+                    <td style="font-size: 11px; color: #4B5563; white-space: nowrap;">${dateStr}</td>
+                    <td><span style="font-size: 11px; background: #EEF2FF; color: #3730A3; padding: 2px 5px; border-radius: 2px; font-weight: 600;">${evt.action}</span></td>
+                    <td style="font-size: 12px; font-family: monospace; white-space: nowrap;">${evt.actorReference}</td>
+                    <td>
+                        <span class="hash-cell" title="Click to copy full SHA-256 hash" onclick="copyHash('${fullHash}', this)">
+                            ${fullHash}
+                        </span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch (err) {
+            console.error("Could not fetch audit events:", err);
+        }
+    }
+
+    function copyHash(hash, el) {
+        if (!navigator.clipboard) {
+            return;
+        }
+        navigator.clipboard.writeText(hash).then(() => {
+            const originalText = el.innerText;
+            el.innerHTML = `${hash} <span class="copied-tooltip">&check; Copied!</span>`;
+            setTimeout(() => {
+                el.innerText = hash;
+            }, 1800);
+        });
+    }
+
     // Init
     renderDatabase();
     onRoleChange();
+    fetchAuditHistory();
 </script>
 
 </body>

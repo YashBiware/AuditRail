@@ -294,8 +294,14 @@ export const OrgDashboardPage: React.FC = () => {
                       <td className="py-3 px-4 text-muted-foreground">
                         {r.resourceReference}
                       </td>
-                      <td className="py-3 px-4 text-muted-foreground font-mono text-[11px]" title={r.currentHash}>
-                        {r.currentHash.substring(0, 16)}...
+                      <td className="py-3 px-4 text-muted-foreground font-mono text-[11px]">
+                        <span
+                          className="bg-secondary/70 hover:bg-secondary px-2 py-1 rounded border border-border select-all cursor-pointer font-mono inline-block max-w-full break-all"
+                          title="Click to copy complete 64-character SHA-256 hash"
+                          onClick={() => navigator.clipboard.writeText(r.currentHash)}
+                        >
+                          {r.currentHash}
+                        </span>
                       </td>
                     </tr>
                   ))

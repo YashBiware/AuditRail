@@ -75,6 +75,7 @@ public class DevDataInitializer {
 
             // 2. Aarohi Global Bank
             String aarohiOrgId = "11111111-1111-1111-1111-111111111111";
+            String aarohiKeyHash = "91cc2e501534a12e9831f1e87f6c21970be151b275fb34e16b6e9a6dbf8a2593";
             if (!orgRepo.existsById(aarohiOrgId)) {
                 Organization org = new Organization();
                 org.setId(aarohiOrgId);
@@ -99,11 +100,14 @@ public class DevDataInitializer {
                 admin.setTotpEnabled(false);
                 userRepo.save(admin);
 
-                ApiKey key = new ApiKey();
-                key.setId("11111111-1111-1111-1111-111111111120");
+                ApiKey key = apiKeyRepo.findByKeyHashAndStatus(aarohiKeyHash, "ACTIVE").orElseGet(() -> {
+                    ApiKey k = new ApiKey();
+                    k.setId("11111111-1111-1111-1111-111111111120");
+                    return k;
+                });
                 key.setOrganizationId(aarohiOrgId);
                 key.setKeyPrefix("ar_live_admin");
-                key.setKeyHash("91cc2e501534a12e9831f1e87f6c21970be151b275fb34e16b6e9a6dbf8a2593");
+                key.setKeyHash(aarohiKeyHash);
                 key.setLabel("Aarohi Core Banking Ingestion Key");
                 key.setStatus("ACTIVE");
                 key.setCreatedByUserId(admin.getId());
@@ -117,14 +121,16 @@ public class DevDataInitializer {
                 existing.setSlug("aarohi-bank");
                 orgRepo.save(existing);
 
-                ApiKey key = apiKeyRepo.findAllByOrganizationId(aarohiOrgId).stream().findFirst().orElseGet(() -> {
-                    ApiKey k = new ApiKey();
-                    k.setId(java.util.UUID.randomUUID().toString());
-                    k.setOrganizationId(aarohiOrgId);
-                    return k;
-                });
+                ApiKey key = apiKeyRepo.findByKeyHashAndStatus(aarohiKeyHash, "ACTIVE")
+                        .or(() -> apiKeyRepo.findAllByOrganizationId(aarohiOrgId).stream().findFirst())
+                        .orElseGet(() -> {
+                            ApiKey k = new ApiKey();
+                            k.setId(java.util.UUID.randomUUID().toString());
+                            return k;
+                        });
+                key.setOrganizationId(aarohiOrgId);
                 key.setKeyPrefix("ar_live_admin");
-                key.setKeyHash("91cc2e501534a12e9831f1e87f6c21970be151b275fb34e16b6e9a6dbf8a2593");
+                key.setKeyHash(aarohiKeyHash);
                 key.setLabel("Aarohi Core Banking Ingestion Key");
                 key.setStatus("ACTIVE");
                 apiKeyRepo.save(key);

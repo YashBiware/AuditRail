@@ -117,7 +117,7 @@ public class DevDataInitializer {
                 existing.setSlug("aarohi-bank");
                 orgRepo.save(existing);
 
-                ApiKey key = apiKeyRepo.findByOrganizationId(aarohiOrgId).stream().findFirst().orElseGet(() -> {
+                ApiKey key = apiKeyRepo.findAllByOrganizationId(aarohiOrgId).stream().findFirst().orElseGet(() -> {
                     ApiKey k = new ApiKey();
                     k.setId(java.util.UUID.randomUUID().toString());
                     k.setOrganizationId(aarohiOrgId);
